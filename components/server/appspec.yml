@@ -1,0 +1,18 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/ubuntu/server
+hooks:
+  AfterInstall:
+    - location: scripts/deploy.sh
+      timeout: 2000
+      runas: root
+  ApplicationStart:
+    - location: scripts/startServer.sh
+      timeout: 900
+      runas: root
+  ApplicationStop:
+    - location: scripts/stopServer.sh
+      timeout: 900
+      runas: root

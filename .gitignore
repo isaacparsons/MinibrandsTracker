@@ -1,0 +1,10 @@
+**/node_modules/
+**/todo.md
+**/package-lock.json
+**/.terraform/
+**/.terraform.lock.hcl
+**/terraform.tfstate.backup
+**/.DS_Store
+**/build/
+**/dist/
+*.tfstate

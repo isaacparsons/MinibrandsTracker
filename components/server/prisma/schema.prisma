@@ -1,0 +1,67 @@
+// to make schema in db
+// npx prisma migrate dev --preview-feature --skip-generate --name "init"
+
+// to generate so can be used in db
+// npx prisma generate
+
+
+generator client {
+  provider = "prisma-client-js"
+   binaryTargets   = ["native", "debian-openssl-1.1.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                     Int     @id @default(autoincrement())
+  email                  String  @unique
+  passwordHash           String
+  accountCreated         Boolean
+
+  collections            Collection[]
+}
+
+model Collection {
+  id                    Int      @id @default(autoincrement())
+  name                  String
+  userId                Int
+
+  user                  User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items                 MiniBrand[]
+}
+
+model MiniBrand {
+  id                    Int      @id @default(autoincrement())
+  name                  String
+  type                  String
+  series                String
+
+  tags                  MiniBrandTag[]
+  collections           Collection[]
+}
+
+model MiniBrandTag {
+  id                    Int      @id @default(autoincrement())
+  name                  String
+  miniBrandId           Int
+
+  miniBrand             MiniBrand @relation(fields: [miniBrandId], references: [id], onDelete: Cascade)
+}
+
+// model GroupMember {
+//   id                    Int      @id @default(autoincrement())
+//   userId                Int
+//   groupId               Int
+//   organizationMemberId  Int
+//   admin                 Boolean
+
+//   organizationMember    OrganizationMember @relation(fields: [organizationMemberId], references: [id], onDelete: Cascade)
+//   user                  User @relation(fields: [userId], references: [id], onDelete: Cascade)
+//   group                 Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+//   @@unique([userId, groupId])
+// }
+
