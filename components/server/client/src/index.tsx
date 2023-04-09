@@ -8,11 +8,14 @@ import client from './graphql/client';
 
 import { ThemeProvider } from '@mui/material/styles';
 import Theme from 'Theme';
+import SnackBarProvider from 'context/SnackBarContext';
 
 ReactDOM.render(
   <ThemeProvider theme={Theme}>
     <ApolloProvider client={client}>
-      <App />
+      <SnackBarProvider>
+        <App />
+      </SnackBarProvider>
     </ApolloProvider>
   </ThemeProvider>,
   document.getElementById('root')

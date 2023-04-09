@@ -1,23 +1,23 @@
-import { gql } from '@apollo/client';
+import { gql } from '../__generated__/gql';
 
-export const UPDATE_USER = gql`
-  mutation Mutation(
-    $phoneNumber: String
-    $password: String
-    $firstName: String
-    $lastName: String
-  ) {
-    updateUser(
-      phoneNumber: $phoneNumber
-      password: $password
-      firstName: $firstName
-      lastName: $lastName
-    ) {
-      id
-      email
-      phoneNumber
-      firstName
-      lastName
-    }
-  }
-`;
+// export const UPDATE_USER = gql`
+//   mutation Mutation(
+//     $phoneNumber: String
+//     $password: String
+//     $firstName: String
+//     $lastName: String
+//   ) {
+//     updateUser(
+//       phoneNumber: $phoneNumber
+//       password: $password
+//       firstName: $firstName
+//       lastName: $lastName
+//     ) {
+//       id
+//       email
+//       phoneNumber
+//       firstName
+//       lastName
+//     }
+//   }
+// `;

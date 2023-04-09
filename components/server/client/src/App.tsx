@@ -1,16 +1,29 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import ChangePassword from './modules/Auth/ChangePassword';
-import CompleteSignup from './modules/Auth/CompleteSignup';
+import Sidenav from 'common/components/Sidenav';
+import MinibrandsMetadataScreen from './modules/MinibrandsMetadata/index';
+import { Box } from '@mui/material';
+
+export const MINIBRANDS_METADATA_PATH = '/minibrandsMetadata';
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Routes>
-          <Route path="/completeSignup" element={<CompleteSignup />} />
-          <Route path="/changePassword" element={<ChangePassword />} />
-        </Routes>
+        <Box
+          display={'flex'}
+          flex={1}
+          flexDirection={'row'}
+          sx={{ backgroundColor: 'neutral.main' }}
+        >
+          <Sidenav />
+          <Routes>
+            <Route
+              path={MINIBRANDS_METADATA_PATH}
+              element={<MinibrandsMetadataScreen />}
+            />
+          </Routes>
+        </Box>
       </BrowserRouter>
     </div>
   );
