@@ -1,5 +1,4 @@
-import { server } from "./server";
+import { startServer } from "./server";
 
-server.listen().then(({ url }) => {
-  console.log(`🚀  Server ready at ${url}`); // tslint:disable-line no-console
-});
+startServer();
+console.log(`🚀  Server ready at http://localhost:4000/`); // tslint:disable-line no-console

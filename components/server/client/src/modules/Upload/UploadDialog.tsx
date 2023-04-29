@@ -1,11 +1,25 @@
 import React from 'react';
+import { useDropzone } from 'react-dropzone';
+import { useState } from 'react';
+import { Box, SelectChangeEvent } from '@mui/material';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
-import DragAndDropUploader from './DragAndDropUploader';
-import { IFileWithMeta } from 'react-dropzone-uploader';
-import axios from 'axios';
+import useMinibrandsMetadata from '../MinibrandsMetadata/hooks/useMinibrandsMetadata';
+import FileInput from './FileInput/FileInput';
+import SeriesInput from './SeriesInput';
+import TypesInput from './TypesInput';
+import Previews from './Previews/Previews';
 import client from '../../graphql/client';
+import axios from 'axios';
+import useSaveMinibrand from './hooks/useSaveMinibrand';
 import { GET_IMAGE_UPLOAD_LINK } from '../../graphql/miniBrands';
+
+export interface MiniBrand {
+  file: File;
+  preview: string;
+  name: string;
+  tagIds: number[];
+}
 
 interface Props {
   open: boolean;
@@ -13,32 +27,116 @@ interface Props {
 }
 export default function UploadDialog(props: Props) {
   const { open, handleClose } = props;
-  // const uploadFiles = async (files: IFileWithMeta[]) => {
-  //   await Promise.all(
-  //     files.map(async (file) => {
-  //       const data = await client.query({
-  //         query: GET_IMAGE_UPLOAD_LINK,
-  //         variables: { name: 'test' }
-  //       });
-  //       const url = data.data.getImageUploadLink;
-  //       console.log(url);
-  //       const response = await axios.put(url, file.file, {
-  //         headers: {
-  //           'Content-Type': file.file.type
-  //         }
-  //       });
-  //       console.log(response);
-  //     })
-  //   );
-  // };
+  const { data, loading } = useMinibrandsMetadata();
+  const { saveMinibrand, loading: savingMiniBrand } = useSaveMinibrand();
+  const [miniBrands, setMiniBrands] = useState<MiniBrand[]>([]);
+  const [seriesId, setSeriesId] = useState<number>();
+  const [typeId, setTypeId] = useState<number>();
+  const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
+    accept: {
+      'image/*': []
+    },
+    onDrop: (acceptedFiles) => {
+      setMiniBrands((miniBrands) => {
+        const newMiniBrands = acceptedFiles.map((file) => ({
+          file,
+          preview: URL.createObjectURL(file),
+          name: '',
+          tagIds: []
+        }));
+        return [...miniBrands, ...newMiniBrands];
+      });
+    }
+  });
+
+  const handleSubmit = async () => {
+    await Promise.all(
+      miniBrands.map(async (miniBrand) => {
+        const data = await client.query({
+          query: GET_IMAGE_UPLOAD_LINK,
+          variables: { name: miniBrand.name }
+        });
+        const url = data.data.getImageUploadLink;
+        const response = await axios.put(url, miniBrand.file, {
+          headers: {
+            'Content-Type': miniBrand.file.type
+          }
+        });
+        if (response.status === 200 && typeId && seriesId) {
+          const imgUrl = url.split('?');
+          saveMinibrand({
+            input: {
+              name: miniBrand.name,
+              typeId,
+              seriesId,
+              tagIds: miniBrand.tagIds,
+              imgUrl: imgUrl[0]
+            }
+          });
+        }
+      })
+    );
+  };
+
+  const handleSeriesChange = (event: SelectChangeEvent<number>) => {
+    setSeriesId(event.target.value as number);
+  };
+
+  const handleTypesChange = (event: SelectChangeEvent<number>) => {
+    setTypeId(event.target.value as number);
+  };
+
   return (
     <Dialog
       onClose={handleClose}
       open={open}
-      PaperProps={{ style: { padding: 10 } }}
+      PaperProps={{ style: { padding: 20, width: '100%' } }}
     >
       <DialogTitle>Upload Mini Brands</DialogTitle>
-      <DragAndDropUploader />
+      {data && (
+        <Box>
+          <FileInput
+            rootProps={getRootProps({ style: fileInputStyle })}
+            inputProps={getInputProps()}
+            miniBrands={miniBrands}
+            setMiniBrands={setMiniBrands}
+          />
+          <SeriesInput
+            seriesId={seriesId}
+            series={data?.series ?? []}
+            handleSeriesChange={handleSeriesChange}
+          />
+          <TypesInput
+            typeId={typeId}
+            types={data?.types ?? []}
+            handleTypesChange={handleTypesChange}
+          />
+          <Previews
+            miniBrands={miniBrands}
+            tags={data?.tags ?? []}
+            setMiniBrands={setMiniBrands}
+            handleSubmit={handleSubmit}
+          />
+        </Box>
+      )}
     </Dialog>
   );
 }
+
+const fileInputStyle = {
+  flex: 1,
+  display: 'flex',
+  // flexDirection: 'column',
+  alignItems: 'center',
+  marginTop: 20,
+  marginBottom: 20,
+  padding: 20,
+  borderWidth: 2,
+  borderRadius: 2,
+  borderColor: '#eeeeee',
+  borderStyle: 'dashed',
+  backgroundColor: '#fafafa',
+  color: '#bdbdbd',
+  outline: 'none',
+  transition: 'border .24s ease-in-out'
+};

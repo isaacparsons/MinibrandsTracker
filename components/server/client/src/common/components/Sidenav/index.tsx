@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
-import { List, Switch, useTheme } from '@mui/material';
-import Collapse from '@mui/material/Collapse';
+import { List, Switch, useTheme, Box, Collapse } from '@mui/material';
 import NavListItem from './NavListItem';
 import UploadDialog from 'modules/Upload/UploadDialog';
 import { useNavigate } from 'react-router-dom';
-import { MINIBRANDS_METADATA_PATH } from '../../../App';
+import { MINIBRANDS_METADATA_PATH, HOME_PATH } from '../../../App';
 
 const COLLAPSED_WIDTH = 70;
-const EXPANDED_WIDTH = 300;
+const EXPANDED_WIDTH = 250;
 
 const Sidenav = () => {
   const navigate = useNavigate();
@@ -22,13 +21,14 @@ const Sidenav = () => {
       in={open}
       collapsedSize={COLLAPSED_WIDTH}
     >
-      <div
+      <Box
         onMouseEnter={() => setOpen(true)}
         onMouseLeave={() => setOpen(false)}
-        style={{
+        sx={{
           backgroundColor: theme.palette.primary.main,
           height: '100vh',
           width: EXPANDED_WIDTH,
+          marginRight: 20,
           flex: 1,
           display: 'flex',
           flexDirection: 'column',
@@ -36,9 +36,15 @@ const Sidenav = () => {
         }}
       >
         <List>
-          <NavListItem icon="AccountCircle" color="white" title="Account" />
+          <NavListItem
+            icon="Home"
+            color="white"
+            title="Home"
+            onClick={() => navigate(HOME_PATH)}
+          />
         </List>
         <List>
+          <NavListItem icon="AccountCircle" color="white" title="Account" />
           <NavListItem
             icon="Settings"
             color="white"
@@ -65,19 +71,13 @@ const Sidenav = () => {
           />
           <NavListItem icon="Logout" color="white" title="Logout" />
         </List>
-      </div>
+      </Box>
       <UploadDialog
         open={uploadDialogOpen}
         handleClose={() => setUploadDialogOpen(false)}
       />
     </Collapse>
   );
-};
-
-const styles = {
-  textInput: {
-    margin: 10
-  }
 };
 
 export default Sidenav;

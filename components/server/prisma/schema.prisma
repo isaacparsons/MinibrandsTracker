@@ -21,34 +21,41 @@ model User {
   passwordHash           String
   accountCreated         Boolean
 
-  collections            Collection[]
-}
-
-model Collection {
-  id                    Int      @id @default(autoincrement())
-  name                  String
-  userId                Int
-
-  user                  User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  items                 MiniBrand[]
+  collected              MiniBrand[]
 }
 
 model MiniBrand {
   id                    Int      @id @default(autoincrement())
   name                  String
-  type                  String
-  series                String
-
+  typeId                Int
+  seriesId              Int
+  imgUrl                String
   tags                  MiniBrandTag[]
-  collections           Collection[]
+
+  type                  MiniBrandType @relation(fields: [typeId], references: [id], onDelete: Cascade)
+  series                MiniBrandSeries @relation(fields: [seriesId], references: [id], onDelete: Cascade)
+  users                 User[]
 }
 
 model MiniBrandTag {
   id                    Int      @id @default(autoincrement())
-  name                  String
-  miniBrandId           Int
+  value                 String   @unique
 
-  miniBrand             MiniBrand @relation(fields: [miniBrandId], references: [id], onDelete: Cascade)
+  miniBrands            MiniBrand[]
+}
+
+model MiniBrandType {
+  id                    Int      @id @default(autoincrement())
+  value                 String   @unique
+
+  miniBrands            MiniBrand[]
+}
+
+model MiniBrandSeries {
+  id                    Int      @id @default(autoincrement())
+  value                 String   @unique
+
+  miniBrands            MiniBrand[]
 }
 
 // model GroupMember {

@@ -1,17 +1,12 @@
 import React, { useState } from 'react';
 import {
-  Icon,
-  List,
   ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
   useTheme
 } from '@mui/material';
-import Collapse from '@mui/material/Collapse';
-import InboxIcon from '@mui/icons-material/Inbox';
-import DraftsIcon from '@mui/icons-material/Drafts';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+
 import * as MUIcon from '@mui/icons-material';
 
 interface Props {

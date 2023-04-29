@@ -5,7 +5,7 @@ const useEditableList = (data: Item[]) => {
   const [list, setList] = useState<Item[]>([]);
 
   useEffect(() => {
-    setList(data);
+    setList([...data]);
   }, [data]);
 
   const addItem = (item: Item) => {

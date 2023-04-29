@@ -6,16 +6,70 @@ export const GET_IMAGE_UPLOAD_LINK = gql(/* GraphQL */ `
   }
 `);
 
+export const SAVE_MINIBRAND = gql(/* GraphQL */ `
+  mutation SaveMiniBrand($input: MiniBrandInput!) {
+    saveMiniBrand(input: $input) {
+      id
+      name
+      seriesId
+      typeId
+      tags {
+        id
+        value
+      }
+    }
+  }
+`);
+
+export const DELETE_MINIBRAND = gql(/* GraphQL */ `
+  mutation DeleteMiniBrand($id: Int!) {
+    deleteMiniBrand(id: $id) {
+      id
+      imgUrl
+      name
+      seriesId
+      typeId
+    }
+  }
+`);
+
+export const GET_MINIBRANDS = gql(/* GraphQL */ `
+  query GetMiniBrands {
+    getMiniBrands {
+      id
+      imgUrl
+      name
+      series {
+        id
+        value
+      }
+      seriesId
+      tags {
+        id
+        value
+      }
+      type {
+        id
+        value
+      }
+      typeId
+    }
+  }
+`);
+
 export const GET_MINIBRANDS_METADATA = gql(/* GraphQL */ `
   query GetMiniBrandsMetaData {
     getMiniBrandsMetaData {
       series {
+        id
         value
       }
       tags {
+        id
         value
       }
       types {
+        id
         value
       }
     }

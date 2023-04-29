@@ -77,3 +77,10 @@ variable "db_password" {
   # sensitive   = true
   default = "password"
 }
+
+variable "icon_bucket_name" {
+  # sensitive   = true
+  default = "minibrands-icon-bucket"
+}
+
+

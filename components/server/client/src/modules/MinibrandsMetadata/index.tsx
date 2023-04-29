@@ -1,6 +1,6 @@
 import { Button, Container } from '@mui/material';
 import useMinibrandsMetadata from './hooks/useMinibrandsMetadata';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import EditableList from './EditableList';
 import useEditableList from './hooks/useEditableList';
 import useSaveMinibrandsMetadata from './hooks/useSaveMinibrandsMetadata';
@@ -11,23 +11,35 @@ function MinibrandsMetadataScreen() {
   const { data } = useMinibrandsMetadata();
   const { saveMinibrandsMetadata, loading } = useSaveMinibrandsMetadata();
 
+  const typesRaw = useMemo(() => {
+    return data?.types.map((item) => ({ value: item.value })) ?? [];
+  }, [data?.types]);
+
+  const seriesRaw = useMemo(() => {
+    return data?.series.map((item) => ({ value: item.value })) ?? [];
+  }, [data?.series]);
+
+  const tagsRaw = useMemo(() => {
+    return data?.tags.map((item) => ({ value: item.value })) ?? [];
+  }, [data?.tags]);
+
   const {
     list: types,
     addItem: addType,
     removeItem: removeType
-  } = useEditableList(data?.types ?? []);
+  } = useEditableList(typesRaw);
 
   const {
     list: series,
     addItem: addSeries,
     removeItem: removeSeries
-  } = useEditableList(data?.series ?? []);
+  } = useEditableList(seriesRaw);
 
   const {
     list: tags,
     addItem: addTag,
     removeItem: removeTag
-  } = useEditableList(data?.tags ?? []);
+  } = useEditableList(tagsRaw);
 
   const handleCancel = () => {
     setEditing(false);

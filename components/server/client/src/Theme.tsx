@@ -24,7 +24,10 @@ const theme = createTheme({
     }
   },
   typography: {
-    fontFamily: 'Roboto, Helvetica, Segoe UI, Arial, sans-serif'
+    allVariants: {
+      fontFamily: 'Roboto',
+      fontWeight: 300
+    }
   }
 });
 

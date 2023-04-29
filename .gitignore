@@ -8,3 +8,7 @@
 **/build/
 **/dist/
 *.tfstate
+.vscode/
+**/logs/
+**/generated/
+**/__generated__/

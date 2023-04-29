@@ -20,6 +20,5 @@
     "inlineSources": true,
     "sourceRoot": "/"
   },
-  "include": ["src", "modules"],
-  "exclude": ["acceptance", "lambdas"]
+  "include": ["src", "modules"]
 }
