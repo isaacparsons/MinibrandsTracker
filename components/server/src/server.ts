@@ -1,8 +1,5 @@
-import { makeExecutableSchema } from "@graphql-tools/schema";
-// import { ApolloServer } from "apollo-server";
-// import { expressMiddleware } from '@apollo/server/express4';
+import path from "path";
 import { readFileSync } from "fs";
-import { applyMiddleware } from "graphql-middleware";
 import { resolvers } from "./graphql/resolver";
 import { permissions } from "./permissions/index";
 import { GraphQLErrorsHandler } from "./plugins/error";
@@ -27,6 +24,13 @@ const typeDefs = readFileSync("src/graphql/schema.graphql", {
 // schema = applyMiddleware(schema, permissions);
 
 const app = express();
+
+// app.use(express.static(path.join(__dirname, "../client/build")));
+
+// app.get("/", (req, res) => {
+//   res.sendFile(path.join(__dirname, "../client/build", "index.html"));
+// });
+
 const httpServer = http.createServer(app);
 
 // Set up Apollo Server
@@ -54,9 +58,3 @@ export const startServer = async () => {
   );
   return await new Promise<void>((resolve) => httpServer.listen({ port: 4000 }, resolve));
 };
-
-// export const server = new ApolloServer({
-//   schema,
-//   context: auth,
-//   plugins: [GraphQLErrorsHandler]
-// });

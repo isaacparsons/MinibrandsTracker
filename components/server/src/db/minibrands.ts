@@ -133,7 +133,10 @@ export default class MiniBrandsRepository {
       where: {
         id
       },
-      data: inputWithoutNulls
+      data: inputWithoutNulls,
+      include: {
+        tags: true
+      }
     });
   };
 
@@ -141,6 +144,9 @@ export default class MiniBrandsRepository {
     return this.db.miniBrand.delete({
       where: {
         id
+      },
+      include: {
+        tags: true
       }
     });
   };
