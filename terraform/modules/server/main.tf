@@ -122,6 +122,18 @@ resource "aws_instance" "minibrands_tracker_backend" {
   vpc_security_group_ids = [aws_security_group.minibrands_tracker_backend_sg.id]
 
   tags = {
-    Name = "backend_${count.index}"
+    Name = "minibrands_tracker_backend_${count.index}"
+  }
+}
+
+resource "aws_eip" "minibrands_tracker_eip" {
+  count = var.settings.backend.count
+
+  instance = aws_instance.minibrands_tracker_backend[count.index].id
+
+  vpc = true
+
+  tags = {
+    Name = "minibrands_tracker_eip_${count.index}"
   }
 }

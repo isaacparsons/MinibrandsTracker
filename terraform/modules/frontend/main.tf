@@ -1,22 +1,5 @@
 resource "aws_s3_bucket" "frontend" {
-  bucket = "${var.bucket_name}"
-}
-
-resource "aws_s3_bucket_website_configuration" "website_config" {
-  bucket = aws_s3_bucket.frontend.id
-
-  index_document {
-    suffix = "index.html"
-  }
-
-  error_document {
-    key = "index.html"
-  }
-}
-
-resource "aws_s3_bucket_acl" "acl" {
-  bucket = aws_s3_bucket.frontend.id
-  acl    = "public-read"
+  bucket = var.bucket_name
 }
 
 resource "aws_s3_bucket_policy" "policy" {
@@ -39,3 +22,21 @@ resource "aws_s3_bucket_policy" "policy" {
 }
 EOF
 }
+
+resource "aws_s3_bucket_website_configuration" "website_config" {
+  bucket = aws_s3_bucket.frontend.id
+
+  index_document {
+    suffix = "index.html"
+  }
+
+  error_document {
+    key = "index.html"
+  }
+}
+
+resource "aws_s3_bucket_acl" "acl" {
+  bucket = aws_s3_bucket.frontend.id
+  acl    = "public-read"
+}
+
