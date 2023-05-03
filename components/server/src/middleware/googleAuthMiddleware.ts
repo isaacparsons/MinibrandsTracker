@@ -4,7 +4,7 @@ import { Express, Request, Response, NextFunction } from "express";
 import GoogleAuthRepository from "../db/googleAuth";
 import UserRepository, { UserWithAuth } from "../db/user";
 
-const SERVER_URL = "http://localhost:4000";
+const SERVER_URL = process.env.BACKEND_URL;
 
 const googleAuthMiddleware = (app: Express) => {
   return (req: Request, res: Response, next: NextFunction): void => {
@@ -58,7 +58,7 @@ const googleAuthMiddleware = (app: Express) => {
       "/auth/google/callback",
       passport.authenticate("google", { failureRedirect: "/login" }),
       function (req, res) {
-        res.redirect("http://localhost:3000/login_success");
+        res.redirect(`${process.env.CLIENT_URL}/login_success`);
       }
     );
     next();
