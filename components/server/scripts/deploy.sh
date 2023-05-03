@@ -1,6 +1,7 @@
 #!/bin/bash
 cd /home/ubuntu/server/
-npm install -g dotenv-cli
+# npm install -g dotenv-cli
+npm install
 npm install -g prisma
 npm run migrate-prod
 
