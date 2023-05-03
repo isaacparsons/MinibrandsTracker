@@ -13,8 +13,10 @@ import ProtectedRoute from './common/components/ProtectedRoute';
 import Admin from './common/components/Admin';
 import Topbar from './common/components/Topbar/Topbar';
 import Authenticated from 'common/components/Authenticated';
+import Account from 'modules/Acccount/Account';
 
 export const MINIBRANDS_METADATA_PATH = '/minibrandsMetadata';
+export const ACCOUNT_PATH = '/account';
 export const HOME_PATH = '/home';
 export const SIGNUP_PATH = '/signup';
 export const LOGIN_PATH = '/login';
@@ -49,6 +51,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <Home />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path={ACCOUNT_PATH}
+                element={
+                  <ProtectedRoute>
+                    <Account />
                   </ProtectedRoute>
                 }
               />

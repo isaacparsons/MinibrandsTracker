@@ -18,12 +18,17 @@ import Admin from '../Admin';
 import { useSessionContext } from 'context/SessionContext';
 import LogoutItem from './LogoutItem';
 import Api from 'api';
+import { ACCOUNT_PATH, HOME_PATH, MINIBRANDS_METADATA_PATH } from 'App';
+import { useNavigate } from 'react-router-dom';
 
 const api = new Api();
 
 export default function Topbar() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
+  const navigate = useNavigate();
+  const session = useSessionContext();
+
   const open = useMemo(() => {
     return Boolean(anchorEl);
   }, [anchorEl]);
@@ -40,7 +45,18 @@ export default function Topbar() {
     setUploadDialogOpen(true);
   };
 
-  const session = useSessionContext();
+  const handleSettingsClick = () => {
+    handleClose();
+    navigate(MINIBRANDS_METADATA_PATH);
+  };
+  const handleLogoClick = () => {
+    navigate(HOME_PATH);
+  };
+
+  const handleAccountClick = () => {
+    handleClose();
+    navigate(ACCOUNT_PATH);
+  };
 
   const handleLogout = async () => {
     try {
@@ -56,6 +72,7 @@ export default function Topbar() {
       <AppBar position="static">
         <Toolbar>
           <Box
+            onClick={handleLogoClick}
             component="img"
             sx={styles.img}
             src={require('../../../assets/logo.png')}
@@ -81,10 +98,10 @@ export default function Topbar() {
               'aria-labelledby': 'basic-button'
             }}
           >
-            <AccountItem handleClose={handleClose} />
+            <AccountItem handleClose={handleAccountClick} />
             <Admin>
               <AdminModeItem />
-              <SettingsItem handleClose={handleClose} />
+              <SettingsItem handleClose={handleSettingsClick} />
               <UploadItem handleClose={handleUploadClick} />
             </Admin>
             <LogoutItem handleClick={handleLogout} />
