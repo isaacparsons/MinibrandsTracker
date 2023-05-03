@@ -15,14 +15,52 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  Admin
+  Member
+}
+
 model User {
   id                     Int     @id @default(autoincrement())
+  role                   Role
+
+  localAuth              LocalAuth?
+  googleAuth             GoogleAuth?
+  
+  collected              CollectedMinibrand[]
+}
+
+
+model LocalAuth {
   email                  String  @unique
   passwordHash           String
-  accountCreated         Boolean
+  userId                 Int     @unique
 
-  collected              MiniBrand[]
+  user                   User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
+
+model GoogleAuth {
+  id                    String @unique
+  email                 String @unique
+  userId                Int    @unique
+
+  user                   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model CollectedMinibrand {
+  id                    Int      @id @default(autoincrement())
+  minibrandId           Int
+  userId                Int
+
+  dateCollected         String
+  quantity              Int
+
+  minibrand             MiniBrand @relation(fields: [minibrandId], references: [id], onDelete: Cascade)
+  user                  User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, minibrandId])
+}
+
 
 model MiniBrand {
   id                    Int      @id @default(autoincrement())
@@ -34,7 +72,7 @@ model MiniBrand {
 
   type                  MiniBrandType @relation(fields: [typeId], references: [id], onDelete: Cascade)
   series                MiniBrandSeries @relation(fields: [seriesId], references: [id], onDelete: Cascade)
-  users                 User[]
+  collectors            CollectedMinibrand[]
 }
 
 model MiniBrandTag {

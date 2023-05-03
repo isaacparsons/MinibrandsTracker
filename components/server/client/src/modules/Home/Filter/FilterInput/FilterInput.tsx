@@ -34,10 +34,10 @@ const styles = {
   container: (theme: Theme) => {
     return {
       backgroundColor: theme.palette.primary.main,
-      width: '100%',
       flex: 1,
       padding: 2,
-      // maxHeight: 300,
+      maxHeight: 350,
+      overflow: 'auto',
       display: 'flex',
       flexDirection: 'column'
     };

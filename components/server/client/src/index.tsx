@@ -9,12 +9,18 @@ import client from './graphql/client';
 import { ThemeProvider } from '@mui/material/styles';
 import Theme from 'Theme';
 import SnackBarProvider from 'context/SnackBarContext';
+import SessionProvider from 'context/SessionContext';
+import AdminModeProvider from 'context/AdminModeContext';
 
 ReactDOM.render(
   <ThemeProvider theme={Theme}>
     <ApolloProvider client={client}>
       <SnackBarProvider>
-        <App />
+        <SessionProvider>
+          <AdminModeProvider>
+            <App />
+          </AdminModeProvider>
+        </SessionProvider>
       </SnackBarProvider>
     </ApolloProvider>
   </ThemeProvider>,

@@ -30,7 +30,7 @@ const setAllValues = (filterMap: FilterMap, value: boolean) => {
   return newFilterMap;
 };
 
-const useFilterMap = (type: string, values: FilterTypeValue[]) => {
+const useFilterMap = (values: FilterTypeValue[]) => {
   const [filterMap, setFilterMap] = useState<FilterMap>({});
   const [allSelected, setAllSelected] = useState(true);
 
@@ -44,7 +44,7 @@ const useFilterMap = (type: string, values: FilterTypeValue[]) => {
       }
       return newFilterMap;
     });
-  }, [type, values].map(useDeepCompareMemoize));
+  }, [values].map(useDeepCompareMemoize));
 
   useEffect(() => {
     const isAllTrue = Object.keys(filterMap).every((key) => filterMap[key]);

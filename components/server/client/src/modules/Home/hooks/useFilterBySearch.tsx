@@ -10,12 +10,12 @@ const doesContainSubstring = (targetString: string, query: string) => {
   let queryTestChar = queue.shift();
   let targetTestChar = targetStringQueue.shift();
 
-  while (targetTestChar !== queryTestChar && targetTestChar) {
+  while (targetTestChar !== queryTestChar) {
     targetTestChar = targetStringQueue.shift();
-  }
 
-  if (targetStringQueue.length === 0) {
-    return false;
+    if (!targetTestChar) {
+      return false;
+    }
   }
 
   while (queryTestChar === targetTestChar && queryTestChar && targetTestChar) {
@@ -23,7 +23,7 @@ const doesContainSubstring = (targetString: string, query: string) => {
     targetTestChar = targetStringQueue.shift();
   }
 
-  if (queue.length === 0) {
+  if (!queryTestChar) {
     return true;
   }
   return false;
@@ -36,9 +36,12 @@ const useFilterBySearch = (
   if (!minibrands) {
     return [];
   }
-  return minibrands.filter((minibrand) =>
-    doesContainSubstring(minibrand.name, text)
-  );
+  return minibrands.filter((minibrand) => {
+    if (!minibrand?.name) {
+      return false;
+    }
+    return doesContainSubstring(minibrand.name, text);
+  });
 };
 
 export default useFilterBySearch;

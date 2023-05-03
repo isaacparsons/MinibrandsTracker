@@ -4,7 +4,9 @@ import {
   MiniBrandTagInput,
   MiniBrandInput,
   MiniBrandTag,
-  UpdateMiniBrandInput
+  UpdateMiniBrandInput,
+  CollectMinibrandInput,
+  UpdateCollectedMinibrandInput
 } from "../generated/graphql";
 import { PrismaClient } from "@prisma/client";
 
@@ -148,6 +150,54 @@ export default class MiniBrandsRepository {
       include: {
         tags: true
       }
+    });
+  };
+
+  collectMinibrand = async (id: number, userId: number, input: CollectMinibrandInput) => {
+    return this.db.collectedMinibrand.create({
+      data: {
+        ...input,
+        dateCollected: new Date().toUTCString(),
+        user: {
+          connect: {
+            id: userId
+          }
+        },
+        minibrand: {
+          connect: {
+            id
+          }
+        }
+      },
+      include: {
+        minibrand: true
+      }
+    });
+  };
+  updateCollectedMinibrand = async (
+    id: number,
+    userId: number,
+    input: UpdateCollectedMinibrandInput
+  ) => {
+    const { quantity } = input;
+    if (quantity === 0) {
+      return this.db.collectedMinibrand.delete({
+        where: {
+          userId_minibrandId: {
+            userId,
+            minibrandId: id
+          }
+        }
+      });
+    }
+    return this.db.collectedMinibrand.update({
+      where: {
+        userId_minibrandId: {
+          userId,
+          minibrandId: id
+        }
+      },
+      data: input
     });
   };
 }

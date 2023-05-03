@@ -19,6 +19,9 @@ const documents = {
     "\n  query GetMiniBrands {\n    getMiniBrands {\n      id\n      imgUrl\n      name\n      series {\n        id\n        value\n      }\n      seriesId\n      tags {\n        id\n        value\n      }\n      type {\n        id\n        value\n      }\n      typeId\n    }\n  }\n": types.GetMiniBrandsDocument,
     "\n  query GetMiniBrandsMetaData {\n    getMiniBrandsMetaData {\n      series {\n        id\n        value\n      }\n      tags {\n        id\n        value\n      }\n      types {\n        id\n        value\n      }\n    }\n  }\n": types.GetMiniBrandsMetaDataDocument,
     "\n  mutation Mutation(\n    $types: [MiniBrandTypeInput!]!\n    $series: [MiniBrandSeriesInput!]!\n    $tags: [MiniBrandTagInput!]!\n  ) {\n    saveMiniBrandsMetaData(types: $types, series: $series, tags: $tags) {\n      series {\n        id\n        value\n      }\n      tags {\n        id\n        value\n      }\n      types {\n        id\n        value\n      }\n    }\n  }\n": types.MutationDocument,
+    "\n  mutation CollectMinibrand($id: Int!, $input: CollectMinibrandInput!) {\n    collectMinibrand(id: $id, input: $input) {\n      dateCollected\n      id\n      minibrand {\n        id\n        imgUrl\n        name\n        seriesId\n        typeId\n      }\n      minibrandId\n      quantity\n      userId\n    }\n  }\n": types.CollectMinibrandDocument,
+    "\n  mutation UpdateCollectedMinibrand(\n    $input: UpdateCollectedMinibrandInput!\n    $id: Int!\n  ) {\n    updateCollectedMinibrand(input: $input, id: $id) {\n      dateCollected\n      id\n      minibrandId\n      quantity\n      userId\n    }\n  }\n": types.UpdateCollectedMinibrandDocument,
+    "\n  query GetMe {\n    getMe {\n      googleAuth {\n        email\n        id\n        userId\n      }\n      id\n      localAuth {\n        email\n        passwordHash\n        userId\n      }\n      role\n      collected {\n        dateCollected\n        id\n        minibrandId\n        quantity\n        userId\n        minibrand {\n          name\n          id\n        }\n      }\n    }\n  }\n": types.GetMeDocument,
 };
 
 /**
@@ -59,6 +62,18 @@ export function gql(source: "\n  query GetMiniBrandsMetaData {\n    getMiniBrand
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  mutation Mutation(\n    $types: [MiniBrandTypeInput!]!\n    $series: [MiniBrandSeriesInput!]!\n    $tags: [MiniBrandTagInput!]!\n  ) {\n    saveMiniBrandsMetaData(types: $types, series: $series, tags: $tags) {\n      series {\n        id\n        value\n      }\n      tags {\n        id\n        value\n      }\n      types {\n        id\n        value\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation Mutation(\n    $types: [MiniBrandTypeInput!]!\n    $series: [MiniBrandSeriesInput!]!\n    $tags: [MiniBrandTagInput!]!\n  ) {\n    saveMiniBrandsMetaData(types: $types, series: $series, tags: $tags) {\n      series {\n        id\n        value\n      }\n      tags {\n        id\n        value\n      }\n      types {\n        id\n        value\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation CollectMinibrand($id: Int!, $input: CollectMinibrandInput!) {\n    collectMinibrand(id: $id, input: $input) {\n      dateCollected\n      id\n      minibrand {\n        id\n        imgUrl\n        name\n        seriesId\n        typeId\n      }\n      minibrandId\n      quantity\n      userId\n    }\n  }\n"): (typeof documents)["\n  mutation CollectMinibrand($id: Int!, $input: CollectMinibrandInput!) {\n    collectMinibrand(id: $id, input: $input) {\n      dateCollected\n      id\n      minibrand {\n        id\n        imgUrl\n        name\n        seriesId\n        typeId\n      }\n      minibrandId\n      quantity\n      userId\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation UpdateCollectedMinibrand(\n    $input: UpdateCollectedMinibrandInput!\n    $id: Int!\n  ) {\n    updateCollectedMinibrand(input: $input, id: $id) {\n      dateCollected\n      id\n      minibrandId\n      quantity\n      userId\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateCollectedMinibrand(\n    $input: UpdateCollectedMinibrandInput!\n    $id: Int!\n  ) {\n    updateCollectedMinibrand(input: $input, id: $id) {\n      dateCollected\n      id\n      minibrandId\n      quantity\n      userId\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetMe {\n    getMe {\n      googleAuth {\n        email\n        id\n        userId\n      }\n      id\n      localAuth {\n        email\n        passwordHash\n        userId\n      }\n      role\n      collected {\n        dateCollected\n        id\n        minibrandId\n        quantity\n        userId\n        minibrand {\n          name\n          id\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetMe {\n    getMe {\n      googleAuth {\n        email\n        id\n        userId\n      }\n      id\n      localAuth {\n        email\n        passwordHash\n        userId\n      }\n      role\n      collected {\n        dateCollected\n        id\n        minibrandId\n        quantity\n        userId\n        minibrand {\n          name\n          id\n        }\n      }\n    }\n  }\n"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};

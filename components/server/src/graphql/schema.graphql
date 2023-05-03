@@ -3,6 +3,7 @@ type Query {
   getMiniBrand(id: Int!): MiniBrand!
   getImageUploadLink(name: String!): String!
   getMiniBrandsMetaData: MiniBrandsMetaData!
+  getMe: User
 }
 
 type Mutation {
@@ -14,25 +15,55 @@ type Mutation {
   saveMiniBrand(input: MiniBrandInput!): MiniBrand!
   updateMiniBrand(id: Int!, input: UpdateMiniBrandInput!): MiniBrand!
   deleteMiniBrand(id: Int!): MiniBrand!
-}
-
-type Auth {
-  token: String!
-  refreshToken: String!
-  user: User!
+  collectMinibrand(id: Int!, input: CollectMinibrandInput!): CollectedMinibrand!
+  updateCollectedMinibrand(id: Int!, input: UpdateCollectedMinibrandInput!): CollectedMinibrand!
 }
 
 type User {
-  id: Int!
-  email: String!
-  passwordHash: String
+  id: Int
+  role: Role
 
-  collected: [MiniBrand!]!
+  collected: [CollectedMinibrand!]
+
+  localAuth: LocalAuth
+  googleAuth: GoogleAuth
 }
 
-enum ROLE {
-  ADMIN
-  MEMBER
+type LocalAuth {
+  email: String
+  passwordHash: String
+  userId: Int
+}
+
+type GoogleAuth {
+  id: String
+  email: String
+  userId: Int
+}
+
+enum Role {
+  Admin
+  Member
+}
+
+type CollectedMinibrand {
+  id: Int!
+  minibrandId: Int
+  userId: Int
+
+  dateCollected: String
+  quantity: Int
+
+  minibrand: MiniBrand
+  user: User
+}
+
+input CollectMinibrandInput {
+  quantity: Int!
+}
+
+input UpdateCollectedMinibrandInput {
+  quantity: Int!
 }
 
 type MiniBrandsMetaData {
@@ -43,15 +74,15 @@ type MiniBrandsMetaData {
 
 type MiniBrand {
   id: Int!
-  name: String!
-  typeId: Int!
-  seriesId: Int!
-  imgUrl: String!
+  name: String
+  typeId: Int
+  seriesId: Int
+  imgUrl: String
 
   type: MiniBrandType
   series: MiniBrandSeries
-  tags: [MiniBrandTag!]!
-  users: [User!]
+  tags: [MiniBrandTag!]
+  collectors: [CollectedMinibrand!]
 }
 
 input MiniBrandInput {

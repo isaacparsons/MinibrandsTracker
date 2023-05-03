@@ -4,7 +4,8 @@ import {
   MiniBrandTypeInput,
   MiniBrandTagInput,
   MiniBrandInput,
-  UpdateMiniBrandInput
+  UpdateMiniBrandInput,
+  CollectMinibrandInput
 } from "../generated/graphql";
 
 export default class MiniBrandsService {
@@ -58,5 +59,13 @@ export default class MiniBrandsService {
 
   updateMiniBrand = async (id: number, input: UpdateMiniBrandInput) => {
     return this.miniBrandsRepository.updateMiniBrand(id, input);
+  };
+
+  collectMinibrand = async (id: number, userId: number, input: CollectMinibrandInput) => {
+    return this.miniBrandsRepository.collectMinibrand(id, userId, input);
+  };
+
+  updateCollectedMinibrand = async (id: number, userId: number, input: CollectMinibrandInput) => {
+    return this.miniBrandsRepository.updateCollectedMinibrand(id, userId, input);
   };
 }

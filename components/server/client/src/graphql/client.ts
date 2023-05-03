@@ -1,12 +1,30 @@
-import { ApolloClient, InMemoryCache } from '@apollo/client';
+import { ApolloClient, InMemoryCache, HttpLink, from } from '@apollo/client';
+import { onError } from '@apollo/client/link/error';
 
-const URI =
-  process.env.NODE_ENV === 'production'
-    ? 'http://44.228.17.0:4000/graphql'
-    : 'http://localhost:4000/graphql';
+const URI = `${process.env.REACT_APP_BACKEND_URL}/graphql`;
+
+const httpLink = new HttpLink({ uri: URI, credentials: 'include' });
+
+const errorLink = onError(
+  ({ networkError, graphQLErrors, operation, forward }) => {
+    if (graphQLErrors && graphQLErrors.length > 0) {
+      graphQLErrors.forEach((error) => {
+        console.log('GRAPHQL ERROR');
+        console.log(error);
+      });
+    }
+
+    if (networkError) {
+      console.log('NETWORK ERROR');
+      console.log(networkError?.cause);
+      console.log(networkError?.message);
+    }
+    return forward(operation);
+  }
+);
 
 const client = new ApolloClient({
-  uri: URI,
+  link: from([errorLink, httpLink]),
   cache: new InMemoryCache({ addTypename: false })
 });
 

@@ -6,7 +6,8 @@ import {
   Checkbox,
   FormGroup,
   FormControlLabel,
-  Typography
+  Typography,
+  Divider
 } from '@mui/material';
 import SelectAll from './SelectAll';
 
@@ -38,7 +39,7 @@ const FilterList = (props: Props) => {
 
   return (
     <Box sx={styles.container}>
-      <Typography>{type}</Typography>
+      <Typography variant="h5">{type}</Typography>
       <List>
         <ListItem>
           <SelectAll

@@ -2,7 +2,8 @@ import type { CodegenConfig } from "@graphql-codegen/cli";
 
 const config: CodegenConfig = {
   config: {
-    contextType: "../../src/context#Context"
+    contextType: "../../src/context#Context",
+    enumsAsConst: true
   },
   overwrite: true,
   schema: "./src/graphql/schema.graphql",

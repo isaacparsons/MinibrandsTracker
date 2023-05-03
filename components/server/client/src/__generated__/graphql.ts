@@ -14,24 +14,46 @@ export type Scalars = {
   Float: number;
 };
 
-export type Auth = {
-  __typename?: 'Auth';
-  refreshToken: Scalars['String'];
-  token: Scalars['String'];
-  user: User;
+export type CollectMinibrandInput = {
+  quantity: Scalars['Int'];
+};
+
+export type CollectedMinibrand = {
+  __typename?: 'CollectedMinibrand';
+  dateCollected?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+  minibrand?: Maybe<MiniBrand>;
+  minibrandId?: Maybe<Scalars['Int']>;
+  quantity?: Maybe<Scalars['Int']>;
+  user?: Maybe<User>;
+  userId?: Maybe<Scalars['Int']>;
+};
+
+export type GoogleAuth = {
+  __typename?: 'GoogleAuth';
+  email?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+  userId?: Maybe<Scalars['Int']>;
+};
+
+export type LocalAuth = {
+  __typename?: 'LocalAuth';
+  email?: Maybe<Scalars['String']>;
+  passwordHash?: Maybe<Scalars['String']>;
+  userId?: Maybe<Scalars['Int']>;
 };
 
 export type MiniBrand = {
   __typename?: 'MiniBrand';
+  collectors?: Maybe<Array<CollectedMinibrand>>;
   id: Scalars['Int'];
-  imgUrl: Scalars['String'];
-  name: Scalars['String'];
+  imgUrl?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
   series?: Maybe<MiniBrandSeries>;
-  seriesId: Scalars['Int'];
-  tags: Array<MiniBrandTag>;
+  seriesId?: Maybe<Scalars['Int']>;
+  tags?: Maybe<Array<MiniBrandTag>>;
   type?: Maybe<MiniBrandType>;
-  typeId: Scalars['Int'];
-  users?: Maybe<Array<User>>;
+  typeId?: Maybe<Scalars['Int']>;
 };
 
 export type MiniBrandInput = {
@@ -84,10 +106,18 @@ export type MiniBrandsMetaData = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  collectMinibrand: CollectedMinibrand;
   deleteMiniBrand: MiniBrand;
   saveMiniBrand: MiniBrand;
   saveMiniBrandsMetaData: MiniBrandsMetaData;
+  updateCollectedMinibrand: CollectedMinibrand;
   updateMiniBrand: MiniBrand;
+};
+
+
+export type MutationCollectMinibrandArgs = {
+  id: Scalars['Int'];
+  input: CollectMinibrandInput;
 };
 
 
@@ -108,6 +138,12 @@ export type MutationSaveMiniBrandsMetaDataArgs = {
 };
 
 
+export type MutationUpdateCollectedMinibrandArgs = {
+  id: Scalars['Int'];
+  input: UpdateCollectedMinibrandInput;
+};
+
+
 export type MutationUpdateMiniBrandArgs = {
   id: Scalars['Int'];
   input: UpdateMiniBrandInput;
@@ -116,6 +152,7 @@ export type MutationUpdateMiniBrandArgs = {
 export type Query = {
   __typename?: 'Query';
   getImageUploadLink: Scalars['String'];
+  getMe?: Maybe<User>;
   getMiniBrand: MiniBrand;
   getMiniBrands: Array<MiniBrand>;
   getMiniBrandsMetaData: MiniBrandsMetaData;
@@ -132,9 +169,13 @@ export type QueryGetMiniBrandArgs = {
 };
 
 export enum Role {
-  Admin = 'ADMIN',
-  Member = 'MEMBER'
+  Admin = 'Admin',
+  Member = 'Member'
 }
+
+export type UpdateCollectedMinibrandInput = {
+  quantity: Scalars['Int'];
+};
 
 export type UpdateMiniBrandInput = {
   imgUrl?: InputMaybe<Scalars['String']>;
@@ -146,10 +187,11 @@ export type UpdateMiniBrandInput = {
 
 export type User = {
   __typename?: 'User';
-  collected: Array<MiniBrand>;
-  email: Scalars['String'];
-  id: Scalars['Int'];
-  passwordHash?: Maybe<Scalars['String']>;
+  collected?: Maybe<Array<CollectedMinibrand>>;
+  googleAuth?: Maybe<GoogleAuth>;
+  id?: Maybe<Scalars['Int']>;
+  localAuth?: Maybe<LocalAuth>;
+  role?: Maybe<Role>;
 };
 
 export type GetImageUploadLinkQueryVariables = Exact<{
@@ -164,19 +206,19 @@ export type SaveMiniBrandMutationVariables = Exact<{
 }>;
 
 
-export type SaveMiniBrandMutation = { __typename?: 'Mutation', saveMiniBrand: { __typename?: 'MiniBrand', id: number, name: string, seriesId: number, typeId: number, tags: Array<{ __typename?: 'MiniBrandTag', id: number, value: string }> } };
+export type SaveMiniBrandMutation = { __typename?: 'Mutation', saveMiniBrand: { __typename?: 'MiniBrand', id: number, name?: string | null, seriesId?: number | null, typeId?: number | null, tags?: Array<{ __typename?: 'MiniBrandTag', id: number, value: string }> | null } };
 
 export type DeleteMiniBrandMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type DeleteMiniBrandMutation = { __typename?: 'Mutation', deleteMiniBrand: { __typename?: 'MiniBrand', id: number, imgUrl: string, name: string, seriesId: number, typeId: number } };
+export type DeleteMiniBrandMutation = { __typename?: 'Mutation', deleteMiniBrand: { __typename?: 'MiniBrand', id: number, imgUrl?: string | null, name?: string | null, seriesId?: number | null, typeId?: number | null } };
 
 export type GetMiniBrandsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetMiniBrandsQuery = { __typename?: 'Query', getMiniBrands: Array<{ __typename?: 'MiniBrand', id: number, imgUrl: string, name: string, seriesId: number, typeId: number, series?: { __typename?: 'MiniBrandSeries', id: number, value: string } | null, tags: Array<{ __typename?: 'MiniBrandTag', id: number, value: string }>, type?: { __typename?: 'MiniBrandType', id: number, value: string } | null }> };
+export type GetMiniBrandsQuery = { __typename?: 'Query', getMiniBrands: Array<{ __typename?: 'MiniBrand', id: number, imgUrl?: string | null, name?: string | null, seriesId?: number | null, typeId?: number | null, series?: { __typename?: 'MiniBrandSeries', id: number, value: string } | null, tags?: Array<{ __typename?: 'MiniBrandTag', id: number, value: string }> | null, type?: { __typename?: 'MiniBrandType', id: number, value: string } | null }> };
 
 export type GetMiniBrandsMetaDataQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -192,6 +234,27 @@ export type MutationMutationVariables = Exact<{
 
 export type MutationMutation = { __typename?: 'Mutation', saveMiniBrandsMetaData: { __typename?: 'MiniBrandsMetaData', series: Array<{ __typename?: 'MiniBrandSeries', id: number, value: string }>, tags: Array<{ __typename?: 'MiniBrandTag', id: number, value: string }>, types: Array<{ __typename?: 'MiniBrandType', id: number, value: string }> } };
 
+export type CollectMinibrandMutationVariables = Exact<{
+  id: Scalars['Int'];
+  input: CollectMinibrandInput;
+}>;
+
+
+export type CollectMinibrandMutation = { __typename?: 'Mutation', collectMinibrand: { __typename?: 'CollectedMinibrand', dateCollected?: string | null, id: number, minibrandId?: number | null, quantity?: number | null, userId?: number | null, minibrand?: { __typename?: 'MiniBrand', id: number, imgUrl?: string | null, name?: string | null, seriesId?: number | null, typeId?: number | null } | null } };
+
+export type UpdateCollectedMinibrandMutationVariables = Exact<{
+  input: UpdateCollectedMinibrandInput;
+  id: Scalars['Int'];
+}>;
+
+
+export type UpdateCollectedMinibrandMutation = { __typename?: 'Mutation', updateCollectedMinibrand: { __typename?: 'CollectedMinibrand', dateCollected?: string | null, id: number, minibrandId?: number | null, quantity?: number | null, userId?: number | null } };
+
+export type GetMeQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetMeQuery = { __typename?: 'Query', getMe?: { __typename?: 'User', id?: number | null, role?: Role | null, googleAuth?: { __typename?: 'GoogleAuth', email?: string | null, id?: string | null, userId?: number | null } | null, localAuth?: { __typename?: 'LocalAuth', email?: string | null, passwordHash?: string | null, userId?: number | null } | null, collected?: Array<{ __typename?: 'CollectedMinibrand', dateCollected?: string | null, id: number, minibrandId?: number | null, quantity?: number | null, userId?: number | null, minibrand?: { __typename?: 'MiniBrand', name?: string | null, id: number } | null }> | null } | null };
+
 
 export const GetImageUploadLinkDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetImageUploadLink"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"name"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getImageUploadLink"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"name"},"value":{"kind":"Variable","name":{"kind":"Name","value":"name"}}}]}]}}]} as unknown as DocumentNode<GetImageUploadLinkQuery, GetImageUploadLinkQueryVariables>;
 export const SaveMiniBrandDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"SaveMiniBrand"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"MiniBrandInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"saveMiniBrand"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"seriesId"}},{"kind":"Field","name":{"kind":"Name","value":"typeId"}},{"kind":"Field","name":{"kind":"Name","value":"tags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]}}]}}]} as unknown as DocumentNode<SaveMiniBrandMutation, SaveMiniBrandMutationVariables>;
@@ -199,3 +262,6 @@ export const DeleteMiniBrandDocument = {"kind":"Document","definitions":[{"kind"
 export const GetMiniBrandsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetMiniBrands"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getMiniBrands"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"imgUrl"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"series"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}},{"kind":"Field","name":{"kind":"Name","value":"seriesId"}},{"kind":"Field","name":{"kind":"Name","value":"tags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}},{"kind":"Field","name":{"kind":"Name","value":"type"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}},{"kind":"Field","name":{"kind":"Name","value":"typeId"}}]}}]}}]} as unknown as DocumentNode<GetMiniBrandsQuery, GetMiniBrandsQueryVariables>;
 export const GetMiniBrandsMetaDataDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetMiniBrandsMetaData"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getMiniBrandsMetaData"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"series"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}},{"kind":"Field","name":{"kind":"Name","value":"tags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}},{"kind":"Field","name":{"kind":"Name","value":"types"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]}}]}}]} as unknown as DocumentNode<GetMiniBrandsMetaDataQuery, GetMiniBrandsMetaDataQueryVariables>;
 export const MutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Mutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"types"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"MiniBrandTypeInput"}}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"series"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"MiniBrandSeriesInput"}}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"tags"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"MiniBrandTagInput"}}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"saveMiniBrandsMetaData"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"types"},"value":{"kind":"Variable","name":{"kind":"Name","value":"types"}}},{"kind":"Argument","name":{"kind":"Name","value":"series"},"value":{"kind":"Variable","name":{"kind":"Name","value":"series"}}},{"kind":"Argument","name":{"kind":"Name","value":"tags"},"value":{"kind":"Variable","name":{"kind":"Name","value":"tags"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"series"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}},{"kind":"Field","name":{"kind":"Name","value":"tags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}},{"kind":"Field","name":{"kind":"Name","value":"types"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]}}]}}]} as unknown as DocumentNode<MutationMutation, MutationMutationVariables>;
+export const CollectMinibrandDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CollectMinibrand"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CollectMinibrandInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"collectMinibrand"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"dateCollected"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"minibrand"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"imgUrl"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"seriesId"}},{"kind":"Field","name":{"kind":"Name","value":"typeId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"minibrandId"}},{"kind":"Field","name":{"kind":"Name","value":"quantity"}},{"kind":"Field","name":{"kind":"Name","value":"userId"}}]}}]}}]} as unknown as DocumentNode<CollectMinibrandMutation, CollectMinibrandMutationVariables>;
+export const UpdateCollectedMinibrandDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateCollectedMinibrand"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateCollectedMinibrandInput"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateCollectedMinibrand"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}},{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"dateCollected"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"minibrandId"}},{"kind":"Field","name":{"kind":"Name","value":"quantity"}},{"kind":"Field","name":{"kind":"Name","value":"userId"}}]}}]}}]} as unknown as DocumentNode<UpdateCollectedMinibrandMutation, UpdateCollectedMinibrandMutationVariables>;
+export const GetMeDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetMe"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getMe"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"googleAuth"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"userId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"localAuth"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"passwordHash"}},{"kind":"Field","name":{"kind":"Name","value":"userId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"role"}},{"kind":"Field","name":{"kind":"Name","value":"collected"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"dateCollected"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"minibrandId"}},{"kind":"Field","name":{"kind":"Name","value":"quantity"}},{"kind":"Field","name":{"kind":"Name","value":"userId"}},{"kind":"Field","name":{"kind":"Name","value":"minibrand"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetMeQuery, GetMeQueryVariables>;

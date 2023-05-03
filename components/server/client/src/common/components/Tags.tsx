@@ -39,7 +39,10 @@ const Tags = (props: Props) => {
 
   //overflow: 'auto'
   return (
-    <Stack direction="row" sx={{ padding: 1, flexWrap: 'wrap' }}>
+    <Stack
+      direction="row"
+      sx={{ padding: 1, flexWrap: 'wrap', maxHeight: 100, overflow: 'auto' }}
+    >
       {tags.map((tag) => (
         <Chip
           sx={{
@@ -50,6 +53,7 @@ const Tags = (props: Props) => {
             backgroundSize: 'cover'
           }}
           label={tag.value}
+          key={tag.value}
           //   src={i}
         />
       ))}

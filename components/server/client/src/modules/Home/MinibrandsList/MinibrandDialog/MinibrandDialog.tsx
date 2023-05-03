@@ -3,21 +3,37 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { Box, IconButton, Typography, useTheme } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { MiniBrand } from '../../../../__generated__/graphql';
+import {
+  CollectedMinibrand,
+  MiniBrand
+} from '../../../../__generated__/graphql';
 import Tags from '../../../../common/components/Tags';
 import { useState } from 'react';
 import ConfirmDeleteMinibrandDialog from './ConfirmDeleteMinibrandDialog';
 import useDeleteMinibrand from './hooks/useDeleteMinibrand';
+import Admin from 'common/components/Admin';
+import AdminMode from 'common/components/AdminMode';
+import useCollectMinibrand from './hooks/useCollectMinibrand';
+import useUpdateCollectedMinibrand from './hooks/useUpdateCollectedMinibrand';
+import CollectOrUpdateMinibrand from './CollectOrUpdateMinibrand';
+import useConfetti from './hooks/useConfetti';
 
 interface Props {
   minibrand: MiniBrand;
+  collectedMinibrand?: CollectedMinibrand;
   open: boolean;
   handleClose: () => void;
 }
 
 const MinibrandDialog = (props: Props) => {
-  const { minibrand, open, handleClose } = props;
+  const { minibrand, collectedMinibrand, open, handleClose } = props;
+  const { trigger, Confetti } = useConfetti();
+
   const { deleteMiniBrand, loading: deletingMinibrand } = useDeleteMinibrand();
+  const { collectMinibrand, loading: collectingMinibrand } =
+    useCollectMinibrand(trigger);
+  const { updateCollectedMinibrand, loading: updatingMinibrand } =
+    useUpdateCollectedMinibrand();
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
   const theme = useTheme();
 
@@ -30,7 +46,9 @@ const MinibrandDialog = (props: Props) => {
   };
 
   const handleDeleteMinibrand = () => {
-    deleteMiniBrand({ id: minibrand.id });
+    if (minibrand.id) {
+      deleteMiniBrand({ id: minibrand.id });
+    }
     handleCloseConfirmDeleteDialog();
     handleClose();
   };
@@ -41,17 +59,22 @@ const MinibrandDialog = (props: Props) => {
       open={open}
       PaperProps={{ style: styles.container }}
     >
+      {Confetti}
       <DialogTitle sx={styles.header}>
         <Typography variant="h5">{minibrand.name}</Typography>
-        <IconButton
-          aria-label="delete"
-          size="large"
-          onClick={handleOpenConfirmDeleteDialog}
-        >
-          <DeleteIcon fontSize="inherit" color={'error'} />
-        </IconButton>
+        <Admin>
+          <AdminMode>
+            <IconButton
+              aria-label="delete"
+              size="large"
+              onClick={handleOpenConfirmDeleteDialog}
+            >
+              <DeleteIcon fontSize="inherit" color={'error'} />
+            </IconButton>
+          </AdminMode>
+        </Admin>
       </DialogTitle>
-      <Box component="img" sx={styles.img} src={minibrand.imgUrl} />
+      <Box component="img" sx={styles.img} src={minibrand.imgUrl ?? ''} />
       <Box sx={{ height: '30%' }}>
         <Typography
           lineHeight={1}
@@ -61,19 +84,29 @@ const MinibrandDialog = (props: Props) => {
           lineHeight={1}
           fontSize={'1rem'}
         >{`series ${minibrand.series?.value}`}</Typography>
-
         <Tags tags={minibrand.tags ?? []} />
+        <CollectOrUpdateMinibrand
+          minibrandId={minibrand.id}
+          collectedMinibrand={collectedMinibrand}
+          handleCollectMinibrand={collectMinibrand}
+          handleUpdateMinibrand={updateCollectedMinibrand}
+          loading={collectingMinibrand || updatingMinibrand}
+        />
       </Box>
-      <EditIcon
-        sx={{
-          position: 'absolute',
-          right: 20,
-          bottom: 20,
-          padding: 2,
-          borderRadius: 10,
-          backgroundColor: theme.palette.grey[400]
-        }}
-      />
+      <Admin>
+        <AdminMode>
+          <EditIcon
+            sx={{
+              position: 'absolute',
+              right: 20,
+              bottom: 20,
+              padding: 2,
+              borderRadius: 10,
+              backgroundColor: theme.palette.grey[400]
+            }}
+          />
+        </AdminMode>
+      </Admin>
       <ConfirmDeleteMinibrandDialog
         open={confirmDeleteOpen}
         handleClose={handleCloseConfirmDeleteDialog}

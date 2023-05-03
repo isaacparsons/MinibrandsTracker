@@ -98,3 +98,37 @@ export const SAVE_MINIBRANDS_METADATA = gql(/* GraphQL */ `
     }
   }
 `);
+
+export const COLLECT_MINIBRAND = gql(/* GraphQL */ `
+  mutation CollectMinibrand($id: Int!, $input: CollectMinibrandInput!) {
+    collectMinibrand(id: $id, input: $input) {
+      dateCollected
+      id
+      minibrand {
+        id
+        imgUrl
+        name
+        seriesId
+        typeId
+      }
+      minibrandId
+      quantity
+      userId
+    }
+  }
+`);
+
+export const UPDATE_COLLECTED_MINIBRAND = gql(/* GraphQL */ `
+  mutation UpdateCollectedMinibrand(
+    $input: UpdateCollectedMinibrandInput!
+    $id: Int!
+  ) {
+    updateCollectedMinibrand(input: $input, id: $id) {
+      dateCollected
+      id
+      minibrandId
+      quantity
+      userId
+    }
+  }
+`);

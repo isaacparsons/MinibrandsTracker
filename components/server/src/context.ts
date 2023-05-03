@@ -4,13 +4,12 @@ import { mockDeep, DeepMockProxy } from "jest-mock-extended";
 import logger, { mockLogger } from "./config/logger";
 import TokenService from "./services/TokenService";
 import { AuthenticationError, NotFoundError } from "./util/errors";
-
-const tokenService = new TokenService();
+import { UserWithAuth } from "./db/user";
 
 export interface Context {
   db: PrismaClient;
-  user?: User;
-  log: any;
+  user?: UserWithAuth;
+  // log: any;
 }
 
 export type MockContext = {
@@ -27,26 +26,24 @@ export const createMockContext = (): MockContext => {
 };
 
 export const auth = async ({ req }) => {
-  let log = logger("Minibrand tracker App");
-  const prisma: PrismaClient = new PrismaClient();
-  const result: Context = { db: prisma, log };
-  if (req?.headers?.authorization) {
-    const token = req.headers.authorization.replace("Bearer ", "");
-    try {
-      const { userId } = tokenService.verifyAccessToken(token);
-      const user = await prisma.user.findUnique({
-        where: { id: userId }
-      });
-
-      if (!user) {
-        throw NotFoundError("User does not exist");
-      }
-      log = logger("Minibrand tracker App", { userId: user.id });
-      result.user = user;
-    } catch (error) {
-      throw AuthenticationError("Invalid access token");
-    }
-    result.log = log;
-  }
-  return result;
+  // let log = logger("Minibrand tracker App");
+  // const result: Context = { db: req.prisma, log };
+  // if (req?.headers?.authorization) {
+  //   const token = req.headers.authorization.replace("Bearer ", "");
+  //   try {
+  //     const { userId } = tokenService.verifyAccessToken(token);
+  //     const user = await result.db.user.findUnique({
+  //       where: { id: userId }
+  //     });
+  //     if (!user) {
+  //       throw NotFoundError("User does not exist");
+  //     }
+  //     log = logger("Minibrand tracker App", { userId: user.id });
+  //     result.user = user;
+  //   } catch (error) {
+  //     throw AuthenticationError("Invalid access token");
+  //   }
+  //   result.log = log;
+  // }
+  // return result;
 };

@@ -69,32 +69,28 @@ const MiniBrandsResolver: Resolvers = {
         s3Service.deleteIcon(nonUpdatedMinibrand.imgUrl);
       }
       return updatedMinibrand;
+    },
+    collectMinibrand: async (parent, args, context) => {
+      const { id, input } = args;
+      if (!context.user) {
+        throw new Error("User does not exist");
+      }
+      const miniBrandsRepository = new MiniBrandsRepository(context.db);
+      const miniBrandsService = new MiniBrandsService(miniBrandsRepository);
+
+      return miniBrandsService.collectMinibrand(id, context.user.id, input);
+    },
+    updateCollectedMinibrand: async (parent, args, context) => {
+      const { id, input } = args;
+      if (!context.user) {
+        throw new Error("User does not exist");
+      }
+      const miniBrandsRepository = new MiniBrandsRepository(context.db);
+      const miniBrandsService = new MiniBrandsService(miniBrandsRepository);
+
+      return miniBrandsService.updateCollectedMinibrand(id, context.user.id, input);
     }
   }
-  // login: async (parent, args, context) => {
-  //   const { password, email } = args;
-  //   const userRepository = new UserRepository(context.db);
-  //   const user = await userRepository.getUserByEmail({ email });
-  //   if (!user) {
-  //     throw new Error(`No user found with email: ${email}`);
-  //   }
-  //   if (!user.accountCreated) {
-  //     throw new Error(`Account has not been setup, go to signup to complete`);
-  //   }
-  //   const valid = await bcrypt.compare(password, user.passwordHash);
-  //   if (!valid) {
-  //     throw new Error("Password is incorrect");
-  //   }
-  //   const userWithoutPassword = exclude<User, "passwordHash">(user, "passwordHash");
-  //   const token = tokenService.createAccessToken(user.id);
-  //   const refreshToken = tokenService.createRefreshToken(user.id);
-  //   return {
-  //     token,
-  //     refreshToken,
-  //     user: userWithoutPassword
-  //   };
-  // }
-  // }
 };
 
 export default MiniBrandsResolver;

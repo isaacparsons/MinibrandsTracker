@@ -12,22 +12,34 @@ import useFilterMinibrandsByType from './hooks/useFilterMinibrandsByType';
 import useFilterByMinibrandsSeries from './hooks/useFilterByMinibrandsSeries';
 import useFilterByMinibrandTags from './hooks/useFilterByMinibrandTags';
 import useFilterBySearch from './hooks/useFilterBySearch';
+import useMe from '../../common/hooks/useMe';
+import useCollectedMinibrandsMap from './hooks/useCollectedMinibrandsMap';
+import useNotCollectedMinibrandsMap from './hooks/useNotCollectedMinibrandsMap';
+import useFilterByCollected from './hooks/useFilterByCollected';
+import useMinibrandsMap from './hooks/useMinibrandsMap';
 
 function Home() {
   const theme = useTheme();
+  const { data: me } = useMe();
   const { data, loading } = useMiniBrands();
   const { data: minibrandsMetadata } = useMinibrandsMetadata();
-  const [filterOpen, setFilterOpen] = useState(true);
+  const [filterOpen, setFilterOpen] = useState(false);
   const [searchText, setSearchText] = useState('');
 
-  // add collected vs not collected
+  const collectedMinibrandsMap = useCollectedMinibrandsMap(me?.collected);
+  const minibrandMap = useMinibrandsMap(data);
+  const notCollectedMinibrandsMap = useNotCollectedMinibrandsMap(
+    data,
+    collectedMinibrandsMap
+  );
+
   const {
     filterMap: seriesFilterMap,
     updateFilterMap: updateSeriesFilterMap,
     selectAll: selectAllSeries,
     allSelected: allSeriesSelected,
     unSelectAll: unSelectAllSeries
-  } = useFilterMap('series', minibrandsMetadata?.series ?? []);
+  } = useFilterMap(minibrandsMetadata?.series ?? []);
 
   const {
     filterMap: typesFilterMap,
@@ -35,7 +47,7 @@ function Home() {
     selectAll: selectAllTypes,
     allSelected: allTypesSelected,
     unSelectAll: unSelectAllTypes
-  } = useFilterMap('types', minibrandsMetadata?.types ?? []);
+  } = useFilterMap(minibrandsMetadata?.types ?? []);
 
   const {
     filterMap: tagsFilterMap,
@@ -43,10 +55,24 @@ function Home() {
     selectAll: selectAllTags,
     allSelected: allTagsSelected,
     unSelectAll: unSelectAllTags
-  } = useFilterMap('tags', minibrandsMetadata?.tags ?? []);
+  } = useFilterMap(minibrandsMetadata?.tags ?? []);
 
+  const {
+    filterMap: collectedFilterMap,
+    updateFilterMap: updateCollectedFilterMap,
+    selectAll: selectAllCollected,
+    allSelected: allCollectedSelected,
+    unSelectAll: unselectAllCollected
+  } = useFilterMap([{ value: 'collected' }, { value: 'not-collected' }] ?? []);
+
+  const filteredByCollectionStatus = useFilterByCollected(
+    minibrandMap,
+    collectedMinibrandsMap,
+    notCollectedMinibrandsMap,
+    collectedFilterMap
+  );
   const filteredByType = useFilterMinibrandsByType(
-    data,
+    filteredByCollectionStatus,
     typesFilterMap,
     allTypesSelected
   );
@@ -85,7 +111,7 @@ function Home() {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ padding: 10 }}>
+    <Container maxWidth="lg" sx={{ padding: 5 }}>
       <Box sx={styles.container}>
         <Box sx={styles.topBar}>
           <Search value={searchText} onValueChange={setSearchText} />
@@ -102,6 +128,14 @@ function Home() {
           unSelectAll={handleUnSelectAll}
           allSelected={allSelected}
         >
+          <FilterList
+            type="collected status"
+            filterMap={collectedFilterMap}
+            updateFilterMap={updateCollectedFilterMap}
+            selectAll={selectAllCollected}
+            unSelectAll={unselectAllCollected}
+            allSelected={allCollectedSelected}
+          />
           <FilterList
             type="series"
             filterMap={seriesFilterMap}
@@ -128,7 +162,11 @@ function Home() {
           />
         </FilterInput>
       </Box>
-      <MinibrandsList minibrands={filteredMiniBrands} />
+      <MinibrandsList
+        loading={loading}
+        minibrands={filteredMiniBrands}
+        collectedMinibrandsMap={collectedMinibrandsMap}
+      />
     </Container>
   );
 }
@@ -137,6 +175,7 @@ const styles = {
   container: {
     display: 'flex',
     flexDirection: 'column',
+    alignItems: 'stretch',
     marginBottom: 5
   },
   topBar: {

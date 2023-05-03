@@ -15,7 +15,7 @@ const useFilterByMinibrandTags = (
       return minibrands;
     }
     return minibrands.filter((minibrand) => {
-      return minibrand.tags.find((tag) => tags[tag.value]);
+      return minibrand?.tags?.find((tag) => tags[tag.value]);
     });
   }, [minibrands, tags, allSelected]);
 };
