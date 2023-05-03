@@ -20,5 +20,6 @@
     "inlineSources": true,
     "sourceRoot": "/"
   },
-  "include": ["src", "modules"]
+  "include": ["src", "modules"],
+  "exclude": ["node_modules/**"]
 }
