@@ -9,7 +9,7 @@ const errorLink = onError(
   ({ networkError, graphQLErrors, operation, forward }) => {
     if (graphQLErrors && graphQLErrors.length > 0) {
       graphQLErrors.forEach((error) => {
-        console.log('GRAPHQL ERROR');
+        console.log('GRAPHQL ERROR!');
         console.log(error);
       });
     }
