@@ -32,17 +32,14 @@ const tagMap: Record<string, TagBackground> = {
 
 interface Props {
   tags: MiniBrandTag[];
+  maxHeight?: number;
 }
 
 const Tags = (props: Props) => {
-  const { tags } = props;
+  const { tags, maxHeight } = props;
 
-  //overflow: 'auto'
   return (
-    <Stack
-      direction="row"
-      sx={{ padding: 1, flexWrap: 'wrap', maxHeight: 100, overflow: 'auto' }}
-    >
+    <Stack direction="row" sx={styles.container} maxHeight={maxHeight}>
       {tags.map((tag) => (
         <Chip
           sx={{
@@ -59,5 +56,13 @@ const Tags = (props: Props) => {
       ))}
     </Stack>
   );
+};
+
+const styles = {
+  container: {
+    padding: 1,
+    flexWrap: 'wrap',
+    overflow: 'auto'
+  }
 };
 export default Tags;

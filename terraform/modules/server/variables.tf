@@ -28,8 +28,8 @@ variable "settings" {
       skip_final_snapshot = true
     },
     "backend" = {
-      count         = 1          // the number of EC2 instances
-      instance_type = "t2.micro" // the EC2 instance
+      count         = 1           // the number of EC2 instances
+      instance_type = "t3a.small" // the EC2 instance
     }
   }
 }

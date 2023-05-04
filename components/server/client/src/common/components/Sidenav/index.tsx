@@ -4,16 +4,17 @@ import NavListItem from './NavListItem';
 import UploadDialog from 'modules/Upload/UploadDialog';
 import { useNavigate } from 'react-router-dom';
 import { MINIBRANDS_METADATA_PATH, HOME_PATH } from '../../../App';
-import axios from 'axios';
 import Admin from '../Admin';
 import { useSessionContext } from 'context/SessionContext';
+import Api from 'api';
+
+const api = new Api();
 
 const COLLAPSED_WIDTH = 70;
 const EXPANDED_WIDTH = 250;
 
 const Sidenav = () => {
   const navigate = useNavigate();
-  const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [adminMode, setAdminMode] = useState(false);
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
@@ -22,9 +23,7 @@ const Sidenav = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post('http://localhost:4000/auth/logout', {
-        withCredentials: true
-      });
+      await api.logout();
       session.logout();
     } catch (error) {
       console.log(error);

@@ -19,6 +19,17 @@ export default class Api {
     );
   }
 
+  authLocalSignup(email: string, password: string) {
+    return axios.post(
+      `${this.baseUrl}/auth/signup`,
+      {
+        email,
+        password
+      },
+      { withCredentials: true }
+    );
+  }
+
   authGoogle() {
     return window.open(`${this.baseUrl}/auth/google`, '_self');
   }

@@ -4,6 +4,7 @@ import { CollectedMinibrand, MiniBrand } from '__generated__/graphql';
 import Tags from '../../../../common/components/Tags';
 import MinibrandDialog from '../MinibrandDialog/MinibrandDialog';
 import { useState } from 'react';
+import MinibrandBasicInfo from '../MinibrandBasicInfo';
 
 interface Props {
   minibrand: MiniBrand;
@@ -28,21 +29,13 @@ const MinibrandCard = (props: Props) => {
       {collectedMinibrand ? (
         <CheckCircleIcon sx={styles.collectedIcon} />
       ) : null}
-      <Box component="div" onClick={handleDialogOpen}>
+      <Box
+        component="div"
+        onClick={handleDialogOpen}
+        sx={styles.contentContainer}
+      >
         <Box component="img" sx={styles.img} src={minibrand.imgUrl ?? ''} />
-        <Box sx={{ height: '30%' }}>
-          <Typography fontSize={'1.1rem'}>{minibrand.name}</Typography>
-          <Typography
-            lineHeight={1}
-            fontSize={'1rem'}
-          >{`${minibrand.type?.value}`}</Typography>
-          <Typography
-            lineHeight={1}
-            fontSize={'1rem'}
-          >{`series ${minibrand.series?.value}`}</Typography>
-
-          <Tags tags={minibrand.tags ?? []} />
-        </Box>
+        <MinibrandBasicInfo minibrand={minibrand} />
       </Box>
       <MinibrandDialog
         collectedMinibrand={collectedMinibrand}
@@ -56,18 +49,27 @@ const MinibrandCard = (props: Props) => {
 
 const styles = {
   container: {
-    padding: 1,
     height: '100%',
-    overflow: 'visible'
+    overflow: 'visible',
+    display: 'flex',
+    flexDirection: 'column',
+    position: 'relative'
+  },
+  contentContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    flex: 1
   },
   img: {
+    display: 'flex',
+    padding: 1,
     objectFit: 'contain',
     width: '100%',
-    maxHeight: 250,
-    height: '70%'
+    height: 250
+    // height: '70%'
   },
   collectedIcon: {
-    position: 'relative',
+    position: 'absolute',
     color: 'green',
     top: -20,
     left: -20,

@@ -10,6 +10,9 @@ import {
 
 import { useForm, SubmitHandler } from 'react-hook-form';
 import axios from 'axios';
+import Api from 'api';
+
+const api = new Api();
 
 interface FormValues {
   email: string;
@@ -29,10 +32,7 @@ const Signup = () => {
     const { password, confirmPassword, email } = data;
     if (password === confirmPassword) {
       try {
-        await axios.post('http://localhost:4000/auth/signup', {
-          email,
-          password
-        });
+        await api.authLocalSignup(email, password);
       } catch (error) {
         console.log(error);
       }
