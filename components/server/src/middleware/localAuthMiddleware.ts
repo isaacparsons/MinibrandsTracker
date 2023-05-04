@@ -30,14 +30,17 @@ const localAuthMiddleware = (app: Express) => {
 
     app.post(
       "/auth/signup",
-      async function (req, res) {
+      async function (req, res, next) {
         const { email, password } = req.body;
         const userRepository = new UserRepository(req.prisma);
         const localAuthRepository = new LocalAuthRepository(req.prisma);
         const passwordHash = await bcrypt.hash(password, 10);
         const existinglocalAuth = await localAuthRepository.getByEmail(email);
         if (existinglocalAuth) {
-          throw new Error("User with this email already exists");
+          // throw new Error("User with this email already exists");
+          return res.status(400).json({
+            error: "User with this email already exists"
+          });
         }
         const user = await userRepository.create();
         await localAuthRepository.create({
@@ -45,6 +48,7 @@ const localAuthMiddleware = (app: Express) => {
           email,
           passwordHash
         });
+        next();
       },
       passport.authenticate("local", { failureRedirect: "/auth/login" }),
       async function (req, res) {

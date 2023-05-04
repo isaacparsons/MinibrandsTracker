@@ -10,8 +10,13 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
+interface SnackbarContentDetails {
+  message: string;
+  type: AlertColor;
+}
+
 interface ISnackBarContext {
-  show(message: string, type: AlertColor): void;
+  show(details: SnackbarContentDetails): void;
 }
 
 const SnackBarContext = createContext<ISnackBarContext>({
@@ -30,16 +35,15 @@ const SnackBarProvider: React.FC<Props> = (props) => {
   const { children } = props;
 
   const [open, setOpen] = useState(false);
-  const [message, setMessage] = useState('');
-  const [type, setType] = useState<AlertColor>('info');
+
+  const [details, setDetails] = useState<SnackbarContentDetails | null>(null);
 
   const show = useCallback(
-    (message: string, type: AlertColor) => {
-      setType(type);
-      setMessage(message);
+    (details: SnackbarContentDetails) => {
+      setDetails(details);
       setOpen(true);
     },
-    [setMessage, setOpen]
+    [setDetails, setOpen]
   );
 
   const handleClose = () => {
@@ -48,11 +52,17 @@ const SnackBarProvider: React.FC<Props> = (props) => {
 
   return (
     <SnackBarContext.Provider value={{ show }}>
-      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity={type} sx={{ width: '100%' }}>
-          {message}
-        </Alert>
-      </Snackbar>
+      {details?.type && details?.message ? (
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+          <Alert
+            onClose={handleClose}
+            severity={details.type}
+            sx={{ width: '100%' }}
+          >
+            {details?.message}
+          </Alert>
+        </Snackbar>
+      ) : null}
       {children}
     </SnackBarContext.Provider>
   );

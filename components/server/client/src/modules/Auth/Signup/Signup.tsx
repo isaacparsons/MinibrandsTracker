@@ -1,16 +1,22 @@
 import {
   TextField,
   Box,
-  Button,
   Typography,
   Paper,
   useTheme,
-  Theme
+  Theme,
+  IconButton
 } from '@mui/material';
-
+import LoadingButton from '@mui/lab/LoadingButton';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import axios from 'axios';
 import Api from 'api';
+import { useNavigate } from 'react-router-dom';
+import { LOGIN_PATH } from 'App';
+import { useSessionContext } from 'context/SessionContext';
+import { useState } from 'react';
+import { AxiosError, isAxiosError } from 'axios';
+import { useSnackBarContext } from 'context/SnackBarContext';
 
 const api = new Api();
 
@@ -26,27 +32,53 @@ const Signup = () => {
     handleSubmit,
     formState: { errors }
   } = useForm<FormValues>();
+  const [loading, setLoading] = useState(false);
   const theme = useTheme();
+  const navigate = useNavigate();
+  const session = useSessionContext();
+  const snackbar = useSnackBarContext();
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     const { password, confirmPassword, email } = data;
+    setLoading(true);
     if (password === confirmPassword) {
       try {
         await api.authLocalSignup(email, password);
-      } catch (error) {
+        session.login();
+        navigate('/home');
+      } catch (e) {
+        const error = e as AxiosError;
         console.log(error);
+        const response = error?.response?.data as any;
+        if (response?.error) {
+          snackbar.show({
+            message: response.error,
+            type: 'error'
+          });
+        }
       }
     }
+    setLoading(false);
+  };
+
+  const onBackClick = () => {
+    navigate(LOGIN_PATH);
   };
 
   return (
     <Box sx={styles.container}>
       <Paper elevation={3} sx={styles.contentContainer(theme)}>
         <Box sx={styles.content}>
-          <Typography variant="h5">Signup</Typography>
+          <Box sx={styles.header}>
+            <IconButton onClick={onBackClick} sx={{ mr: 10 }}>
+              <ArrowBackIcon />
+            </IconButton>
+            <Typography variant="h5">Signup</Typography>
+          </Box>
+
           <TextField
             // error={errors.password}
-            style={styles.textInput}
+            sx={styles.textInput}
             helperText={errors.email?.type === 'required'}
             id="email"
             label="Email"
@@ -55,7 +87,7 @@ const Signup = () => {
 
           <TextField
             // error={errors.password}
-            style={styles.textInput}
+            sx={styles.textInput}
             helperText={errors.password?.type === 'required'}
             id="password"
             type="password"
@@ -64,7 +96,7 @@ const Signup = () => {
           />
           <TextField
             // error={errors.password}
-            style={styles.textInput}
+            sx={styles.textInput}
             helperText={errors.password?.type === 'required'}
             id="confirmPassword"
             type="password"
@@ -72,13 +104,14 @@ const Signup = () => {
             {...register('confirmPassword', { required: true })}
           />
 
-          <Button
+          <LoadingButton
+            loading={loading}
             sx={styles.btn}
             variant="contained"
             onClick={handleSubmit(onSubmit)}
           >
             Signup
-          </Button>
+          </LoadingButton>
 
           {/* {error ? <Typography color="red">{error.message} </Typography> : null} */}
         </Box>
@@ -93,6 +126,12 @@ const styles = {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  header: {
+    display: 'flex',
+    flex: 1,
+    alignItems: 'center',
+    width: '100%'
   },
   contentContainer: (theme: Theme) => {
     return {
@@ -115,7 +154,7 @@ const styles = {
     flexGrow: 1
   },
   textInput: {
-    margin: 10,
+    margin: 2,
     width: '100%'
   },
   btn: {

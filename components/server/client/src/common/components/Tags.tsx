@@ -1,4 +1,4 @@
-import { Box, Chip, Stack, Paper } from '@mui/material';
+import { Box, Chip, Stack, Paper, useTheme } from '@mui/material';
 import { MiniBrandTag } from '__generated__/graphql';
 
 interface TagBackground {
@@ -37,7 +37,6 @@ interface Props {
 
 const Tags = (props: Props) => {
   const { tags, maxHeight } = props;
-
   return (
     <Stack direction="row" sx={styles.container} maxHeight={maxHeight}>
       {tags.map((tag) => (
@@ -45,7 +44,7 @@ const Tags = (props: Props) => {
           sx={{
             margin: 0.3,
             backgroundColor: tagMap[tag.value]?.color,
-            color: tagMap[tag.value] ? 'white' : 'black',
+            color: 'white',
             backgroundImage: tagMap[tag.value]?.img,
             backgroundSize: 'cover'
           }}

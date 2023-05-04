@@ -34,7 +34,7 @@ const styles = {
     flexDirection: 'column',
     flex: 1,
     padding: 1,
-    backgroundColor: 'primary.light'
+    backgroundColor: 'primary.main'
     // height: '100%'
   }
 };

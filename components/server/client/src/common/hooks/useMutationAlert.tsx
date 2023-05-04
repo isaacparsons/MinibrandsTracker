@@ -13,11 +13,11 @@ const useMutationAlert = (props: Props) => {
   const { show } = useSnackBarContext();
 
   useEffect(() => {
-    if (data) show(successMsg, 'success');
+    if (data) show({ message: successMsg, type: 'success' });
   }, [data, successMsg, show]);
 
   useEffect(() => {
-    if (error) show(errorMsg, 'error');
+    if (error) show({ message: errorMsg, type: 'error' });
   }, [error, errorMsg, show]);
 };
 
