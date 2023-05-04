@@ -31,6 +31,8 @@ app.use(
   cors<cors.CorsRequest>({
     origin: [
       CLIENT_URL,
+      "https://api.minibrandstracker.com",
+      "https://minibrandstracker.com",
       "https://studio.apollographql.com",
       "https://accounts.google.com",
       "http://localhost:4000"
