@@ -26,7 +26,7 @@ resource "aws_subnet" "minibrands_tracker_public_subnet" {
   availability_zone = data.aws_availability_zones.available.names[count.index]
 
   tags = {
-    Name = "public_subnet_${count.index}"
+    Name = "minibrands_tracker_public_subnet_${count.index}"
   }
 }
 

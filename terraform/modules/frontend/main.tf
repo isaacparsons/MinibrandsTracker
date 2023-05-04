@@ -40,3 +40,33 @@ resource "aws_s3_bucket_acl" "acl" {
   acl    = "public-read"
 }
 
+// *******************************
+
+
+
+# resource "aws_s3_bucket_public_access_block" "minibrands_tracker_public_access_block" {
+#   bucket = aws_s3_bucket.frontend.id
+
+#   block_public_acls       = false
+#   block_public_policy     = false
+#   ignore_public_acls      = false
+#   restrict_public_buckets = false
+# }
+
+# resource "aws_s3_bucket_ownership_controls" "minibrands_tracker_bucket_ownership_controls" {
+#   bucket = aws_s3_bucket.example.id
+#   rule {
+#     object_ownership = "BucketOwnerPreferred"
+#   }
+# }
+
+# resource "aws_s3_bucket_acl" "minibrands_tracker_bucket_acl" {
+#   depends_on = [
+#     aws_s3_bucket_public_access_block.minibrands_tracker_public_access_block,
+#     aws_s3_bucket_ownership_controls.minibrands_tracker_bucket_ownership_controls,
+#   ]
+
+#   bucket = aws_s3_bucket.frontend.id
+#   acl    = "public-read"
+# }
+
