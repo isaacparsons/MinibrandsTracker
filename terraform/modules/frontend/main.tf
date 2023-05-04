@@ -3,8 +3,9 @@ resource "aws_s3_bucket" "frontend" {
 }
 
 resource "aws_s3_bucket_policy" "policy" {
-  bucket = aws_s3_bucket.frontend.id
-  policy = <<EOF
+  depends_on = [aws_s3_bucket_acl.minibrands_tracker_bucket_acl]
+  bucket     = aws_s3_bucket.frontend.id
+  policy     = <<EOF
 {
   "Id": "bucket_policy_site",
   "Version": "2012-10-17",
@@ -35,38 +36,38 @@ resource "aws_s3_bucket_website_configuration" "website_config" {
   }
 }
 
-resource "aws_s3_bucket_acl" "acl" {
-  bucket = aws_s3_bucket.frontend.id
-  acl    = "public-read"
-}
+# resource "aws_s3_bucket_acl" "acl" {
+#   bucket = aws_s3_bucket.frontend.id
+#   acl    = "public-read"
+# }
 
 // *******************************
 
 
 
-# resource "aws_s3_bucket_public_access_block" "minibrands_tracker_public_access_block" {
-#   bucket = aws_s3_bucket.frontend.id
+resource "aws_s3_bucket_public_access_block" "minibrands_tracker_public_access_block" {
+  bucket = aws_s3_bucket.frontend.id
 
-#   block_public_acls       = false
-#   block_public_policy     = false
-#   ignore_public_acls      = false
-#   restrict_public_buckets = false
-# }
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
+}
 
-# resource "aws_s3_bucket_ownership_controls" "minibrands_tracker_bucket_ownership_controls" {
-#   bucket = aws_s3_bucket.example.id
-#   rule {
-#     object_ownership = "BucketOwnerPreferred"
-#   }
-# }
+resource "aws_s3_bucket_ownership_controls" "minibrands_tracker_bucket_ownership_controls" {
+  bucket = aws_s3_bucket.frontend.id
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
 
-# resource "aws_s3_bucket_acl" "minibrands_tracker_bucket_acl" {
-#   depends_on = [
-#     aws_s3_bucket_public_access_block.minibrands_tracker_public_access_block,
-#     aws_s3_bucket_ownership_controls.minibrands_tracker_bucket_ownership_controls,
-#   ]
+resource "aws_s3_bucket_acl" "minibrands_tracker_bucket_acl" {
+  depends_on = [
+    aws_s3_bucket_public_access_block.minibrands_tracker_public_access_block,
+    aws_s3_bucket_ownership_controls.minibrands_tracker_bucket_ownership_controls,
+  ]
 
-#   bucket = aws_s3_bucket.frontend.id
-#   acl    = "public-read"
-# }
+  bucket = aws_s3_bucket.frontend.id
+  acl    = "public-read"
+}
 

@@ -34,7 +34,7 @@ module "server" {
 }
 
 
-# module "frontend" {
-#   bucket_name = "minibrands-tracker"
-#   source      = "./modules/frontend"
-# }
+module "frontend" {
+  bucket_name = "minibrands-tracker"
+  source      = "./modules/frontend"
+}

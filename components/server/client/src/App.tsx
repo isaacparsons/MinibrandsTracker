@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 import Sidenav from 'common/components/Sidenav';
 import MinibrandsMetadataScreen from './modules/MinibrandsMetadata/index';
@@ -24,7 +24,6 @@ export const FORGOT_PASSWORD_PATH = '/forgot_password';
 export const LOGIN_SUCCESS_PATH = '/login_success';
 
 function App() {
-  console.log(process.env);
   return (
     <Box
       className="App"
@@ -43,6 +42,7 @@ function App() {
           {/* <Sidenav /> */}
           <Box display={'flex'} flex={1} sx={{ justifyContent: 'center' }}>
             <Routes>
+              <Route path={'/'} element={<Navigate to={LOGIN_PATH} />} />
               <Route path={LOGIN_SUCCESS_PATH} element={<Success />} />
               <Route path={SIGNUP_PATH} element={<Signup />} />
               <Route path={LOGIN_PATH} element={<Login />} />
