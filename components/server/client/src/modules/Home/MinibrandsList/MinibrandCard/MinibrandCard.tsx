@@ -65,7 +65,7 @@ const styles = {
     padding: 1,
     objectFit: 'contain',
     width: '100%',
-    height: 250
+    height: 150
     // height: '70%'
   },
   collectedIcon: {

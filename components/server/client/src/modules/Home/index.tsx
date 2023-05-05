@@ -111,7 +111,7 @@ function Home() {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ padding: 5 }}>
+    <Container maxWidth="xl" sx={{ paddingTop: 5 }}>
       <Box sx={styles.container}>
         <Box sx={styles.topBar}>
           <Search value={searchText} onValueChange={setSearchText} />

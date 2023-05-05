@@ -18,7 +18,7 @@ const MinibrandsList = (props: Props) => {
       {minibrands.length === 0 ? (
         <Typography variant="h5">No results</Typography>
       ) : (
-        <Grid container spacing={5}>
+        <Grid container spacing={3}>
           {loading ? (
             <MinibrandsListSkeleton />
           ) : (
@@ -30,6 +30,7 @@ const MinibrandsList = (props: Props) => {
                   xs={12}
                   sm={6}
                   md={4}
+                  lg={3}
                 >
                   <MinibrandCard
                     minibrand={minibrand}

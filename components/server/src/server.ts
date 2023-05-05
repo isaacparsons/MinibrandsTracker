@@ -8,7 +8,6 @@ import express from "express";
 import http from "http";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import session from "express-session";
 
 import { dbMiddleware } from "./middleware/dbMiddleware";
 import googleAuthMiddleware from "./middleware/googleAuthMiddleware";
@@ -16,11 +15,7 @@ import { UserWithAuth } from "./db/user";
 import localAuthMiddleware from "./middleware/localAuthMiddleware";
 import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin/landingPage/default";
 import authRoutes from "./middleware/authRoutes";
-
-const CLIENT_URL =
-  process.env.NODE_ENV === "production"
-    ? (process.env.CLIENT_URL as string)
-    : "http://localhost:3000";
+import { sessionMiddleware } from "./session";
 
 const typeDefs = readFileSync("src/graphql/schema.graphql", {
   encoding: "utf-8"
@@ -30,7 +25,7 @@ const app = express();
 app.use(
   cors<cors.CorsRequest>({
     origin: [
-      CLIENT_URL,
+      process.env.CLIENT_URL as string,
       "https://api.minibrandstracker.com",
       "https://minibrandstracker.com",
       "https://studio.apollographql.com",
@@ -46,15 +41,7 @@ app.get("/", (req, res) => {
 });
 app.use(express.json());
 app.use(cookieParser());
-app.use(
-  session({
-    name: "id",
-    secret: process.env.SESSION_SECRET as string,
-    resave: false,
-    saveUninitialized: false,
-    cookie: { secure: false }
-  })
-);
+app.use(sessionMiddleware());
 app.use(passport.initialize());
 app.use(passport.session());
 

@@ -25,10 +25,7 @@ export const LOGIN_SUCCESS_PATH = '/login_success';
 
 function App() {
   return (
-    <Box
-      className="App"
-      sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}
-    >
+    <Box className="App" sx={styles.container}>
       <BrowserRouter>
         <Box
           display={'flex'}
@@ -78,5 +75,13 @@ function App() {
     </Box>
   );
 }
+
+const styles = {
+  container: {
+    minHeight: '100vh',
+    display: 'flex',
+    flexDirection: 'column'
+  }
+};
 
 export default App;
