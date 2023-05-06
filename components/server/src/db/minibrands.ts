@@ -49,6 +49,14 @@ export default class MiniBrandsRepository {
     return await this.db.miniBrandType.deleteMany();
   };
 
+  deleteMiniBrandTypeById = async (id: number) => {
+    return await this.db.miniBrandType.delete({
+      where: {
+        id
+      }
+    });
+  };
+
   getMiniBrandSeries = async () => {
     return await this.db.miniBrandSeries.findMany();
   };
@@ -66,6 +74,13 @@ export default class MiniBrandsRepository {
       data
     });
   };
+  deleteMiniBrandSeriesById = async (id: number) => {
+    return await this.db.miniBrandSeries.delete({
+      where: {
+        id
+      }
+    });
+  };
 
   deleteMiniBrandSeries = async () => {
     return await this.db.miniBrandSeries.deleteMany();
@@ -79,6 +94,13 @@ export default class MiniBrandsRepository {
     return await this.db.miniBrandTag.findUnique({
       where: {
         value
+      }
+    });
+  };
+  deleteMiniBrandTagById = async (id: number) => {
+    return await this.db.miniBrandTag.delete({
+      where: {
+        id
       }
     });
   };

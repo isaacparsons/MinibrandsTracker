@@ -1,3 +1,4 @@
+import _ from "lodash";
 import MiniBrandsRepository from "../db/minibrands";
 import {
   MiniBrandSeriesInput,
@@ -20,24 +21,69 @@ export default class MiniBrandsService {
     series: MiniBrandSeriesInput[],
     tags: MiniBrandTagInput[]
   ) => {
-    await this.miniBrandsRepository.deleteMinBrandTypes();
+    const existingTypes = await this.miniBrandsRepository.getMiniBrandTypes();
+    const typesToDelete = _.differenceWith(
+      existingTypes,
+      types,
+      (val1, val2) => val1.value === val2.value
+    );
     const savedTypes = await Promise.all(
       types.map(async (type) => {
-        return this.miniBrandsRepository.createMiniBrandType(type);
+        const existingType = existingTypes.find((item) => item.value === type.value);
+        if (!existingType) {
+          return await this.miniBrandsRepository.createMiniBrandType(type);
+        }
+        return existingType;
       })
     );
-    await this.miniBrandsRepository.deleteMiniBrandSeries();
+    await Promise.all(
+      typesToDelete.map(async (item) => {
+        await this.miniBrandsRepository.deleteMiniBrandTypeById(item.id);
+      })
+    );
+
+    const existingSeries = await this.miniBrandsRepository.getMiniBrandSeries();
+    const seriesToDelete = _.differenceWith(
+      existingSeries,
+      series,
+      (val1, val2) => val1.value === val2.value
+    );
     const savedSeries = await Promise.all(
-      series.map(async (seriesItem) => {
-        return this.miniBrandsRepository.createMiniBrandSeries(seriesItem);
+      series.map(async (_series) => {
+        const _existingSeries = existingSeries.find((item) => item.value === _series.value);
+        if (!_existingSeries) {
+          return await this.miniBrandsRepository.createMiniBrandSeries(_series);
+        }
+        return _existingSeries;
       })
     );
-    await this.miniBrandsRepository.deleteMinBrandTags();
+    await Promise.all(
+      seriesToDelete.map(async (item) => {
+        await this.miniBrandsRepository.deleteMiniBrandSeriesById(item.id);
+      })
+    );
+
+    const existingTags = await this.miniBrandsRepository.getMiniBrandTags();
+    const tagsToDelete = _.differenceWith(
+      existingTags,
+      tags,
+      (val1, val2) => val1.value === val2.value
+    );
     const savedTags = await Promise.all(
       tags.map(async (tag) => {
-        return this.miniBrandsRepository.createMiniBrandTag(tag);
+        const existingTag = existingTags.find((item) => item.value === tag.value);
+        if (!existingTag) {
+          return await this.miniBrandsRepository.createMiniBrandTag(tag);
+        }
+        return existingTag;
       })
     );
+    await Promise.all(
+      tagsToDelete.map(async (item) => {
+        await this.miniBrandsRepository.deleteMiniBrandTagById(item.id);
+      })
+    );
+
     return {
       types: savedTypes,
       series: savedSeries,
