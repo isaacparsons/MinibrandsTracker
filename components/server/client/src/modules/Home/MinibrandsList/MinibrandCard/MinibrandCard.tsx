@@ -1,7 +1,6 @@
-import { Paper, Box, Typography } from '@mui/material';
+import { Paper, Box } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { CollectedMinibrand, MiniBrand } from '__generated__/graphql';
-import Tags from '../../../../common/components/Tags';
 import MinibrandDialog from '../MinibrandDialog/MinibrandDialog';
 import { useState } from 'react';
 import MinibrandBasicInfo from '../MinibrandBasicInfo';

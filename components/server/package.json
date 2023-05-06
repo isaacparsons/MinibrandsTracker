@@ -84,6 +84,7 @@
     "save-dev": "^0.0.1-security",
     "universal-cookie": "^4.0.4",
     "uuid": "^9.0.0",
+    "winston": "^3.8.2",
     "yup": "^0.32.11"
   },
   "devDependencies": {

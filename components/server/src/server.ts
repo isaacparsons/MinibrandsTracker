@@ -16,6 +16,7 @@ import localAuthMiddleware from "./middleware/localAuthMiddleware";
 import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin/landingPage/default";
 import authRoutes from "./middleware/authRoutes";
 import { sessionMiddleware } from "./session";
+import { loggingMiddleware } from "./middleware/loggingMiddleware";
 
 const typeDefs = readFileSync("src/graphql/schema.graphql", {
   encoding: "utf-8"
@@ -46,6 +47,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(dbMiddleware);
+app.use(loggingMiddleware);
 app.use(googleAuthMiddleware(app));
 app.use(localAuthMiddleware(app));
 authRoutes(app);
@@ -69,7 +71,7 @@ export const startServer = async () => {
     "/graphql",
     expressMiddleware(server, {
       context: async ({ req }) => {
-        return { db: req.prisma, user: req.user as UserWithAuth };
+        return { db: req.prisma, user: req.user as UserWithAuth, logger: req.logger };
       }
     })
   );

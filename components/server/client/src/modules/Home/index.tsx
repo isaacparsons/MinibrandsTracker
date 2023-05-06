@@ -1,8 +1,6 @@
-import { Container, Box, useTheme, IconButton } from '@mui/material';
-import TuneIcon from '@mui/icons-material/Tune';
+import { Box } from '@mui/material';
 import useMiniBrands from './hooks/useMiniBrands';
 import MinibrandsList from './MinibrandsList/MinibrandsList';
-import Search from './Filter/Search/Search';
 import FilterInput from './Filter/FilterInput/FilterInput';
 import useMinibrandsMetadata from '../MinibrandsMetadata/hooks/useMinibrandsMetadata';
 import { useMemo, useState } from 'react';
@@ -17,9 +15,9 @@ import useCollectedMinibrandsMap from './hooks/useCollectedMinibrandsMap';
 import useNotCollectedMinibrandsMap from './hooks/useNotCollectedMinibrandsMap';
 import useFilterByCollected from './hooks/useFilterByCollected';
 import useMinibrandsMap from './hooks/useMinibrandsMap';
+import FilterBar from './Filter/FilterBar/FilterBar';
 
 function Home() {
-  const theme = useTheme();
   const { data: me } = useMe();
   const { data, loading } = useMiniBrands();
   const { data: minibrandsMetadata } = useMinibrandsMetadata();
@@ -110,18 +108,18 @@ function Home() {
     });
   };
 
+  const updateSearchText = (text: string) => {
+    setSearchText(text);
+  };
+
   return (
-    <Container maxWidth="xl" sx={{ paddingTop: 5 }}>
+    <Box sx={{ paddingTop: 5 }}>
       <Box sx={styles.container}>
-        <Box sx={styles.topBar}>
-          <Search value={searchText} onValueChange={setSearchText} />
-          <IconButton onClick={toggleFilter}>
-            <TuneIcon
-              fontSize="large"
-              sx={{ paddingLeft: 2, color: theme.palette.grey[700] }}
-            />
-          </IconButton>
-        </Box>
+        <FilterBar
+          searchText={searchText}
+          updateSearchText={updateSearchText}
+          toggleFilter={toggleFilter}
+        />
         <FilterInput
           open={filterOpen}
           selectAll={handleSelectAll}
@@ -167,7 +165,7 @@ function Home() {
         minibrands={filteredMiniBrands}
         collectedMinibrandsMap={collectedMinibrandsMap}
       />
-    </Container>
+    </Box>
   );
 }
 
@@ -177,11 +175,6 @@ const styles = {
     flexDirection: 'column',
     alignItems: 'stretch',
     marginBottom: 5
-  },
-  topBar: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center'
   }
 };
 

@@ -13,7 +13,7 @@ import ProtectedRoute from './common/components/ProtectedRoute';
 import Admin from './common/components/Admin';
 import Topbar from './common/components/Topbar/Topbar';
 import Authenticated from 'common/components/Authenticated';
-import Account from 'modules/Acccount/Account';
+import Account from 'modules/Account/Account';
 
 export const MINIBRANDS_METADATA_PATH = '/minibrandsMetadata';
 export const ACCOUNT_PATH = '/account';
@@ -37,7 +37,11 @@ function App() {
             <Topbar />
           </Authenticated>
           {/* <Sidenav /> */}
-          <Box display={'flex'} flex={1} sx={{ justifyContent: 'center' }}>
+          <Box
+            display={'flex'}
+            flex={1}
+            sx={{ justifyContent: 'center', width: '100%' }}
+          >
             <Routes>
               <Route path={'/'} element={<Navigate to={LOGIN_PATH} />} />
               <Route path={LOGIN_SUCCESS_PATH} element={<Success />} />

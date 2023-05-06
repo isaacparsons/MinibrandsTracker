@@ -54,7 +54,13 @@ const MiniBrandsResolver: Resolvers = {
       const { id } = args;
       const miniBrandsRepository = new MiniBrandsRepository(context.db);
       const miniBrandsService = new MiniBrandsService(miniBrandsRepository);
-      return miniBrandsService.deleteMiniBrand(id);
+      const s3Service = new S3Service();
+      const deletedMinibrand = await miniBrandsService.deleteMiniBrand(id);
+
+      if (deletedMinibrand) {
+        s3Service.deleteIcon(deletedMinibrand.imgUrl);
+      }
+      return deletedMinibrand;
     },
     updateMiniBrand: async (parent, args, context) => {
       const { id, input } = args;

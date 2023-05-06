@@ -5,11 +5,12 @@ import logger, { mockLogger } from "./config/logger";
 import TokenService from "./services/TokenService";
 import { AuthenticationError, NotFoundError } from "./util/errors";
 import { UserWithAuth } from "./db/user";
+import { Logger } from "winston";
 
 export interface Context {
   db: PrismaClient;
   user?: UserWithAuth;
-  // log: any;
+  logger: Logger;
 }
 
 export type MockContext = {

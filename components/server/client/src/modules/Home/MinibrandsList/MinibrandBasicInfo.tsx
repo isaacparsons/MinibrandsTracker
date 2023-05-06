@@ -11,7 +11,7 @@ const MinibrandBasicInfo = (props: Props) => {
 
   return (
     <Box sx={styles.container}>
-      <Typography variant="h5" color={'white'}>
+      <Typography sx={styles.title} variant="h5" color={'white'}>
         {minibrand.name}
       </Typography>
       <Typography
@@ -29,6 +29,9 @@ const MinibrandBasicInfo = (props: Props) => {
 };
 
 const styles = {
+  title: {
+    paddingBottom: 0.5
+  },
   container: {
     display: 'flex',
     flexDirection: 'column',

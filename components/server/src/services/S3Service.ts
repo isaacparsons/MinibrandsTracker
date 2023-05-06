@@ -6,13 +6,14 @@ export default class S3Service {
   s3Client: S3Client;
 
   constructor() {
-    this.s3Client = new S3Client({ region: "us-west-2" });
+    this.s3Client = new S3Client({ region: process.env.REGION });
   }
 
   createUploadLink = async (name: string) => {
+    const id = Math.random().toString(16).slice(2);
     const bucketParams = {
-      Bucket: "minibrands-icon-bucket",
-      Key: name,
+      Bucket: process.env.MINIBRANDS_ICONS_S3_BUCKET_NAME,
+      Key: name + id,
       ContentType: "image/*"
     };
     const command = new PutObjectCommand(bucketParams);
