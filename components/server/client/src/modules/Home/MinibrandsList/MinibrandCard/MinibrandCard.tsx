@@ -70,8 +70,8 @@ const styles = {
   collectedIcon: {
     position: 'absolute',
     color: 'green',
-    top: -20,
-    left: -20,
+    top: -15,
+    left: -15,
     fontSize: 40,
     backgroundColor: 'white',
     borderRadius: 20

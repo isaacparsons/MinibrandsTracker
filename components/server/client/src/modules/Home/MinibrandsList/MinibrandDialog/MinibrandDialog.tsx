@@ -2,6 +2,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Box, IconButton, Typography, useTheme } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
 import {
   CollectedMinibrand,
@@ -17,6 +18,8 @@ import useCollectMinibrand from './hooks/useCollectMinibrand';
 import useUpdateCollectedMinibrand from './hooks/useUpdateCollectedMinibrand';
 import CollectOrUpdateMinibrand from './CollectOrUpdateMinibrand';
 import useConfetti from './hooks/useConfetti';
+import useIsAdmin from 'common/hooks/useIsAdmin';
+import { useAdminModeContext } from 'context/AdminModeContext';
 
 interface Props {
   minibrand: MiniBrand;
@@ -28,6 +31,9 @@ interface Props {
 const MinibrandDialog = (props: Props) => {
   const { minibrand, collectedMinibrand, open, handleClose } = props;
   const { trigger, Confetti } = useConfetti();
+
+  const isAdmin = useIsAdmin();
+  const { adminMode } = useAdminModeContext();
 
   const { deleteMiniBrand, loading: deletingMinibrand } = useDeleteMinibrand();
   const { collectMinibrand, loading: collectingMinibrand } =
@@ -62,17 +68,19 @@ const MinibrandDialog = (props: Props) => {
       {Confetti}
       <DialogTitle sx={styles.header}>
         <Typography variant="h5">{minibrand.name}</Typography>
-        <Admin>
-          <AdminMode>
-            <IconButton
-              aria-label="delete"
-              size="large"
-              onClick={handleOpenConfirmDeleteDialog}
-            >
-              <DeleteIcon fontSize="inherit" color={'error'} />
-            </IconButton>
-          </AdminMode>
-        </Admin>
+        {adminMode && isAdmin ? (
+          <IconButton
+            aria-label="delete"
+            size="large"
+            onClick={handleOpenConfirmDeleteDialog}
+          >
+            <DeleteIcon fontSize="inherit" color={'error'} />
+          </IconButton>
+        ) : (
+          <IconButton size="large" onClick={handleClose}>
+            <CloseIcon fontSize="inherit" />
+          </IconButton>
+        )}
       </DialogTitle>
       <Box component="img" sx={styles.img} src={minibrand.imgUrl ?? ''} />
       <Box sx={{ height: '30%' }}>

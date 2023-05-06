@@ -1,7 +1,6 @@
-import { Role } from '__generated__/graphql';
-import useMe from '../hooks/useMe';
-import { ReactElement, useMemo } from 'react';
+import { ReactElement } from 'react';
 import { Box } from '@mui/material';
+import useIsAdmin from 'common/hooks/useIsAdmin';
 
 interface Props {
   children: ReactElement[] | ReactElement;
@@ -9,11 +8,7 @@ interface Props {
 
 const Admin = (props: Props) => {
   const { children } = props;
-  const { data } = useMe();
-
-  const isAdmin = useMemo(() => {
-    return data?.role === Role.Admin;
-  }, [data]);
+  const isAdmin = useIsAdmin();
 
   return isAdmin ? <Box>{children}</Box> : null;
 };

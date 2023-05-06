@@ -113,7 +113,7 @@ function Home() {
   };
 
   return (
-    <Box sx={{ paddingTop: 5 }}>
+    <Box sx={{ padding: 5 }}>
       <Box sx={styles.container}>
         <FilterBar
           searchText={searchText}
