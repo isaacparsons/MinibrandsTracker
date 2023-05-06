@@ -5,9 +5,11 @@ import logger, { mockLogger } from "./config/logger";
 import TokenService from "./services/TokenService";
 import { AuthenticationError, NotFoundError } from "./util/errors";
 import { UserWithAuth } from "./db/user";
+import RedisCache from "./redisCache";
 
 export interface Context {
   db: PrismaClient;
+  cache: RedisCache;
   user?: UserWithAuth;
   // log: any;
 }
@@ -23,27 +25,4 @@ export const createMockContext = (): MockContext => {
     db: mockDeep<PrismaClient>(),
     log: mockLogger
   };
-};
-
-export const auth = async ({ req }) => {
-  // let log = logger("Minibrand tracker App");
-  // const result: Context = { db: req.prisma, log };
-  // if (req?.headers?.authorization) {
-  //   const token = req.headers.authorization.replace("Bearer ", "");
-  //   try {
-  //     const { userId } = tokenService.verifyAccessToken(token);
-  //     const user = await result.db.user.findUnique({
-  //       where: { id: userId }
-  //     });
-  //     if (!user) {
-  //       throw NotFoundError("User does not exist");
-  //     }
-  //     log = logger("Minibrand tracker App", { userId: user.id });
-  //     result.user = user;
-  //   } catch (error) {
-  //     throw AuthenticationError("Invalid access token");
-  //   }
-  //   result.log = log;
-  // }
-  // return result;
 };

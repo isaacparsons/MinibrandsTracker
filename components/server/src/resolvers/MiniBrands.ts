@@ -7,7 +7,8 @@ const MiniBrandsResolver: Resolvers = {
   Query: {
     getMiniBrands: async (parent, args, context) => {
       const miniBrandsRepository = new MiniBrandsRepository(context.db);
-      return miniBrandsRepository.getMiniBrands();
+      const miniBrandsService = new MiniBrandsService(miniBrandsRepository, context.cache);
+      return miniBrandsService.getMiniBrands();
     },
     getMiniBrand: async (parent, args, context) => {
       const { id } = args;
@@ -41,26 +42,26 @@ const MiniBrandsResolver: Resolvers = {
     saveMiniBrandsMetaData: async (parent, args, context) => {
       const { types, series, tags } = args;
       const miniBrandsRepository = new MiniBrandsRepository(context.db);
-      const miniBrandsService = new MiniBrandsService(miniBrandsRepository);
+      const miniBrandsService = new MiniBrandsService(miniBrandsRepository, context.cache);
       return await miniBrandsService.saveMinibrandsMetadata(types, series, tags);
     },
     saveMiniBrand: async (parent, args, context) => {
       const { input } = args;
       const miniBrandsRepository = new MiniBrandsRepository(context.db);
-      const miniBrandsService = new MiniBrandsService(miniBrandsRepository);
+      const miniBrandsService = new MiniBrandsService(miniBrandsRepository, context.cache);
       return miniBrandsService.saveMiniBrand(input);
     },
     deleteMiniBrand: async (parent, args, context) => {
       const { id } = args;
       const miniBrandsRepository = new MiniBrandsRepository(context.db);
-      const miniBrandsService = new MiniBrandsService(miniBrandsRepository);
+      const miniBrandsService = new MiniBrandsService(miniBrandsRepository, context.cache);
       return miniBrandsService.deleteMiniBrand(id);
     },
     updateMiniBrand: async (parent, args, context) => {
       const { id, input } = args;
       const { imgUrl } = input;
       const miniBrandsRepository = new MiniBrandsRepository(context.db);
-      const miniBrandsService = new MiniBrandsService(miniBrandsRepository);
+      const miniBrandsService = new MiniBrandsService(miniBrandsRepository, context.cache);
       const s3Service = new S3Service();
 
       const nonUpdatedMinibrand = await miniBrandsService.getMiniBrand(id);
@@ -76,7 +77,7 @@ const MiniBrandsResolver: Resolvers = {
         throw new Error("User does not exist");
       }
       const miniBrandsRepository = new MiniBrandsRepository(context.db);
-      const miniBrandsService = new MiniBrandsService(miniBrandsRepository);
+      const miniBrandsService = new MiniBrandsService(miniBrandsRepository, context.cache);
 
       return miniBrandsService.collectMinibrand(id, context.user.id, input);
     },
@@ -86,7 +87,7 @@ const MiniBrandsResolver: Resolvers = {
         throw new Error("User does not exist");
       }
       const miniBrandsRepository = new MiniBrandsRepository(context.db);
-      const miniBrandsService = new MiniBrandsService(miniBrandsRepository);
+      const miniBrandsService = new MiniBrandsService(miniBrandsRepository, context.cache);
 
       return miniBrandsService.updateCollectedMinibrand(id, context.user.id, input);
     }

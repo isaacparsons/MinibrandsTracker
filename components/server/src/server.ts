@@ -16,6 +16,9 @@ import localAuthMiddleware from "./middleware/localAuthMiddleware";
 import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin/landingPage/default";
 import authRoutes from "./middleware/authRoutes";
 import { sessionMiddleware } from "./session";
+import RedisCache from "./redisCache";
+
+export const redisCache = new RedisCache();
 
 const typeDefs = readFileSync("src/graphql/schema.graphql", {
   encoding: "utf-8"
@@ -69,7 +72,7 @@ export const startServer = async () => {
     "/graphql",
     expressMiddleware(server, {
       context: async ({ req }) => {
-        return { db: req.prisma, user: req.user as UserWithAuth };
+        return { db: req.prisma, user: req.user as UserWithAuth, cache: redisCache };
       }
     })
   );

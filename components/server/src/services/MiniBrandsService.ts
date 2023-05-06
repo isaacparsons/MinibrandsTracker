@@ -1,3 +1,4 @@
+import RedisCache from "../redisCache";
 import MiniBrandsRepository from "../db/minibrands";
 import {
   MiniBrandSeriesInput,
@@ -10,10 +11,16 @@ import {
 
 export default class MiniBrandsService {
   miniBrandsRepository: MiniBrandsRepository;
+  cache: RedisCache;
 
-  constructor(miniBrandsRepository: MiniBrandsRepository) {
+  constructor(miniBrandsRepository: MiniBrandsRepository, cache: RedisCache) {
     this.miniBrandsRepository = miniBrandsRepository;
+    this.cache = cache;
   }
+
+  getMiniBrands = async () => {
+    return this.miniBrandsRepository.getMiniBrands();
+  };
 
   saveMinibrandsMetadata = async (
     types: MiniBrandTypeInput[],
