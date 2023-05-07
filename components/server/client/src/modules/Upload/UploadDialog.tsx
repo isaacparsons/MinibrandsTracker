@@ -49,12 +49,19 @@ export default function UploadDialog(props: Props) {
     }
   });
 
+  function wait(ms: number) {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  }
+
   const handleSubmit = async () => {
     await Promise.all(
       miniBrands.map(async (miniBrand) => {
+        const id = Math.random().toString(16).slice(2);
         const data = await client.query({
           query: GET_IMAGE_UPLOAD_LINK,
-          variables: { name: miniBrand.name }
+          variables: { name: miniBrand.name + id }
         });
         const url = data.data.getImageUploadLink;
         const response = await axios.put(url, miniBrand.file, {
@@ -74,6 +81,7 @@ export default function UploadDialog(props: Props) {
             }
           });
         }
+        await wait(1000);
       })
     );
   };

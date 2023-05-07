@@ -53,7 +53,7 @@ const SnackBarProvider: React.FC<Props> = (props) => {
   return (
     <SnackBarContext.Provider value={{ show }}>
       {details?.type && details?.message ? (
-        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
           <Alert
             onClose={handleClose}
             severity={details.type}
