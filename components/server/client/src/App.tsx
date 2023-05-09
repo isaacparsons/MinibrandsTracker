@@ -36,12 +36,7 @@ function App() {
           <Authenticated>
             <Topbar />
           </Authenticated>
-          {/* <Sidenav /> */}
-          <Box
-            display={'flex'}
-            flex={1}
-            sx={{ justifyContent: 'center', width: '100%' }}
-          >
+          <Box sx={styles.contentContainer}>
             <Routes>
               <Route path={'/'} element={<Navigate to={LOGIN_PATH} />} />
               <Route path={LOGIN_SUCCESS_PATH} element={<Success />} />
@@ -85,6 +80,11 @@ const styles = {
     minHeight: '100vh',
     display: 'flex',
     flexDirection: 'column'
+  },
+  contentContainer: {
+    display: 'flex',
+    flex: 1,
+    justifyContent: 'center'
   }
 };
 

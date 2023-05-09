@@ -1,42 +1,29 @@
-import {
-  TextField,
-  Box,
-  Typography,
-  Paper,
-  useTheme,
-  Theme,
-  Divider,
-  CircularProgress,
-  Container
-} from '@mui/material';
+import { Box, CircularProgress, Container } from '@mui/material';
 import useMe from 'common/hooks/useMe';
-import useGetEmail from './hooks/useGetEmail';
+import AchievementsPreview from './components/AchievementsPreview/AchievementsPreview';
+import AccountDetails from './components/AccountDetails/AccountDetails';
+import useMiniBrands from 'modules/Home/hooks/useMiniBrands';
 
 const Account = () => {
-  const theme = useTheme();
   const { data, loading } = useMe();
-  const email = useGetEmail(data);
-  console.log(data);
+  const { data: me, loading: loadingMe } = useMe();
+  const { data: minibrands, loading: loadingMinibrands } = useMiniBrands();
   return (
-    <Container maxWidth="xl">
-      <Box sx={styles.container}>
-        {loading ? (
+    <Container maxWidth="md" style={styles.container}>
+      <Box sx={styles.contentContainer}>
+        {loading ||
+        loadingMe ||
+        loadingMinibrands ||
+        !minibrands ||
+        !me?.collected ? (
           <CircularProgress />
         ) : (
-          <Box sx={styles.content}>
-            <TextField
-              variant="outlined"
-              sx={styles.textInput}
-              id="email"
-              label="Email"
-              value={email}
-              disabled={true}
+          <Box sx={styles.contentContainer}>
+            <AccountDetails me={me} />
+            <AchievementsPreview
+              minibrands={minibrands}
+              collected={me.collected}
             />
-
-            <Box sx={styles.roleContainer}>
-              <Typography>Role: </Typography>
-              <Typography>{data?.role}</Typography>
-            </Box>
           </Box>
         )}
       </Box>
@@ -46,31 +33,15 @@ const Account = () => {
 
 const styles = {
   container: {
+    paddingTop: 10,
     display: 'flex',
-    flex: 1,
-    // justifyContent: 'center',
-    // alignItems: 'center',
-    width: '100%'
+    flex: 1
   },
-  textInput: {
-    marginTop: 2,
-    width: '100%'
-  },
-  roleContainer: {
+  contentContainer: {
     display: 'flex',
-    flexDirection: 'row',
-    width: '100%',
-    padding: 1,
-
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  },
-  content: {
-    display: 'flex',
-    flex: 1,
-    alignItems: 'flex-start',
     flexDirection: 'column',
-    marginTop: 2
+    flex: 1,
+    padding: 1
   }
 };
 

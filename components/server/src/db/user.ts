@@ -51,4 +51,23 @@ export default class UserRepository {
       }
     });
   };
+  getCollectedById = async (id: number) => {
+    return await this.db.user.findUnique({
+      where: {
+        id
+      },
+      select: {
+        collected: {
+          select: {
+            minibrand: {
+              include: {
+                tags: true,
+                type: true
+              }
+            }
+          }
+        }
+      }
+    });
+  };
 }

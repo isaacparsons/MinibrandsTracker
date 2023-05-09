@@ -4,8 +4,10 @@ const doesContainSubstring = (targetString: string, query: string) => {
   if (query.length === 0) {
     return true;
   }
-  const targetStringQueue = targetString.split('');
-  const queue = query.split('');
+  const targetStringQueue = targetString
+    .split('')
+    .map((char) => char.toLowerCase());
+  const queue = query.split('').map((char) => char.toLowerCase());
 
   let queryTestChar = queue.shift();
   let targetTestChar = targetStringQueue.shift();
@@ -35,6 +37,9 @@ const useFilterBySearch = (
 ) => {
   if (!minibrands) {
     return [];
+  }
+  if (!text) {
+    return minibrands;
   }
   return minibrands.filter((minibrand) => {
     if (!minibrand?.name) {

@@ -4,6 +4,7 @@ type Query {
   getImageUploadLink(name: String!): String!
   getMiniBrandsMetaData: MiniBrandsMetaData!
   getMe: User
+  getAchievements: Achievements
 }
 
 type Mutation {
@@ -44,6 +45,24 @@ type GoogleAuth {
 enum Role {
   Admin
   Member
+}
+
+type Achievements {
+  totalCollected: Int!
+  type: [AchievementCategory!]!
+  tag: [AchievementCategory!]!
+}
+
+type CategoryType {
+  id: Int!
+  value: String!
+}
+
+type AchievementCategory {
+  type: CategoryType!
+  totalCount: Int!
+  collectedCount: Int!
+  subCategories: [AchievementCategory!]
 }
 
 type CollectedMinibrand {

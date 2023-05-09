@@ -29,3 +29,43 @@ export const GET_ME = gql(/* GraphQL */ `
     }
   }
 `);
+
+export const GET_ACHIEVEMENTS = gql(/* GraphQL */ `
+  query GetAchievements {
+    getAchievements {
+      totalCollected
+      type {
+        collectedCount
+        totalCount
+        type {
+          id
+          value
+        }
+        subCategories {
+          collectedCount
+          totalCount
+          type {
+            id
+            value
+          }
+        }
+      }
+      tag {
+        collectedCount
+        totalCount
+        type {
+          id
+          value
+        }
+        subCategories {
+          collectedCount
+          totalCount
+          type {
+            id
+            value
+          }
+        }
+      }
+    }
+  }
+`);

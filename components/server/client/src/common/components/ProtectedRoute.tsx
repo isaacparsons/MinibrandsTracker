@@ -18,7 +18,7 @@ const ProtectedRoute = (props: Props) => {
     }
   }, [authenticated, navigate]);
 
-  return authenticated ? <Box>{children}</Box> : null;
+  return authenticated ? <>{children}</> : null;
 };
 
 export default ProtectedRoute;
