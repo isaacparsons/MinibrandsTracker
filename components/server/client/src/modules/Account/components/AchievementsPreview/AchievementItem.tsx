@@ -22,7 +22,7 @@ const AchievementItem = (props: Props) => {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={2} sx={styles.container}>
-        <Grid xs={2}>
+        <Grid xs={4} sm={2}>
           {iconMap[achievementCategory.type.value] ? (
             <Box
               component="img"
@@ -33,7 +33,7 @@ const AchievementItem = (props: Props) => {
             <Typography>{achievementCategory.type.value}</Typography>
           )}
         </Grid>
-        <Grid xs={8}>
+        <Grid xs={6} sm={8}>
           <AchievementProgessBar
             percentage={Math.floor(
               (achievementCategory.collectedCount /
@@ -62,7 +62,8 @@ const styles = {
   img: {
     objectFit: 'contain',
     maxHeight: 70,
-    maxWidth: 100
+    maxWidth: 100,
+    width: '100%'
   }
 };
 
