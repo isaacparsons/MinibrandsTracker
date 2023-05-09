@@ -20,7 +20,7 @@ interface Props {
 const AchievementItem = (props: Props) => {
   const { achievementCategory } = props;
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1, mr: 2 }}>
       <Grid container spacing={2} sx={styles.container}>
         <Grid xs={4} sm={2}>
           {iconMap[achievementCategory.type.value] ? (
@@ -30,7 +30,9 @@ const AchievementItem = (props: Props) => {
               src={iconMap[achievementCategory.type.value]}
             />
           ) : (
-            <Typography>{achievementCategory.type.value}</Typography>
+            <Typography sx={styles.titleText}>
+              {achievementCategory.type.value}
+            </Typography>
           )}
         </Grid>
         <Grid xs={6} sm={8}>
@@ -51,13 +53,15 @@ const AchievementItem = (props: Props) => {
     </Box>
   );
 };
-
 const styles = {
+  titleText: {
+    color: 'white'
+  },
   container: {
     alignItems: 'center'
   },
   collectedText: {
-    color: 'text.secondary'
+    color: 'white'
   },
   img: {
     objectFit: 'contain',

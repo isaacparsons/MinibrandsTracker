@@ -32,12 +32,12 @@ const AchievementCategory = (props: Props) => {
       {achievementCategories.map((achievementCategory) => {
         return (
           <Accordion
-            sx={{ backgroundColor: 'neutral.main' }}
+            sx={{ backgroundColor: 'primary.main' }}
             expanded={expanded === achievementCategory.type.value}
             onChange={handleChange(achievementCategory.type.value)}
           >
             <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
+              expandIcon={<ExpandMoreIcon sx={styles.expandIcon} />}
               id={achievementCategory.type.value}
             >
               <AchievementItem achievementCategory={achievementCategory} />
@@ -57,6 +57,9 @@ const AchievementCategory = (props: Props) => {
 const styles = {
   container: {
     marginTop: 2
+  },
+  expandIcon: {
+    color: 'common.white'
   }
 };
 

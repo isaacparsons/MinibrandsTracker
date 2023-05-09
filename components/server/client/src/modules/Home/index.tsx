@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, Container } from '@mui/material';
 import useMiniBrands from './hooks/useMiniBrands';
 import MinibrandsList from './MinibrandsList/MinibrandsList';
 import FilterInput from './Filter/FilterInput/FilterInput';
@@ -113,8 +113,8 @@ function Home() {
   };
 
   return (
-    <Box sx={{ padding: 5 }}>
-      <Box sx={styles.container}>
+    <Container sx={styles.container}>
+      <Box sx={styles.contentContainer}>
         <FilterBar
           searchText={searchText}
           updateSearchText={updateSearchText}
@@ -165,12 +165,18 @@ function Home() {
         minibrands={filteredMiniBrands}
         collectedMinibrandsMap={collectedMinibrandsMap}
       />
-    </Box>
+    </Container>
   );
 }
 
 const styles = {
   container: {
+    display: 'flex',
+    flexDirection: 'column',
+    flex: 1,
+    padding: 5
+  },
+  contentContainer: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'stretch',
