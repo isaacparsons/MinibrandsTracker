@@ -127,6 +127,13 @@ resource "aws_security_group" "minibrands_tracker_backend_sg" {
     cidr_blocks = ["75.155.25.250/32"]
   }
 
+  ingress {
+    description = "Allow redis connection"
+    from_port   = "6379"
+    to_port     = "6379"
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
 
   egress {

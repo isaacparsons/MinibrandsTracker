@@ -36,5 +36,6 @@ module "server" {
 
 module "frontend" {
   bucket_name = "minibrands-tracker"
+  url         = "minibrandstracker.com"
   source      = "./modules/frontend"
 }

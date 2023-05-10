@@ -36,15 +36,6 @@ resource "aws_s3_bucket_website_configuration" "website_config" {
   }
 }
 
-# resource "aws_s3_bucket_acl" "acl" {
-#   bucket = aws_s3_bucket.frontend.id
-#   acl    = "public-read"
-# }
-
-// *******************************
-
-
-
 resource "aws_s3_bucket_public_access_block" "minibrands_tracker_public_access_block" {
   bucket = aws_s3_bucket.frontend.id
 
