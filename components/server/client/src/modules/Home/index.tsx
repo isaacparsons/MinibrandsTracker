@@ -1,4 +1,4 @@
-import { Box, Container } from '@mui/material';
+import { Box, CircularProgress, Container } from '@mui/material';
 import useMiniBrands from './hooks/useMiniBrands';
 import MinibrandsList from './MinibrandsList/MinibrandsList';
 import FilterInput from './Filter/FilterInput/FilterInput';
@@ -18,7 +18,7 @@ import useMinibrandsMap from './hooks/useMinibrandsMap';
 import FilterBar from './Filter/FilterBar/FilterBar';
 
 function Home() {
-  const { data: me } = useMe();
+  const { data: me, loading: loadingMe } = useMe();
   const { data, loading } = useMiniBrands();
   const { data: minibrandsMetadata } = useMinibrandsMetadata();
   const [filterOpen, setFilterOpen] = useState(false);
@@ -112,6 +112,18 @@ function Home() {
     setSearchText(text);
   };
 
+  const clearSearch = () => {
+    setSearchText('');
+  };
+
+  if (loading || loadingMe) {
+    return (
+      <Box sx={styles.loadingContainer}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   return (
     <Container sx={styles.container}>
       <Box sx={styles.contentContainer}>
@@ -119,6 +131,7 @@ function Home() {
           searchText={searchText}
           updateSearchText={updateSearchText}
           toggleFilter={toggleFilter}
+          clearSearch={clearSearch}
         />
         <FilterInput
           open={filterOpen}
@@ -179,8 +192,13 @@ const styles = {
   contentContainer: {
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'stretch',
     marginBottom: 5
+  },
+  loadingContainer: {
+    display: 'flex',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 };
 

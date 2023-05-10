@@ -1,20 +1,26 @@
 import { Box, IconButton, useTheme, Theme } from '@mui/material';
 import TuneIcon from '@mui/icons-material/Tune';
+
 import Search from './Search';
 
 interface Props {
   searchText: string;
   updateSearchText: (text: string) => void;
   toggleFilter: () => void;
+  clearSearch: () => void;
 }
 
 const FilterBar = (props: Props) => {
-  const { searchText, updateSearchText, toggleFilter } = props;
+  const { searchText, updateSearchText, toggleFilter, clearSearch } = props;
   const theme = useTheme();
 
   return (
     <Box sx={styles.topBar}>
-      <Search value={searchText} onValueChange={updateSearchText} />
+      <Search
+        value={searchText}
+        onValueChange={updateSearchText}
+        clearSearch={clearSearch}
+      />
       <IconButton onClick={toggleFilter}>
         <TuneIcon fontSize="large" sx={styles.icon(theme)} />
       </IconButton>

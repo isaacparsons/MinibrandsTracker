@@ -12,7 +12,6 @@ const AchievementsPreview = (props: Props) => {
   const { minibrands, collected } = props;
 
   const { data, loading } = useAchievements();
-  console.log(data);
   return (
     <Box sx={styles.container}>
       {!loading && data?.type ? (

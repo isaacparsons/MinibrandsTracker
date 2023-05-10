@@ -1,33 +1,44 @@
 import { MiniBrand } from '../../../__generated__/graphql';
 
+const sanitizeString = (str: string) => {
+  return str.split('').reduce((result, current) => {
+    if (current === "'" || current === '"') {
+      return result;
+    }
+    result.push(current.toLowerCase());
+    return result;
+  }, [] as string[]);
+};
+
 const doesContainSubstring = (targetString: string, query: string) => {
   if (query.length === 0) {
     return true;
   }
-  const targetStringQueue = targetString
-    .split('')
-    .map((char) => char.toLowerCase());
-  const queue = query.split('').map((char) => char.toLowerCase());
 
-  let queryTestChar = queue.shift();
-  let targetTestChar = targetStringQueue.shift();
+  const sanitizedTargetString = sanitizeString(targetString);
+  const sanitizedQuery = sanitizeString(query);
 
-  while (targetTestChar !== queryTestChar) {
-    targetTestChar = targetStringQueue.shift();
+  let queryIndex = 0;
+  let startCharIndex = 0;
 
-    if (!targetTestChar) {
-      return false;
+  while (startCharIndex < sanitizedTargetString.length) {
+    if (sanitizedTargetString[startCharIndex] === sanitizedQuery[queryIndex]) {
+      while (
+        startCharIndex + queryIndex < sanitizedTargetString.length &&
+        queryIndex < sanitizedQuery.length &&
+        sanitizedTargetString[startCharIndex + queryIndex] ===
+          sanitizedQuery[queryIndex]
+      ) {
+        queryIndex += 1;
+      }
+      if (queryIndex >= sanitizedQuery.length) {
+        return true;
+      }
+      queryIndex = 0;
     }
+    startCharIndex += 1;
   }
 
-  while (queryTestChar === targetTestChar && queryTestChar && targetTestChar) {
-    queryTestChar = queue.shift();
-    targetTestChar = targetStringQueue.shift();
-  }
-
-  if (!queryTestChar) {
-    return true;
-  }
   return false;
 };
 
