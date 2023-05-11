@@ -3,32 +3,44 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Api from 'api';
 import { useSnackBarContext } from 'context/SnackBarContext';
+import { useNavigate } from 'react-router-dom';
+import { LOGIN_PATH } from 'App';
 
 const api = new Api();
 
 interface FormValues {
-  email: string;
+  password: string;
+  confirmPassword: string;
 }
 
-const ForgotPassword = () => {
+const ChangePassword = () => {
   const {
     register,
     handleSubmit,
     formState: { errors }
   } = useForm<FormValues>();
-
+  const navigate = useNavigate();
   const { show } = useSnackBarContext();
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const token = urlParams.get('token');
+    if (!token) {
+      show({ type: 'error', message: 'Invalid link' });
+      return;
+    }
+    if (data.password !== data.confirmPassword) {
+      show({ type: 'error', message: 'Passwords do not match' });
+      return;
+    }
     try {
-      await api.resetPassword(data.email);
-      show({
-        message: 'an email has been sent to reset your password',
-        type: 'success'
-      });
+      await api.changePassword(token, data.password);
+      show({ type: 'success', message: 'Password updated' });
+      navigate(LOGIN_PATH);
     } catch (error) {
+      show({ type: 'error', message: 'Unable to change password' });
       console.log(error);
-      show({ message: 'unable to send email to this address', type: 'error' });
     }
   };
   return (
@@ -40,11 +52,22 @@ const ForgotPassword = () => {
         <Grid container spacing={2}>
           <Grid xs={12}>
             <TextField
+              type="password"
               variant="outlined"
               sx={styles.textInput}
-              id="email"
-              label="Email"
-              {...register('email', { required: true })}
+              id="password"
+              label="Password"
+              {...register('password', { required: true })}
+            />
+          </Grid>
+          <Grid xs={12}>
+            <TextField
+              type="password"
+              variant="outlined"
+              sx={styles.textInput}
+              id="confirmPassword"
+              label="Confirm Password"
+              {...register('confirmPassword', { required: true })}
             />
           </Grid>
           <Grid xs={12}>
@@ -72,4 +95,4 @@ const styles = {
   }
 };
 
-export default ForgotPassword;
+export default ChangePassword;

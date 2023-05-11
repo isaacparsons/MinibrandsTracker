@@ -34,6 +34,17 @@ export default class Api {
     return window.open(`${this.baseUrl}/auth/google`, '_self');
   }
 
+  resetPassword(email: string) {
+    return axios.get(`${this.baseUrl}/auth/reset_password?email=${email}`);
+  }
+
+  changePassword(token: string, password: string) {
+    return axios.put(`${this.baseUrl}/auth/change_password`, {
+      token,
+      password
+    });
+  }
+
   logout() {
     return axios.get(`${this.baseUrl}/auth/logout`, {
       withCredentials: true

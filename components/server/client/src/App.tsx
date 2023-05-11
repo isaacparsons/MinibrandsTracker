@@ -14,6 +14,7 @@ import Admin from './common/components/Admin';
 import Topbar from './common/components/Topbar/Topbar';
 import Authenticated from 'common/components/Authenticated';
 import Account from 'modules/Account/Account';
+import ChangePassword from 'modules/Auth/ForgotPassword/ChangePassword';
 
 export const MINIBRANDS_METADATA_PATH = '/minibrandsMetadata';
 export const ACCOUNT_PATH = '/account';
@@ -21,6 +22,7 @@ export const HOME_PATH = '/home';
 export const SIGNUP_PATH = '/signup';
 export const LOGIN_PATH = '/login';
 export const FORGOT_PASSWORD_PATH = '/forgot_password';
+export const CHANGE_PASSWORD_PATH = '/change_password';
 export const LOGIN_SUCCESS_PATH = '/login_success';
 
 function App() {
@@ -59,6 +61,7 @@ function App() {
                 }
               />
               <Route path={FORGOT_PASSWORD_PATH} element={<ForgotPassword />} />
+              <Route path={CHANGE_PASSWORD_PATH} element={<ChangePassword />} />
               <Route
                 path={MINIBRANDS_METADATA_PATH}
                 element={

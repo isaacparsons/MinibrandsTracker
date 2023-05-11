@@ -24,6 +24,25 @@ export default class UserRepository {
     });
   };
 
+  getLocalAuthByEmail = async (email: string) => {
+    return this.db.localAuth.findUnique({
+      where: {
+        email
+      }
+    });
+  };
+
+  updateLocalPassword = async (id: number, passwordHash: string) => {
+    return this.db.localAuth.update({
+      where: {
+        userId: id
+      },
+      data: {
+        passwordHash
+      }
+    });
+  };
+
   getAuthInfoById = async (id: number): Promise<UserWithAuth | null> => {
     return await this.db.user.findUnique({
       where: {
