@@ -2,7 +2,7 @@ import MiniBrandsRepository from "../db/minibrands";
 import UserRepository from "../db/user";
 import { AchievementCategory } from "../generated/graphql";
 import { getAchievementsByTag, getAchievementsByType } from "./utils/achievements";
-import FriendsRepository from "../../dist/db/friends";
+import FriendsRepository from "../db/friends";
 
 export default class UserService {
   userRepository: UserRepository;
