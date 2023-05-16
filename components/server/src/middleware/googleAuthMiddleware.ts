@@ -27,7 +27,7 @@ const googleAuthMiddleware = (app: Express) => {
           const exisitingGoogleAuth = await googleAuthRepository.getById(id);
           let user: UserWithAuth;
           if (!exisitingGoogleAuth) {
-            user = await userRepository.create();
+            user = await userRepository.create(email);
             await googleAuthRepository.create({
               id,
               email,

@@ -16,7 +16,7 @@ const LoginWithGoogle = (props: Props) => {
       onClick={onClick}
       loading={loading}
     >
-      <Typography>Login with google</Typography>
+      <Typography color="white">Login with google</Typography>
       <GoogleIcon sx={styles.icon} />
     </LoadingButton>
   );

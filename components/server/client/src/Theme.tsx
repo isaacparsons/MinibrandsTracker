@@ -28,7 +28,8 @@ const theme = createTheme({
   typography: {
     allVariants: {
       fontFamily: 'Roboto',
-      fontWeight: 300
+      fontWeight: 300,
+      color: '#585858'
     }
   }
 });

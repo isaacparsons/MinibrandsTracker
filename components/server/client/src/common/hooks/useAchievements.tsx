@@ -5,7 +5,7 @@ const useAchievements = () => {
   const { data, loading, error, refetch } = useQuery(GET_ACHIEVEMENTS);
 
   return {
-    data: data?.getAchievements,
+    data: data?.getMyAchievements,
     loading,
     error,
     refetch

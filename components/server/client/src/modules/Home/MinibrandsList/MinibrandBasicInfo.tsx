@@ -17,12 +17,7 @@ const MinibrandBasicInfo = (props: Props) => {
       <Typography
         variant="body1"
         color={'white'}
-      >{`${minibrand.type?.value}`}</Typography>
-      <Typography
-        variant="body2"
-        color={'white'}
-      >{`series ${minibrand.series?.value}`}</Typography>
-
+      >{`${minibrand.type?.value}, series ${minibrand.series?.value}`}</Typography>
       <Tags tags={minibrand.tags ?? []} maxHeight={65} />
     </Box>
   );

@@ -12,9 +12,10 @@ export default class UserRepository {
     this.db = db;
   }
 
-  create = async (): Promise<UserWithAuth> => {
+  create = async (username: string): Promise<UserWithAuth> => {
     return await this.db.user.create({
       data: {
+        username,
         role: Role.Member
       },
       include: {
@@ -54,6 +55,7 @@ export default class UserRepository {
       }
     });
   };
+
   getBasicInfoById = async (id: number) => {
     return await this.db.user.findUnique({
       where: {
@@ -70,8 +72,9 @@ export default class UserRepository {
       }
     });
   };
+
   getCollectedById = async (id: number) => {
-    return await this.db.user.findUnique({
+    return this.db.user.findUnique({
       where: {
         id
       },
@@ -88,5 +91,31 @@ export default class UserRepository {
         }
       }
     });
+  };
+
+  searchUsers = async (query: string, cursor?: number | null) => {
+    const PAGE_SIZE = 25;
+    const users = await this.db.user.findMany({
+      ...(cursor && { skip: 1 }),
+      ...(cursor && {
+        cursor: {
+          id: cursor
+        }
+      }),
+      take: PAGE_SIZE,
+      orderBy: {
+        id: "asc"
+      },
+      where: {
+        username: {
+          contains: query,
+          mode: "insensitive"
+        }
+      }
+    });
+    return {
+      data: users,
+      cursor: users.length > 0 ? users[users.length - 1].id : cursor
+    };
   };
 }

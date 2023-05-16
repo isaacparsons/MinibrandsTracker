@@ -1,7 +1,7 @@
 import { Box, IconButton, useTheme, Theme } from '@mui/material';
 import TuneIcon from '@mui/icons-material/Tune';
 
-import Search from './Search';
+import Search from '../../../../common/components/Search';
 
 interface Props {
   searchText: string;

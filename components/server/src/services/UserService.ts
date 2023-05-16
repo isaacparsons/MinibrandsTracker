@@ -1,18 +1,35 @@
 import MiniBrandsRepository from "../db/minibrands";
 import UserRepository from "../db/user";
-import { AchievementCategory, MiniBrand, MiniBrandTag, MiniBrandType } from "../generated/graphql";
+import { AchievementCategory } from "../generated/graphql";
+import { getAchievementsByTag, getAchievementsByType } from "./utils/achievements";
+import FriendsRepository from "../../dist/db/friends";
 
 export default class UserService {
   userRepository: UserRepository;
   minibrandsRepository: MiniBrandsRepository;
+  friendsRepository: FriendsRepository;
 
-  constructor(userRepository: UserRepository, minibrandsRepository: MiniBrandsRepository) {
+  constructor(
+    userRepository: UserRepository,
+    minibrandsRepository: MiniBrandsRepository,
+    friendsRepository: FriendsRepository
+  ) {
     this.userRepository = userRepository;
     this.minibrandsRepository = minibrandsRepository;
+    this.friendsRepository = friendsRepository;
   }
 
   getBasicInfoById = async (id: number) => {
     return this.userRepository.getBasicInfoById(id);
+  };
+
+  getAchievementsForUser = async (userId: number, id: number) => {
+    const friendShip = await this.friendsRepository.getAcceptedFriendRequest(userId, id);
+    if (!friendShip) {
+      throw new Error(`No friendship exists between users with id: ${userId} and ${id}`);
+    }
+
+    return this.getAchievementsByUserId(id);
   };
 
   getAchievementsByUserId = async (id: number) => {
@@ -70,68 +87,8 @@ export default class UserService {
       tag: achievementsByTag
     };
   };
+
+  searchUsers = async (query: string, cursor?: number | null) => {
+    return this.userRepository.searchUsers(query, cursor);
+  };
 }
-
-const getAchievementsByTag = (
-  collected: {
-    minibrand: MiniBrand & {
-      tags: MiniBrandTag[];
-      type: MiniBrandType;
-    };
-  }[],
-  tags: MiniBrandTag[],
-  minibrands: MiniBrand[]
-) => {
-  return tags.reduce((result, tag) => {
-    const filteredCollected = collected.filter((item) => {
-      return item.minibrand.tags.find((itemTag) => itemTag.id === tag.id);
-    });
-    const filteredMinibrands = minibrands.filter((item) => {
-      return item.tags?.find((itemTag) => itemTag.id === tag.id) ?? false;
-    });
-    if (filteredMinibrands.length === 0) {
-      return result;
-    }
-    result.push({
-      type: {
-        id: tag.id,
-        value: tag.value
-      },
-      collectedCount: filteredCollected.length,
-      totalCount: filteredMinibrands.length
-    });
-    return result;
-  }, [] as AchievementCategory[]);
-};
-
-const getAchievementsByType = (
-  collected: {
-    minibrand: MiniBrand & {
-      tags: MiniBrandTag[];
-      type: MiniBrandType;
-    };
-  }[],
-  types: MiniBrandType[],
-  minibrands: MiniBrand[]
-) => {
-  return types.reduce((result, type) => {
-    const filteredCollected = collected.filter((item) => {
-      return item.minibrand.typeId === type.id;
-    });
-    const filteredMinibrands = minibrands.filter((item) => {
-      return item.typeId === type.id;
-    });
-    if (filteredMinibrands.length === 0) {
-      return result;
-    }
-    result.push({
-      type: {
-        id: type.id,
-        value: type.value
-      },
-      collectedCount: filteredCollected.length,
-      totalCount: filteredMinibrands.length
-    });
-    return result;
-  }, [] as AchievementCategory[]);
-};

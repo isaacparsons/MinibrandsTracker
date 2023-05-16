@@ -42,7 +42,7 @@ const localAuthMiddleware = (app: Express) => {
             error: "User with this email already exists"
           });
         }
-        const user = await userRepository.create();
+        const user = await userRepository.create(email);
         await localAuthRepository.create({
           userId: user.id,
           email,

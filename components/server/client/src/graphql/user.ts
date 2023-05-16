@@ -15,6 +15,7 @@ export const GET_ME = gql(/* GraphQL */ `
         userId
       }
       role
+      username
       collected {
         dateCollected
         id
@@ -31,8 +32,8 @@ export const GET_ME = gql(/* GraphQL */ `
 `);
 
 export const GET_ACHIEVEMENTS = gql(/* GraphQL */ `
-  query GetAchievements {
-    getAchievements {
+  query getMyAchievements {
+    getMyAchievements {
       totalCollected
       type {
         collectedCount
@@ -51,6 +52,58 @@ export const GET_ACHIEVEMENTS = gql(/* GraphQL */ `
         }
       }
       tag {
+        collectedCount
+        totalCount
+        type {
+          id
+          value
+        }
+        subCategories {
+          collectedCount
+          totalCount
+          type {
+            id
+            value
+          }
+        }
+      }
+    }
+  }
+`);
+
+export const SEARCH_USERS = gql(/* GraphQL */ `
+  query SearchUsers($query: String!, $cursor: Int) {
+    searchUsers(query: $query, cursor: $cursor) {
+      cursor
+      data {
+        id
+        username
+      }
+    }
+  }
+`);
+
+export const USER_ACHIEVEMENTS = gql(/* GraphQL */ `
+  query GetAchievements($userId: Int!) {
+    getAchievements(userId: $userId) {
+      tag {
+        collectedCount
+        subCategories {
+          collectedCount
+          totalCount
+          type {
+            id
+            value
+          }
+        }
+        totalCount
+        type {
+          id
+          value
+        }
+      }
+      totalCollected
+      type {
         collectedCount
         totalCount
         type {

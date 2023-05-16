@@ -1,18 +1,7 @@
 import session from "express-session";
-import { createClient } from "redis";
 import RedisStore from "connect-redis";
 
-const redisClient = createClient({
-  url: process.env.REDIS_URL
-});
-redisClient.connect().catch(console.error);
-
-const redisStore = new RedisStore({
-  client: redisClient,
-  prefix: "minibrands-tracker:"
-});
-
-export const sessionMiddleware = () => {
+export const sessionMiddleware = (redisStore: RedisStore) => {
   return session({
     store: redisStore,
     name: "id",

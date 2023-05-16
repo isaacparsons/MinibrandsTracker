@@ -7,14 +7,16 @@ interface Props {
   value: string;
   onValueChange: (value: string) => void;
   clearSearch: () => void;
+  onSearchPress?: () => void;
 }
 
 const Search = (props: Props) => {
-  const { value, onValueChange, clearSearch } = props;
+  const { value, onValueChange, clearSearch, onSearchPress } = props;
   const searchInput = useRef<HTMLElement | null>(null);
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter' && searchInput.current) {
+      if (onSearchPress) onSearchPress();
       searchInput.current.blur();
     }
   };
@@ -33,17 +35,15 @@ const Search = (props: Props) => {
         }}
         sx={{ ml: 1, flex: 1 }}
         placeholder="Search"
-        inputProps={{ 'aria-label': 'search mini brands' }}
       />
       {value.length > 0 ? (
         <IconButton onClick={clearSearch}>
           <CancelIcon />
         </IconButton>
-      ) : (
-        <IconButton>
-          <SearchIcon />
-        </IconButton>
-      )}
+      ) : null}
+      <IconButton onClick={onSearchPress}>
+        <SearchIcon />
+      </IconButton>
     </Paper>
   );
 };

@@ -3,7 +3,6 @@ import { PrismaClient } from "@prisma/client";
 import { mockDeep, DeepMockProxy } from "jest-mock-extended";
 import logger, { mockLogger } from "./config/logger";
 import TokenService from "./services/TokenService";
-import { AuthenticationError, NotFoundError } from "./util/errors";
 import { UserWithAuth } from "./db/user";
 import { Logger } from "winston";
 

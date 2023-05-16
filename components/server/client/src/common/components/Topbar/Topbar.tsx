@@ -1,7 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import {
   Menu,
-  MenuItem,
   Typography,
   IconButton,
   Toolbar,
@@ -18,8 +17,15 @@ import Admin from '../Admin';
 import { useSessionContext } from 'context/SessionContext';
 import LogoutItem from './LogoutItem';
 import Api from 'api';
-import { ACCOUNT_PATH, HOME_PATH, MINIBRANDS_METADATA_PATH } from 'App';
+import {
+  ACCOUNT_PATH,
+  FRIENDS_PATH,
+  HOME_PATH,
+  MINIBRANDS_METADATA_PATH
+} from 'App';
 import { useNavigate } from 'react-router-dom';
+import client from '../../../graphql/client';
+import FriendsItem from './FriendsIcon';
 
 const api = new Api();
 
@@ -58,10 +64,16 @@ export default function Topbar() {
     navigate(ACCOUNT_PATH);
   };
 
+  const handleFriendsClick = () => {
+    handleClose();
+    navigate(FRIENDS_PATH);
+  };
+
   const handleLogout = async () => {
     try {
       await api.logout();
       session.logout();
+      client.clearStore();
     } catch (error) {
       console.log(error);
     }
@@ -99,6 +111,7 @@ export default function Topbar() {
             }}
           >
             <AccountItem handleClose={handleAccountClick} />
+            <FriendsItem handleClose={handleFriendsClick} />
             <Admin>
               <AdminModeItem />
               <SettingsItem handleClose={handleSettingsClick} />

@@ -132,3 +132,33 @@ export const UPDATE_COLLECTED_MINIBRAND = gql(/* GraphQL */ `
     }
   }
 `);
+
+export const GET_COLLECTED_MINIBRANDS = gql(/* GraphQL */ `
+  query GetCollectedMinibrands($userId: Int!) {
+    getCollectedMinibrands(userId: $userId) {
+      cursor
+      data {
+        dateCollected
+        id
+        minibrand {
+          id
+          name
+          imgUrl
+          series {
+            id
+            value
+          }
+          tags {
+            id
+            value
+          }
+          type {
+            id
+            value
+          }
+        }
+        quantity
+      }
+    }
+  }
+`);

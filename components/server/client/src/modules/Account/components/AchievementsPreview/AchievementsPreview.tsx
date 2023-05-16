@@ -1,42 +1,34 @@
-import { Box, CircularProgress, Typography } from '@mui/material';
-import { CollectedMinibrand, MiniBrand } from '__generated__/graphql';
-import useAchievements from 'common/hooks/useAchievements';
+import { Box, Typography } from '@mui/material';
+import { Achievements, MiniBrand } from '__generated__/graphql';
 import AchievementCategory from './AchievementCategory';
 
 interface Props {
   minibrands: MiniBrand[];
-  collected: CollectedMinibrand[];
+  achievements: Achievements;
 }
 
 const AchievementsPreview = (props: Props) => {
-  const { minibrands, collected } = props;
+  const { minibrands, achievements } = props;
 
-  const { data, loading } = useAchievements();
   return (
     <Box sx={styles.container}>
-      {!loading && data?.type ? (
-        <>
-          <Typography variant="h5" marginBottom={1}>
-            Achievements
-          </Typography>
-          <Box sx={styles.achievementsContainer}>
-            <Box sx={styles.collectedContainer}>
-              <Typography sx={{ mr: 1 }}>Total collected:</Typography>
-              <Typography>{`${data?.totalCollected}/${minibrands.length}`}</Typography>
-            </Box>
-            <AchievementCategory
-              name="By Type"
-              achievementCategories={data?.type}
-            />
-            <AchievementCategory
-              name="By Tag"
-              achievementCategories={data?.tag}
-            />
-          </Box>
-        </>
-      ) : (
-        <CircularProgress />
-      )}
+      <Typography variant="h5" marginBottom={1}>
+        Achievements
+      </Typography>
+      <Box sx={styles.achievementsContainer}>
+        <Box sx={styles.collectedContainer}>
+          <Typography sx={{ mr: 1 }}>Total collected:</Typography>
+          <Typography>{`${achievements?.totalCollected}/${minibrands.length}`}</Typography>
+        </Box>
+        <AchievementCategory
+          name="By Type"
+          achievementCategories={achievements?.type}
+        />
+        <AchievementCategory
+          name="By Tag"
+          achievementCategories={achievements?.tag}
+        />
+      </Box>
     </Box>
   );
 };

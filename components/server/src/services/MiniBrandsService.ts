@@ -8,12 +8,15 @@ import {
   UpdateMiniBrandInput,
   CollectMinibrandInput
 } from "../generated/graphql";
+import FriendsRepository from "../db/friends";
 
 export default class MiniBrandsService {
   miniBrandsRepository: MiniBrandsRepository;
+  friendsRepository: FriendsRepository;
 
-  constructor(miniBrandsRepository: MiniBrandsRepository) {
+  constructor(miniBrandsRepository: MiniBrandsRepository, friendsRepository: FriendsRepository) {
     this.miniBrandsRepository = miniBrandsRepository;
+    this.friendsRepository = friendsRepository;
   }
 
   saveMinibrandsMetadata = async (
@@ -91,6 +94,10 @@ export default class MiniBrandsService {
     };
   };
 
+  getMiniBrands = async () => {
+    return this.miniBrandsRepository.getMiniBrands();
+  };
+
   getMiniBrand = async (id: number) => {
     return this.miniBrandsRepository.getMiniBrand(id);
   };
@@ -113,5 +120,17 @@ export default class MiniBrandsService {
 
   updateCollectedMinibrand = async (id: number, userId: number, input: CollectMinibrandInput) => {
     return this.miniBrandsRepository.updateCollectedMinibrand(id, userId, input);
+  };
+
+  getCollectedMinibrandsByUserId = async (
+    userId: number,
+    profileId: number,
+    cursor?: number | null
+  ) => {
+    const friendShip = await this.friendsRepository.getAcceptedFriendRequest(userId, profileId);
+    if (!friendShip) {
+      throw new Error(`No friendship exists between users with id: ${userId} and ${profileId}`);
+    }
+    return this.miniBrandsRepository.getCollectedMinibrandsByUserId(profileId, cursor);
   };
 }

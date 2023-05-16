@@ -1,10 +1,25 @@
+enum CacheControlScope {
+  PUBLIC
+  PRIVATE
+}
+
+directive @cacheControl(
+  maxAge: Int
+  scope: CacheControlScope
+  inheritMaxAge: Boolean
+) on FIELD_DEFINITION | OBJECT | INTERFACE | UNION
+
 type Query {
   getMiniBrands: [MiniBrand!]!
   getMiniBrand(id: Int!): MiniBrand!
   getImageUploadLink(name: String!): String!
   getMiniBrandsMetaData: MiniBrandsMetaData!
-  getMe: User
-  getAchievements: Achievements
+  getMe: User!
+  getMyAchievements: Achievements!
+  getFriends: Friends!
+  getCollectedMinibrands(userId: Int!, cursor: Int): PagedCollectedMinibrandsResults!
+  searchUsers(query: String!, cursor: Int): PagedUsersSearch!
+  getAchievements(userId: Int!): Achievements!
 }
 
 type Mutation {
@@ -18,16 +33,25 @@ type Mutation {
   deleteMiniBrand(id: Int!): MiniBrand!
   collectMinibrand(id: Int!, input: CollectMinibrandInput!): CollectedMinibrand!
   updateCollectedMinibrand(id: Int!, input: UpdateCollectedMinibrandInput!): CollectedMinibrand!
+  createFriendRequest(userId: Int!): FriendRequest!
+  updateFriendRequest(senderId: Int!, status: FriendRequestStatus!): FriendRequest!
+  deleteFriend(friendRequestId: Int!): FriendRequest!
 }
 
 type User {
-  id: Int
+  id: Int!
   role: Role
+  username: String
 
   collected: [CollectedMinibrand!]
 
   localAuth: LocalAuth
   googleAuth: GoogleAuth
+}
+
+type PagedUsersSearch {
+  data: [User!]!
+  cursor: Int
 }
 
 type LocalAuth {
@@ -77,6 +101,11 @@ type CollectedMinibrand {
   user: User
 }
 
+type PagedCollectedMinibrandsResults {
+  data: [CollectedMinibrand!]!
+  cursor: Int
+}
+
 input CollectMinibrandInput {
   quantity: Int!
 }
@@ -91,7 +120,7 @@ type MiniBrandsMetaData {
   tags: [MiniBrandTag!]!
 }
 
-type MiniBrand {
+type MiniBrand @cacheControl(maxAge: 300) {
   id: Int!
   name: String
   typeId: Int
@@ -120,7 +149,7 @@ input UpdateMiniBrandInput {
   imgUrl: String
 }
 
-type MiniBrandTag {
+type MiniBrandTag @cacheControl(maxAge: 300) {
   id: Int!
   value: String!
 
@@ -131,7 +160,7 @@ input MiniBrandTagInput {
   value: String!
 }
 
-type MiniBrandType {
+type MiniBrandType @cacheControl(maxAge: 300) {
   id: Int!
   value: String!
 
@@ -142,7 +171,7 @@ input MiniBrandTypeInput {
   value: String!
 }
 
-type MiniBrandSeries {
+type MiniBrandSeries @cacheControl(maxAge: 300) {
   id: Int!
   value: String!
 
@@ -151,4 +180,24 @@ type MiniBrandSeries {
 
 input MiniBrandSeriesInput {
   value: String!
+}
+
+enum FriendRequestStatus {
+  Accepted
+  Pending
+  Declined
+}
+
+type FriendRequest {
+  senderId: Int!
+  receiverId: Int!
+  status: FriendRequestStatus!
+
+  sender: User
+  receiver: User
+}
+
+type Friends {
+  requests: [FriendRequest!]!
+  friends: [FriendRequest!]!
 }

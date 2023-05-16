@@ -1,5 +1,6 @@
 import { ApolloClient, InMemoryCache, HttpLink, from } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
+import { PagedUsersSearch } from '__generated__/graphql';
 
 const URI = `${process.env.REACT_APP_BACKEND_URL}/graphql`;
 
@@ -25,7 +26,33 @@ const errorLink = onError(
 
 const client = new ApolloClient({
   link: from([errorLink, httpLink]),
-  cache: new InMemoryCache({ addTypename: false })
+  cache: new InMemoryCache({
+    addTypename: false,
+    typePolicies: {
+      Query: {
+        fields: {
+          searchUsers: {
+            keyArgs: ['query'],
+            merge(
+              existing: PagedUsersSearch = { data: [] },
+              incoming: PagedUsersSearch
+            ) {
+              console.log(existing);
+              console.log(incoming);
+              return {
+                data: [...existing.data, ...incoming.data],
+                cursor: incoming.cursor
+              };
+            }
+            // read(existing) {
+            //   console.log(existing);
+            //   return existing;
+            // }
+          }
+        }
+      }
+    }
+  })
 });
 
 export default client;

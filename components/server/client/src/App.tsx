@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
-import Sidenav from 'common/components/Sidenav';
 import MinibrandsMetadataScreen from './modules/MinibrandsMetadata/index';
 import { Box } from '@mui/material';
 import Home from './modules/Home/index';
@@ -8,13 +7,14 @@ import Signup from 'modules/Auth/Signup/Signup';
 import Login from 'modules/Auth/Login/Login';
 import ForgotPassword from 'modules/Auth/ForgotPassword/ForgotPassword';
 import Success from 'modules/Auth/Success/Success';
-import { useSessionContext } from 'context/SessionContext';
 import ProtectedRoute from './common/components/ProtectedRoute';
-import Admin from './common/components/Admin';
 import Topbar from './common/components/Topbar/Topbar';
 import Authenticated from 'common/components/Authenticated';
 import Account from 'modules/Account/Account';
 import ChangePassword from 'modules/Auth/ForgotPassword/ChangePassword';
+import Friends from 'modules/Friends/Friends';
+import Profile from 'modules/Profile/Profile';
+import AddFriend from 'modules/Friends/components/AddFriend/AddFriend';
 
 export const MINIBRANDS_METADATA_PATH = '/minibrandsMetadata';
 export const ACCOUNT_PATH = '/account';
@@ -24,6 +24,9 @@ export const LOGIN_PATH = '/login';
 export const FORGOT_PASSWORD_PATH = '/forgot_password';
 export const CHANGE_PASSWORD_PATH = '/change_password';
 export const LOGIN_SUCCESS_PATH = '/login_success';
+export const FRIENDS_PATH = '/friends';
+export const ADD_FRIENDS_PATH = '/add_friend';
+export const PROFILE_PATH = '/profile';
 
 function App() {
   return (
@@ -44,6 +47,30 @@ function App() {
               <Route path={LOGIN_SUCCESS_PATH} element={<Success />} />
               <Route path={SIGNUP_PATH} element={<Signup />} />
               <Route path={LOGIN_PATH} element={<Login />} />
+              <Route
+                path={FRIENDS_PATH}
+                element={
+                  <ProtectedRoute>
+                    <Friends />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path={ADD_FRIENDS_PATH}
+                element={
+                  <ProtectedRoute>
+                    <AddFriend />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path={`${PROFILE_PATH}/:userId`}
+                element={
+                  <ProtectedRoute>
+                    <Profile />
+                  </ProtectedRoute>
+                }
+              />
               <Route
                 path={HOME_PATH}
                 element={

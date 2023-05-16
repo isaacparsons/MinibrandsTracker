@@ -196,6 +196,7 @@ export default class MiniBrandsRepository {
       }
     });
   };
+
   updateCollectedMinibrand = async (
     id: number,
     userId: number,
@@ -221,5 +222,40 @@ export default class MiniBrandsRepository {
       },
       data: input
     });
+  };
+
+  getCollectedMinibrandsByUserId = async (id: number, cursor?: number | null) => {
+    const PAGE_SIZE = 50;
+    const collectedMinibrands = await this.db.collectedMinibrand.findMany({
+      ...(cursor && { skip: 1 }),
+      ...(cursor && {
+        cursor: {
+          id: cursor
+        }
+      }),
+      take: PAGE_SIZE,
+      orderBy: {
+        id: "asc"
+      },
+      where: {
+        userId: id
+      },
+      include: {
+        minibrand: {
+          include: {
+            series: true,
+            tags: true,
+            type: true
+          }
+        }
+      }
+    });
+    return {
+      data: collectedMinibrands,
+      cursor:
+        collectedMinibrands.length > 0
+          ? collectedMinibrands[collectedMinibrands.length - 1].id
+          : cursor
+    };
   };
 }
