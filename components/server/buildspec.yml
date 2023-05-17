@@ -8,6 +8,7 @@ phases:
       - npm run lint
       - npm run compile
       - rm -rf node_modules
+      # we need to do prisma migrate and prisma generate here
       # - npm run unit-tests
       # - npm run setup-integration-tests
       # - npm run integration-test

@@ -1,30 +1,37 @@
 import { useMemo } from 'react';
 import { CollectedMinibrandMap } from './useCollectedMinibrandsMap';
 import { FilterMap } from './useFilterMap';
-import { MinibrandMap } from './useMinibrandsMap';
 import { NotCollectedMinibrandMap } from './useNotCollectedMinibrandsMap';
+import { MiniBrand } from '__generated__/graphql';
 
 const useFilterByCollected = (
-  minibrandsMap: MinibrandMap,
+  minibrands: MiniBrand[],
   collectedMinibrandMap: CollectedMinibrandMap,
   notCollectedMinibrandMap: NotCollectedMinibrandMap,
   collectedFilterMap: FilterMap
 ) => {
   return useMemo(() => {
+    let minibrandsMap: Record<number, MiniBrand> = {};
+    minibrands.forEach((minibrand) => {
+      minibrandsMap[minibrand.id] = minibrand;
+    });
     let filtered = [];
     if (collectedFilterMap['collected']) {
       for (let collectedMinibrandId in collectedMinibrandMap) {
-        filtered.push(minibrandsMap[collectedMinibrandId]);
+        if (minibrandsMap[collectedMinibrandId])
+          filtered.push(minibrandsMap[collectedMinibrandId]);
       }
     }
     if (collectedFilterMap['not-collected']) {
       for (let notCollectedMinibrandId in notCollectedMinibrandMap) {
-        filtered.push(minibrandsMap[notCollectedMinibrandId]);
+        if (minibrandsMap[notCollectedMinibrandId])
+          filtered.push(minibrandsMap[notCollectedMinibrandId]);
       }
     }
+    // console.log(filtered);
     return filtered;
   }, [
-    minibrandsMap,
+    minibrands,
     collectedMinibrandMap,
     notCollectedMinibrandMap,
     collectedFilterMap

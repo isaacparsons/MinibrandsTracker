@@ -1,106 +1,50 @@
 import { Box, CircularProgress, Container } from '@mui/material';
 import useMiniBrands from './hooks/useMiniBrands';
-import MinibrandsList from './MinibrandsList/MinibrandsList';
-import FilterInput from './Filter/FilterInput/FilterInput';
 import useMinibrandsMetadata from '../MinibrandsMetadata/hooks/useMinibrandsMetadata';
 import { useMemo, useState } from 'react';
 import useFilterMap from './hooks/useFilterMap';
-import FilterList from './Filter/FilterInput/FilterList';
 import useFilterMinibrandsByType from './hooks/useFilterMinibrandsByType';
 import useFilterByMinibrandsSeries from './hooks/useFilterByMinibrandsSeries';
 import useFilterByMinibrandTags from './hooks/useFilterByMinibrandTags';
 import useFilterBySearch from './hooks/useFilterBySearch';
-import useMe from '../../common/hooks/useMe';
-import useCollectedMinibrandsMap from './hooks/useCollectedMinibrandsMap';
-import useNotCollectedMinibrandsMap from './hooks/useNotCollectedMinibrandsMap';
-import useFilterByCollected from './hooks/useFilterByCollected';
-import useMinibrandsMap from './hooks/useMinibrandsMap';
-import FilterBar from './Filter/FilterBar/FilterBar';
+
+import { useSessionContext } from 'context/SessionContext';
+import LoggedInMinibrands from './LoggedInMinibrands';
 
 function Home() {
-  const { data: me, loading: loadingMe } = useMe();
   const { data, loading } = useMiniBrands();
-  const { data: minibrandsMetadata } = useMinibrandsMetadata();
+  const { data: minibrandsMetadata, loading: loadingMinibrandsMetadata } =
+    useMinibrandsMetadata();
+  const session = useSessionContext();
+
   const [filterOpen, setFilterOpen] = useState(false);
   const [searchText, setSearchText] = useState('');
 
-  const collectedMinibrandsMap = useCollectedMinibrandsMap(me?.collected);
-  const minibrandMap = useMinibrandsMap(data);
-  const notCollectedMinibrandsMap = useNotCollectedMinibrandsMap(
-    data,
-    collectedMinibrandsMap
-  );
+  const seriesFilter = useFilterMap('series', minibrandsMetadata?.series ?? []);
+  const typesFilter = useFilterMap('types', minibrandsMetadata?.types ?? []);
+  const tagsFilter = useFilterMap('tags', minibrandsMetadata?.tags ?? []);
 
-  const {
-    filterMap: seriesFilterMap,
-    updateFilterMap: updateSeriesFilterMap,
-    selectAll: selectAllSeries,
-    allSelected: allSeriesSelected,
-    unSelectAll: unSelectAllSeries
-  } = useFilterMap(minibrandsMetadata?.series ?? []);
+  const filters = useMemo(() => {
+    return [seriesFilter, typesFilter, tagsFilter];
+  }, [seriesFilter, typesFilter, tagsFilter]);
 
-  const {
-    filterMap: typesFilterMap,
-    updateFilterMap: updateTypesFilterMap,
-    selectAll: selectAllTypes,
-    allSelected: allTypesSelected,
-    unSelectAll: unSelectAllTypes
-  } = useFilterMap(minibrandsMetadata?.types ?? []);
-
-  const {
-    filterMap: tagsFilterMap,
-    updateFilterMap: updateTagsFilterMap,
-    selectAll: selectAllTags,
-    allSelected: allTagsSelected,
-    unSelectAll: unSelectAllTags
-  } = useFilterMap(minibrandsMetadata?.tags ?? []);
-
-  const {
-    filterMap: collectedFilterMap,
-    updateFilterMap: updateCollectedFilterMap,
-    selectAll: selectAllCollected,
-    allSelected: allCollectedSelected,
-    unSelectAll: unselectAllCollected
-  } = useFilterMap([{ value: 'collected' }, { value: 'not-collected' }] ?? []);
-
-  const filteredByCollectionStatus = useFilterByCollected(
-    minibrandMap,
-    collectedMinibrandsMap,
-    notCollectedMinibrandsMap,
-    collectedFilterMap
-  );
   const filteredByType = useFilterMinibrandsByType(
-    filteredByCollectionStatus,
-    typesFilterMap,
-    allTypesSelected
+    data,
+    typesFilter.filterMap,
+    typesFilter.allSelected
   );
   const filteredBySeries = useFilterByMinibrandsSeries(
     filteredByType,
-    seriesFilterMap,
-    allSeriesSelected
+    seriesFilter.filterMap,
+    seriesFilter.allSelected
   );
   const filteredByTags = useFilterByMinibrandTags(
     filteredBySeries,
-    tagsFilterMap,
-    allTagsSelected
+    tagsFilter.filterMap,
+    tagsFilter.allSelected
   );
 
   const filteredMiniBrands = useFilterBySearch(filteredByTags, searchText);
-
-  const handleSelectAll = () => {
-    selectAllSeries();
-    selectAllTypes();
-    selectAllTags();
-  };
-  const handleUnSelectAll = () => {
-    unSelectAllSeries();
-    unSelectAllTypes();
-    unSelectAllTags();
-  };
-
-  const allSelected = useMemo(() => {
-    return allTagsSelected && allTypesSelected && allSeriesSelected;
-  }, [allTagsSelected, allTypesSelected, allSeriesSelected]);
 
   const toggleFilter = () => {
     setFilterOpen((prevFilterOpenVal) => {
@@ -116,7 +60,7 @@ function Home() {
     setSearchText('');
   };
 
-  if (loading || loadingMe) {
+  if (loading || loadingMinibrandsMetadata || !data || !minibrandsMetadata) {
     return (
       <Box sx={styles.loadingContainer}>
         <CircularProgress />
@@ -126,57 +70,14 @@ function Home() {
 
   return (
     <Container sx={styles.container}>
-      <Box sx={styles.contentContainer}>
-        <FilterBar
-          searchText={searchText}
-          updateSearchText={updateSearchText}
-          toggleFilter={toggleFilter}
-          clearSearch={clearSearch}
-        />
-        <FilterInput
-          open={filterOpen}
-          selectAll={handleSelectAll}
-          unSelectAll={handleUnSelectAll}
-          allSelected={allSelected}
-        >
-          <FilterList
-            type="collected status"
-            filterMap={collectedFilterMap}
-            updateFilterMap={updateCollectedFilterMap}
-            selectAll={selectAllCollected}
-            unSelectAll={unselectAllCollected}
-            allSelected={allCollectedSelected}
-          />
-          <FilterList
-            type="series"
-            filterMap={seriesFilterMap}
-            updateFilterMap={updateSeriesFilterMap}
-            selectAll={selectAllSeries}
-            unSelectAll={unSelectAllSeries}
-            allSelected={allSeriesSelected}
-          />
-          <FilterList
-            type="types"
-            filterMap={typesFilterMap}
-            updateFilterMap={updateTypesFilterMap}
-            selectAll={selectAllTypes}
-            unSelectAll={unSelectAllTypes}
-            allSelected={allTypesSelected}
-          />
-          <FilterList
-            type="tags"
-            filterMap={tagsFilterMap}
-            updateFilterMap={updateTagsFilterMap}
-            selectAll={selectAllTags}
-            unSelectAll={unSelectAllTags}
-            allSelected={allTagsSelected}
-          />
-        </FilterInput>
-      </Box>
-      <MinibrandsList
-        loading={loading}
+      <LoggedInMinibrands
+        filterOpen={filterOpen}
+        toggleFilter={toggleFilter}
+        filters={filters}
         minibrands={filteredMiniBrands}
-        collectedMinibrandsMap={collectedMinibrandsMap}
+        searchText={searchText}
+        updateSearchText={updateSearchText}
+        clearSearch={clearSearch}
       />
     </Container>
   );

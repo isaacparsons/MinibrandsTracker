@@ -1,4 +1,9 @@
-import { Checkbox, FormGroup, FormControlLabel } from '@mui/material';
+import {
+  Checkbox,
+  FormGroup,
+  FormControlLabel,
+  Typography
+} from '@mui/material';
 
 interface Props {
   selectAll: () => void;
@@ -30,7 +35,7 @@ const SelectAll = (props: Props) => {
             sx={styles.checkbox}
           />
         }
-        label={'Select all'}
+        label={<Typography color="white">{'Select all'}</Typography>}
       />
     </FormGroup>
   );

@@ -38,12 +38,12 @@ function App() {
           flexDirection={'column'}
           sx={{ backgroundColor: 'neutral.main' }}
         >
-          <Authenticated>
-            <Topbar />
-          </Authenticated>
+          {/* <Authenticated> */}
+          <Topbar />
+          {/* </Authenticated> */}
           <Box sx={styles.contentContainer}>
             <Routes>
-              <Route path={'/'} element={<Navigate to={LOGIN_PATH} />} />
+              <Route path={'/'} element={<Navigate to={HOME_PATH} />} />
               <Route path={LOGIN_SUCCESS_PATH} element={<Success />} />
               <Route path={SIGNUP_PATH} element={<Signup />} />
               <Route path={LOGIN_PATH} element={<Login />} />
@@ -71,14 +71,7 @@ function App() {
                   </ProtectedRoute>
                 }
               />
-              <Route
-                path={HOME_PATH}
-                element={
-                  <ProtectedRoute>
-                    <Home />
-                  </ProtectedRoute>
-                }
-              />
+              <Route path={HOME_PATH} element={<Home />} />
               <Route
                 path={ACCOUNT_PATH}
                 element={

@@ -21,11 +21,13 @@ import {
   ACCOUNT_PATH,
   FRIENDS_PATH,
   HOME_PATH,
+  LOGIN_PATH,
   MINIBRANDS_METADATA_PATH
 } from 'App';
 import { useNavigate } from 'react-router-dom';
 import client from '../../../graphql/client';
 import FriendsItem from './FriendsIcon';
+import LoginItem from './LoginItem';
 
 const api = new Api();
 
@@ -79,6 +81,11 @@ export default function Topbar() {
     }
   };
 
+  const handleLoginClick = async () => {
+    handleClose();
+    navigate(LOGIN_PATH);
+  };
+
   return (
     <Box>
       <AppBar position="static">
@@ -114,14 +121,20 @@ export default function Topbar() {
               'aria-labelledby': 'basic-button'
             }}
           >
-            <AccountItem handleClose={handleAccountClick} />
-            <FriendsItem handleClose={handleFriendsClick} />
-            <Admin>
-              <AdminModeItem />
-              <SettingsItem handleClose={handleSettingsClick} />
-              <UploadItem handleClose={handleUploadClick} />
-            </Admin>
-            <LogoutItem handleClick={handleLogout} />
+            {session.authenticated ? (
+              <>
+                <AccountItem handleClose={handleAccountClick} />
+                <FriendsItem handleClose={handleFriendsClick} />
+                <Admin>
+                  <AdminModeItem />
+                  <SettingsItem handleClose={handleSettingsClick} />
+                  <UploadItem handleClose={handleUploadClick} />
+                </Admin>
+                <LogoutItem handleClick={handleLogout} />
+              </>
+            ) : (
+              <LoginItem handleClick={handleLoginClick} />
+            )}
           </Menu>
         </Toolbar>
       </AppBar>

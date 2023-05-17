@@ -74,18 +74,18 @@ export const startServer = async () => {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
-    cache: new KeyvAdapter(new Keyv(process.env.REDIS_URL)),
+    // cache: new KeyvAdapter(new Keyv(process.env.REDIS_URL)),
     plugins: [
-      ApolloServerPluginCacheControl({
-        defaultMaxAge: 1,
-        calculateHttpHeaders: false
-      }),
-      responseCachePlugin({
-        sessionId: (requestContext) => {
-          const context = requestContext.contextValue as any;
-          return context.sessionId;
-        }
-      }),
+      // ApolloServerPluginCacheControl({
+      //   defaultMaxAge: 1,
+      //   calculateHttpHeaders: false
+      // }),
+      // responseCachePlugin({
+      //   sessionId: (requestContext) => {
+      //     const context = requestContext.contextValue as any;
+      //     return context.sessionId;
+      //   }
+      // }),
       ApolloServerPluginDrainHttpServer({ httpServer }),
       ApolloServerPluginLandingPageLocalDefault({
         embed: true,

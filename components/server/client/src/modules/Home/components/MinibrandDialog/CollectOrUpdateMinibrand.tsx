@@ -60,7 +60,7 @@ const CollectOrUpdateMinibrand = (props: Props) => {
     return <CircularProgress />;
   }
   return (
-    <Box sx={styles.container}>
+    <>
       <Box sx={styles.quantityContainer}>
         <IconButton onClick={incrementQuantity}>
           <AddIcon />
@@ -95,17 +95,11 @@ const CollectOrUpdateMinibrand = (props: Props) => {
           Collected
         </LoadingButton>
       )}
-    </Box>
+    </>
   );
 };
 
 const styles = {
-  container: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
   quantityContainer: {
     display: 'flex',
     flexDirection: 'column',

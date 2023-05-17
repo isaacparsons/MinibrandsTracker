@@ -1,10 +1,10 @@
 import { Box, Typography } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import { MiniBrand } from '__generated__/graphql';
-import MinibrandCard from './MinibrandCard/MinibrandCard';
+import MinibrandCard from '../components/MinibrandCard/MinibrandCard';
 import { CollectedMinibrandMap } from '../hooks/useCollectedMinibrandsMap';
-import MinibrandsListSkeleton from './MinibrandsListSkeleton';
-import MinibrandDialog from './MinibrandDialog/MinibrandDialog';
+import MinibrandsListSkeleton from '../components/MinibrandsListSkeleton';
+import MinibrandDialog from '../components/MinibrandDialog/MinibrandDialog';
 import { useState } from 'react';
 
 interface Props {

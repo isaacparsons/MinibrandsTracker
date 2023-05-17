@@ -1,6 +1,6 @@
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
-import { Box, IconButton, Typography, useTheme } from '@mui/material';
+import { Box, Button, IconButton, Typography, useTheme } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
@@ -20,6 +20,7 @@ import CollectOrUpdateMinibrand from './CollectOrUpdateMinibrand';
 import useConfetti from './hooks/useConfetti';
 import useIsAdmin from 'common/hooks/useIsAdmin';
 import { useAdminModeContext } from 'context/AdminModeContext';
+import { useSessionContext } from 'context/SessionContext';
 
 interface Props {
   minibrand: MiniBrand;
@@ -30,6 +31,7 @@ interface Props {
 
 const MinibrandDialog = (props: Props) => {
   const { minibrand, collectedMinibrand, open, handleClose } = props;
+  const session = useSessionContext();
   const { trigger, Confetti } = useConfetti();
 
   const isAdmin = useIsAdmin();
@@ -93,13 +95,21 @@ const MinibrandDialog = (props: Props) => {
           fontSize={'1rem'}
         >{`series ${minibrand.series?.value}`}</Typography>
         <Tags tags={minibrand.tags ?? []} />
-        <CollectOrUpdateMinibrand
-          minibrandId={minibrand.id}
-          collectedMinibrand={collectedMinibrand}
-          handleCollectMinibrand={collectMinibrand}
-          handleUpdateMinibrand={updateCollectedMinibrand}
-          loading={collectingMinibrand || updatingMinibrand}
-        />
+        <Box sx={styles.btnContainer}>
+          {session.authenticated ? (
+            <CollectOrUpdateMinibrand
+              minibrandId={minibrand.id}
+              collectedMinibrand={collectedMinibrand}
+              handleCollectMinibrand={collectMinibrand}
+              handleUpdateMinibrand={updateCollectedMinibrand}
+              loading={collectingMinibrand || updatingMinibrand}
+            />
+          ) : (
+            <Button variant="contained" disabled={true}>
+              Login to collect minibrand
+            </Button>
+          )}
+        </Box>
       </Box>
       <Admin>
         <AdminMode>
@@ -140,6 +150,12 @@ const styles = {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between'
+  },
+  btnContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 };
 

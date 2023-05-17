@@ -6,6 +6,15 @@ interface FilterTypeValue {
   value: string;
 }
 
+export interface Filter {
+  type: string;
+  filterMap: FilterMap;
+  updateFilterMap: (property: string, value: boolean) => void;
+  selectAll: () => void;
+  unSelectAll: () => void;
+  allSelected: boolean;
+}
+
 export type FilterMap = Record<string, boolean>;
 
 function deepCompareEquals(a: any, b: any) {
@@ -30,7 +39,7 @@ const setAllValues = (filterMap: FilterMap, value: boolean) => {
   return newFilterMap;
 };
 
-const useFilterMap = (values: FilterTypeValue[]) => {
+const useFilterMap = (type: string, values: FilterTypeValue[]): Filter => {
   const [filterMap, setFilterMap] = useState<FilterMap>({});
   const [allSelected, setAllSelected] = useState(true);
 
@@ -79,7 +88,14 @@ const useFilterMap = (values: FilterTypeValue[]) => {
     setAllSelected(false);
   }, [filterMap]);
 
-  return { filterMap, updateFilterMap, selectAll, unSelectAll, allSelected };
+  return {
+    type,
+    filterMap,
+    updateFilterMap,
+    selectAll,
+    unSelectAll,
+    allSelected
+  };
 };
 
 export default useFilterMap;

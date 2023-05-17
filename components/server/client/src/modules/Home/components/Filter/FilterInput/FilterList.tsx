@@ -1,4 +1,4 @@
-import { FilterMap } from '../../hooks/useFilterMap';
+import { FilterMap } from '../../../hooks/useFilterMap';
 import {
   Box,
   List,
@@ -6,8 +6,7 @@ import {
   Checkbox,
   FormGroup,
   FormControlLabel,
-  Typography,
-  Divider
+  Typography
 } from '@mui/material';
 import SelectAll from './SelectAll';
 
@@ -39,7 +38,9 @@ const FilterList = (props: Props) => {
 
   return (
     <Box sx={styles.container}>
-      <Typography variant="h5">{type}</Typography>
+      <Typography color="white" variant="h5">
+        {type}
+      </Typography>
       <List>
         <ListItem>
           <SelectAll
@@ -64,7 +65,7 @@ const FilterList = (props: Props) => {
                       sx={styles.checkbox}
                     />
                   }
-                  label={property}
+                  label={<Typography color="white">{property}</Typography>}
                 />
               );
             })}

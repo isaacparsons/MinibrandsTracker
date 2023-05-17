@@ -33,7 +33,6 @@ const styles = {
     flex: 1,
     padding: 1,
     backgroundColor: 'primary.main'
-    // height: '100%'
   }
 };
 
