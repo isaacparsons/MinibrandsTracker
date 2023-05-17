@@ -10,6 +10,7 @@ import useFilterBySearch from './hooks/useFilterBySearch';
 
 import { useSessionContext } from 'context/SessionContext';
 import LoggedInMinibrands from './LoggedInMinibrands';
+import LoggedOutMinibrands from './LoggedOutMinibrands';
 
 function Home() {
   const { data, loading } = useMiniBrands();
@@ -70,15 +71,27 @@ function Home() {
 
   return (
     <Container sx={styles.container}>
-      <LoggedInMinibrands
-        filterOpen={filterOpen}
-        toggleFilter={toggleFilter}
-        filters={filters}
-        minibrands={filteredMiniBrands}
-        searchText={searchText}
-        updateSearchText={updateSearchText}
-        clearSearch={clearSearch}
-      />
+      {session.authenticated ? (
+        <LoggedInMinibrands
+          filterOpen={filterOpen}
+          toggleFilter={toggleFilter}
+          filters={filters}
+          minibrands={filteredMiniBrands}
+          searchText={searchText}
+          updateSearchText={updateSearchText}
+          clearSearch={clearSearch}
+        />
+      ) : (
+        <LoggedOutMinibrands
+          filterOpen={filterOpen}
+          toggleFilter={toggleFilter}
+          filters={filters}
+          minibrands={filteredMiniBrands}
+          searchText={searchText}
+          updateSearchText={updateSearchText}
+          clearSearch={clearSearch}
+        />
+      )}
     </Container>
   );
 }
