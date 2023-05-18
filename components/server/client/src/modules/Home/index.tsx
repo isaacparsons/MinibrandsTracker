@@ -64,8 +64,6 @@ function Home() {
   };
 
   const fetchNextPage = () => {
-    console.log('fetch more');
-    console.log(cursor);
     fetchMore({ variables: { cursor } });
     setPrevCursor(cursor);
   };

@@ -1,12 +1,6 @@
 import { Box, CircularProgress } from '@mui/material';
 import useIsInViewport from 'common/hooks/useIsInViewPort';
-import React, {
-  ReactElement,
-  useEffect,
-  useMemo,
-  useRef,
-  useState
-} from 'react';
+import React, { ReactElement, useEffect, useRef, useState } from 'react';
 
 interface Props {
   children: ReactElement[] | ReactElement;
@@ -41,11 +35,26 @@ function InfinityScroll(props: Props) {
   }, [dataLength, prevDataLength, hasMore]);
 
   return (
-    <Box>
+    <Box sx={styles.container}>
       {children}
-      <Box ref={loadingRef}>{fetching ? <CircularProgress /> : null}</Box>
+      <Box sx={styles.loadingContainer} ref={loadingRef}>
+        {fetching ? <CircularProgress /> : null}
+      </Box>
     </Box>
   );
 }
+
+const styles = {
+  container: {
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'column'
+  },
+  loadingContainer: {
+    display: 'flex',
+    flex: 1,
+    justifyContent: 'center'
+  }
+};
 
 export default InfinityScroll;
