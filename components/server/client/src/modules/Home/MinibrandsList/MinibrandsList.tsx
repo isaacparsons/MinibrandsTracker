@@ -39,9 +39,10 @@ const MinibrandsList = (props: Props) => {
                 <Grid
                   key={`minibrand-${minibrand.id}`}
                   marginBottom={2}
-                  xs={6}
-                  sm={4}
-                  md={3}
+                  xs={12}
+                  sm={6}
+                  md={4}
+                  lg={3}
                 >
                   <MinibrandCard
                     minibrand={minibrand}

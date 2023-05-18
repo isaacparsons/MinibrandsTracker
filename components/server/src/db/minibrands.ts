@@ -27,7 +27,7 @@ export default class MiniBrandsRepository {
   };
 
   getMiniBrands = async (cursor?: number | null) => {
-    const PAGE_SIZE = 50;
+    const PAGE_SIZE = 5;
     const users = await this.db.miniBrand.findMany({
       ...(cursor && { skip: 1 }),
       ...(cursor && {

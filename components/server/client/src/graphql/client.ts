@@ -49,10 +49,6 @@ const client = new ApolloClient({
               existing: PaginatedMinibrands = { data: [] },
               incoming: PaginatedMinibrands
             ) {
-              console.log('existing');
-              console.log(existing);
-              console.log('incoming');
-              console.log(incoming);
               return {
                 data: [...existing.data, ...incoming.data],
                 cursor: incoming.cursor

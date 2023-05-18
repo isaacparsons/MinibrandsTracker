@@ -22,6 +22,7 @@ function Home() {
   const [filterOpen, setFilterOpen] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [prevCursor, setPrevCursor] = useState<number | null | undefined>();
+  const t0 = performance.now();
 
   const seriesFilter = useFilterMap('series', minibrandsMetadata?.series ?? []);
   const typesFilter = useFilterMap('types', minibrandsMetadata?.types ?? []);
@@ -48,6 +49,9 @@ function Home() {
   );
 
   const filteredMiniBrands = useFilterBySearch(filteredByTags, searchText);
+
+  const t1 = performance.now();
+  console.log(`Call to filteres took ${t1 - t0} milliseconds.`);
 
   const toggleFilter = () => {
     setFilterOpen((prevFilterOpenVal) => {
