@@ -10,7 +10,7 @@ enum CacheControlScope {
 # ) on FIELD_DEFINITION | OBJECT | INTERFACE | UNION
 
 type Query {
-  getMiniBrands: [MiniBrand!]!
+  getMiniBrands(cursor: Int): PaginatedMinibrands!
   getMiniBrand(id: Int!): MiniBrand!
   getImageUploadLink(name: String!): String!
   getMiniBrandsMetaData: MiniBrandsMetaData!
@@ -118,6 +118,11 @@ type MiniBrandsMetaData {
   types: [MiniBrandType!]!
   series: [MiniBrandSeries!]!
   tags: [MiniBrandTag!]!
+}
+
+type PaginatedMinibrands {
+  data: [MiniBrand!]!
+  cursor: Int
 }
 
 type MiniBrand {

@@ -2,13 +2,14 @@ import { useQuery } from '@apollo/client';
 import { GET_MINIBRANDS } from '../../../graphql/miniBrands';
 
 const useMiniBrands = () => {
-  const { data, loading, error, refetch } = useQuery(GET_MINIBRANDS);
+  const { data, loading, error, fetchMore } = useQuery(GET_MINIBRANDS);
 
   return {
-    data: data?.getMiniBrands,
+    data: data?.getMiniBrands.data,
+    cursor: data?.getMiniBrands.cursor,
+    fetchMore,
     loading,
-    error,
-    refetch
+    error
   };
 };
 

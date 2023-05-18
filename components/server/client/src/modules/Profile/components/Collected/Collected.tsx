@@ -18,8 +18,6 @@ function Collected(props: Props) {
 
   const [prevCursor, setPrevCursor] = useState<number | null | undefined>();
 
-  console.log(data);
-
   const fetchNextPage = () => {
     fetchMore({ variables: { cursor: cursor } });
     setPrevCursor(cursor);

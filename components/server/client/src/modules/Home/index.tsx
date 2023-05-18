@@ -11,15 +11,17 @@ import useFilterBySearch from './hooks/useFilterBySearch';
 import { useSessionContext } from 'context/SessionContext';
 import LoggedInMinibrands from './LoggedInMinibrands';
 import LoggedOutMinibrands from './LoggedOutMinibrands';
+import InfinityScroll from 'common/components/InfinityScroll';
 
 function Home() {
-  const { data, loading } = useMiniBrands();
+  const { data, cursor, loading, fetchMore } = useMiniBrands();
   const { data: minibrandsMetadata, loading: loadingMinibrandsMetadata } =
     useMinibrandsMetadata();
   const session = useSessionContext();
 
   const [filterOpen, setFilterOpen] = useState(false);
   const [searchText, setSearchText] = useState('');
+  const [prevCursor, setPrevCursor] = useState<number | null | undefined>();
 
   const seriesFilter = useFilterMap('series', minibrandsMetadata?.series ?? []);
   const typesFilter = useFilterMap('types', minibrandsMetadata?.types ?? []);
@@ -61,6 +63,17 @@ function Home() {
     setSearchText('');
   };
 
+  const fetchNextPage = () => {
+    console.log('fetch more');
+    console.log(cursor);
+    fetchMore({ variables: { cursor } });
+    setPrevCursor(cursor);
+  };
+
+  const hasMore = useMemo(() => {
+    return prevCursor !== cursor;
+  }, [prevCursor, cursor]);
+
   if (loading || loadingMinibrandsMetadata || !data || !minibrandsMetadata) {
     return (
       <Box sx={styles.loadingContainer}>
@@ -71,27 +84,33 @@ function Home() {
 
   return (
     <Container sx={styles.container}>
-      {session.authenticated ? (
-        <LoggedInMinibrands
-          filterOpen={filterOpen}
-          toggleFilter={toggleFilter}
-          filters={filters}
-          minibrands={filteredMiniBrands}
-          searchText={searchText}
-          updateSearchText={updateSearchText}
-          clearSearch={clearSearch}
-        />
-      ) : (
-        <LoggedOutMinibrands
-          filterOpen={filterOpen}
-          toggleFilter={toggleFilter}
-          filters={filters}
-          minibrands={filteredMiniBrands}
-          searchText={searchText}
-          updateSearchText={updateSearchText}
-          clearSearch={clearSearch}
-        />
-      )}
+      <InfinityScroll
+        hasMore={hasMore}
+        fetchMore={fetchNextPage}
+        dataLength={data?.length ?? 0}
+      >
+        {session.authenticated ? (
+          <LoggedInMinibrands
+            filterOpen={filterOpen}
+            toggleFilter={toggleFilter}
+            filters={filters}
+            minibrands={filteredMiniBrands}
+            searchText={searchText}
+            updateSearchText={updateSearchText}
+            clearSearch={clearSearch}
+          />
+        ) : (
+          <LoggedOutMinibrands
+            filterOpen={filterOpen}
+            toggleFilter={toggleFilter}
+            filters={filters}
+            minibrands={filteredMiniBrands}
+            searchText={searchText}
+            updateSearchText={updateSearchText}
+            clearSearch={clearSearch}
+          />
+        )}
+      </InfinityScroll>
     </Container>
   );
 }

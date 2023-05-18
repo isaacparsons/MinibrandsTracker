@@ -1,6 +1,6 @@
 import { ApolloClient, InMemoryCache, HttpLink, from } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
-import { PagedUsersSearch } from '__generated__/graphql';
+import { PagedUsersSearch, PaginatedMinibrands } from '__generated__/graphql';
 
 const URI = `${process.env.REACT_APP_BACKEND_URL}/graphql`;
 
@@ -37,17 +37,27 @@ const client = new ApolloClient({
               existing: PagedUsersSearch = { data: [] },
               incoming: PagedUsersSearch
             ) {
+              return {
+                data: [...existing.data, ...incoming.data],
+                cursor: incoming.cursor
+              };
+            }
+          },
+          getMiniBrands: {
+            keyArgs: false,
+            merge(
+              existing: PaginatedMinibrands = { data: [] },
+              incoming: PaginatedMinibrands
+            ) {
+              console.log('existing');
               console.log(existing);
+              console.log('incoming');
               console.log(incoming);
               return {
                 data: [...existing.data, ...incoming.data],
                 cursor: incoming.cursor
               };
             }
-            // read(existing) {
-            //   console.log(existing);
-            //   return existing;
-            // }
           }
         }
       }

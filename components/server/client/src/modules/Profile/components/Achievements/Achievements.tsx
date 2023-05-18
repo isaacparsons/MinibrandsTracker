@@ -12,7 +12,6 @@ function Achievements(props: Props) {
   const { data: achievements, loading: loadingAchievements } =
     useUserAchievements({ userId });
   const { data: minibrands, loading: loadingMinibrands } = useMiniBrands();
-  console.log(achievements);
   return (
     <Box sx={styles.container}>
       {!minibrands ||

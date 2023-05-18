@@ -34,25 +34,28 @@ export const DELETE_MINIBRAND = gql(/* GraphQL */ `
 `);
 
 export const GET_MINIBRANDS = gql(/* GraphQL */ `
-  query GetMiniBrands {
-    getMiniBrands {
-      id
-      imgUrl
-      name
-      series {
+  query GetMiniBrands($cursor: Int) {
+    getMiniBrands(cursor: $cursor) {
+      cursor
+      data {
         id
-        value
+        imgUrl
+        name
+        series {
+          id
+          value
+        }
+        seriesId
+        tags {
+          id
+          value
+        }
+        type {
+          id
+          value
+        }
+        typeId
       }
-      seriesId
-      tags {
-        id
-        value
-      }
-      type {
-        id
-        value
-      }
-      typeId
     }
   }
 `);

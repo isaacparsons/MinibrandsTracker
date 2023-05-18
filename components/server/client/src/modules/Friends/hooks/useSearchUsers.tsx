@@ -3,7 +3,7 @@ import { SearchUsersQueryVariables } from '__generated__/graphql';
 import { SEARCH_USERS } from 'graphql/user';
 
 const useSearchUsers = () => {
-  const [searchUsers, { data, loading, error, fetchMore }] =
+  const [searchUsers, { data, loading, error, fetchMore, refetch }] =
     useLazyQuery(SEARCH_USERS);
 
   const onSearchUsers = (variables: SearchUsersQueryVariables) => {
@@ -16,7 +16,8 @@ const useSearchUsers = () => {
     cursor: data?.searchUsers.cursor,
     loading,
     error,
-    fetchMore
+    fetchMore,
+    refetch
   };
 };
 

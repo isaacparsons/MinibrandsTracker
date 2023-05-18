@@ -33,7 +33,6 @@ const Profile = () => {
       return extractFriend(data, friendRequest);
     }
   }, [data, friendRequest]);
-  console.log(friendRequest);
 
   const handleBackClick = () => {
     navigate(FRIENDS_PATH);

@@ -24,7 +24,6 @@ const useFilterByNotFriended = (
           ? friend.receiver
           : friend.sender;
 
-      console.log(friend);
       if (user?.username && !set.has(user?.username)) {
         set.add(user.username);
       }

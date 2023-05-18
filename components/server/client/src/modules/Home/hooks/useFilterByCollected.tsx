@@ -28,7 +28,6 @@ const useFilterByCollected = (
           filtered.push(minibrandsMap[notCollectedMinibrandId]);
       }
     }
-    // console.log(filtered);
     return filtered;
   }, [
     minibrands,

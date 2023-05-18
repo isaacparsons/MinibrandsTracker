@@ -3,7 +3,6 @@ import {
   MiniBrandSeriesInput,
   MiniBrandTagInput,
   MiniBrandInput,
-  MiniBrandTag,
   UpdateMiniBrandInput,
   CollectMinibrandInput,
   UpdateCollectedMinibrandInput
@@ -17,14 +16,29 @@ export default class MiniBrandsRepository {
     this.db = db;
   }
 
-  getMiniBrands = async () => {
-    return await this.db.miniBrand.findMany({
+  getMiniBrands = async (cursor?: number | null) => {
+    const PAGE_SIZE = 5;
+    const users = await this.db.miniBrand.findMany({
+      ...(cursor && { skip: 1 }),
+      ...(cursor && {
+        cursor: {
+          id: cursor
+        }
+      }),
+      take: PAGE_SIZE,
+      orderBy: {
+        id: "asc"
+      },
       include: {
         tags: true,
         series: true,
         type: true
       }
     });
+    return {
+      data: users,
+      cursor: users.length > 0 ? users[users.length - 1].id : cursor
+    };
   };
 
   getMiniBrandTypes = async () => {
