@@ -35,7 +35,7 @@ export default class UserService {
   getAchievementsByUserId = async (id: number) => {
     const _collected = await this.userRepository.getCollectedById(id);
     const collected = _collected ? _collected.collected : [];
-    const minibrands = await this.minibrandsRepository.getMiniBrands();
+    const minibrands = await this.minibrandsRepository.getAllMiniBrands();
     const minibrandTypes = await this.minibrandsRepository.getMiniBrandTypes();
     const minibrandTags = await this.minibrandsRepository.getMiniBrandTags();
 

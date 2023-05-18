@@ -16,6 +16,16 @@ export default class MiniBrandsRepository {
     this.db = db;
   }
 
+  getAllMiniBrands = async () => {
+    return this.db.miniBrand.findMany({
+      include: {
+        tags: true,
+        series: true,
+        type: true
+      }
+    });
+  };
+
   getMiniBrands = async (cursor?: number | null) => {
     const PAGE_SIZE = 5;
     const users = await this.db.miniBrand.findMany({
