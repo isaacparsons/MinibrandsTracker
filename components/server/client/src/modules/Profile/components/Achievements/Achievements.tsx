@@ -1,6 +1,5 @@
 import { Box, CircularProgress } from '@mui/material';
 import AchievementsPreview from 'modules/Account/components/AchievementsPreview/AchievementsPreview';
-import useMiniBrands from 'modules/Home/hooks/useMiniBrands';
 import useUserAchievements from 'modules/Profile/hooks/useUserAchievements';
 
 interface Props {
@@ -11,19 +10,12 @@ function Achievements(props: Props) {
   const { userId } = props;
   const { data: achievements, loading: loadingAchievements } =
     useUserAchievements({ userId });
-  const { data: minibrands, loading: loadingMinibrands } = useMiniBrands();
   return (
     <Box sx={styles.container}>
-      {!minibrands ||
-      !achievements ||
-      loadingMinibrands ||
-      loadingAchievements ? (
+      {!achievements || loadingAchievements ? (
         <CircularProgress />
       ) : (
-        <AchievementsPreview
-          minibrands={minibrands}
-          achievements={achievements}
-        />
+        <AchievementsPreview achievements={achievements} />
       )}
     </Box>
   );

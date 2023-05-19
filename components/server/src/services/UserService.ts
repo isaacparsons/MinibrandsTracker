@@ -82,6 +82,7 @@ export default class UserService {
     }, [] as AchievementCategory[]);
 
     return {
+      totalMinibrands: minibrands.length,
       totalCollected: collected.length,
       type: achievementsByType,
       tag: achievementsByTag

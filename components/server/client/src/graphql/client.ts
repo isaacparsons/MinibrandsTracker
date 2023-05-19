@@ -1,6 +1,10 @@
 import { ApolloClient, InMemoryCache, HttpLink, from } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
-import { PagedUsersSearch, PaginatedMinibrands } from '__generated__/graphql';
+import {
+  MiniBrand,
+  PagedUsersSearch,
+  PaginatedMinibrands
+} from '__generated__/graphql';
 
 const URI = `${process.env.REACT_APP_BACKEND_URL}/graphql`;
 
@@ -44,15 +48,30 @@ const client = new ApolloClient({
             }
           },
           getMiniBrands: {
-            keyArgs: false,
+            keyArgs: ['filter'],
             merge(
               existing: PaginatedMinibrands = { data: [] },
-              incoming: PaginatedMinibrands
+              incoming: PaginatedMinibrands,
+              { readField }
             ) {
+              const merged: Record<number, MiniBrand> = { ...existing.data };
+              incoming.data.forEach((item) => {
+                const id = readField('id', item) as number;
+                merged[id] = item;
+              });
+              // console.log(merged);
               return {
-                data: [...existing.data, ...incoming.data],
+                data: merged,
                 cursor: incoming.cursor
               };
+            },
+            read(existing) {
+              return (
+                existing && {
+                  data: Object.values(existing.data),
+                  cursor: existing.cursor
+                }
+              );
             }
           }
         }

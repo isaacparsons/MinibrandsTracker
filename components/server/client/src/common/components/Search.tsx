@@ -7,7 +7,7 @@ interface Props {
   value: string;
   onValueChange: (value: string) => void;
   clearSearch: () => void;
-  onSearchPress?: () => void;
+  onSearchPress?: (value: string) => void;
 }
 
 const Search = (props: Props) => {
@@ -16,9 +16,13 @@ const Search = (props: Props) => {
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter' && searchInput.current) {
-      if (onSearchPress) onSearchPress();
+      handleSearch();
       searchInput.current.blur();
     }
+  };
+
+  const handleSearch = () => {
+    if (onSearchPress) onSearchPress(value);
   };
 
   return (
@@ -41,7 +45,7 @@ const Search = (props: Props) => {
           <CancelIcon />
         </IconButton>
       ) : null}
-      <IconButton onClick={onSearchPress}>
+      <IconButton onClick={() => handleSearch()}>
         <SearchIcon />
       </IconButton>
     </Paper>

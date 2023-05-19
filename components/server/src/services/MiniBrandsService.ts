@@ -6,7 +6,8 @@ import {
   MiniBrandTagInput,
   MiniBrandInput,
   UpdateMiniBrandInput,
-  CollectMinibrandInput
+  CollectMinibrandInput,
+  MiniBrandsFilter
 } from "../generated/graphql";
 import FriendsRepository from "../db/friends";
 
@@ -94,8 +95,8 @@ export default class MiniBrandsService {
     };
   };
 
-  getMiniBrands = async (cursor?: number | null) => {
-    return this.miniBrandsRepository.getMiniBrands(cursor);
+  getMiniBrands = async (filter?: MiniBrandsFilter | null, cursor?: number | null) => {
+    return this.miniBrandsRepository.getMiniBrands(filter, cursor);
   };
 
   getMiniBrand = async (id: number) => {

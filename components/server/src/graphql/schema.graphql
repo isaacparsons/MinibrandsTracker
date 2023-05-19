@@ -10,7 +10,8 @@ enum CacheControlScope {
 # ) on FIELD_DEFINITION | OBJECT | INTERFACE | UNION
 
 type Query {
-  getMiniBrands(cursor: Int): PaginatedMinibrands!
+  test: Int
+  getMiniBrands(filter: MiniBrandsFilter, cursor: Int): PaginatedMinibrands!
   getMiniBrand(id: Int!): MiniBrand!
   getImageUploadLink(name: String!): String!
   getMiniBrandsMetaData: MiniBrandsMetaData!
@@ -72,6 +73,7 @@ enum Role {
 }
 
 type Achievements {
+  totalMinibrands: Int!
   totalCollected: Int!
   type: [AchievementCategory!]!
   tag: [AchievementCategory!]!
@@ -136,6 +138,13 @@ type MiniBrand {
   series: MiniBrandSeries
   tags: [MiniBrandTag!]
   collectors: [CollectedMinibrand!]
+}
+
+input MiniBrandsFilter {
+  search: String
+  typeIds: [Int!]!
+  seriesIds: [Int!]!
+  tagIds: [Int!]!
 }
 
 input MiniBrandInput {

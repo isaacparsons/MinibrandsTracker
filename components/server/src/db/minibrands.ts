@@ -5,7 +5,8 @@ import {
   MiniBrandInput,
   UpdateMiniBrandInput,
   CollectMinibrandInput,
-  UpdateCollectedMinibrandInput
+  UpdateCollectedMinibrandInput,
+  MiniBrandsFilter
 } from "../generated/graphql";
 import { PrismaClient } from "@prisma/client";
 
@@ -26,9 +27,27 @@ export default class MiniBrandsRepository {
     });
   };
 
-  getMiniBrands = async (cursor?: number | null) => {
+  getMiniBrands = async (filter?: MiniBrandsFilter | null, cursor?: number | null) => {
     const PAGE_SIZE = 5;
+    const where = filter
+      ? {
+          ...(Boolean(filter.search) && {
+            name: {
+              contains: filter.search!,
+              mode: "insensitive"
+            }
+          }),
+          typeId: { in: filter.typeIds },
+          seriesId: { in: filter.seriesIds },
+          tags: {
+            some: {
+              id: { in: filter.tagIds }
+            }
+          }
+        }
+      : {};
     const users = await this.db.miniBrand.findMany({
+      where,
       ...(cursor && { skip: 1 }),
       ...(cursor && {
         cursor: {

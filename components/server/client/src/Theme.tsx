@@ -9,11 +9,17 @@ declare module '@mui/material/styles' {
     neutral: PaletteOptions['primary'];
   }
 }
-
+// #FFA6F9 - pink
+// #335984 - blue
+// #8CE0ED - aqua blue
+// #02ADEB - darker blue
+// #9002B8 - purple / magenta
+// #02B87b - green
+// #5d2f94 - purple dark
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#335984',
+      main: '#5d2f94',
       light: '#88a1bf'
     },
     secondary: {

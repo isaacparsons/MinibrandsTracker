@@ -22,14 +22,14 @@ function InfinityScroll(props: Props) {
       setFetching(true);
       fetchMore();
     }
-  }, [hasMore, isInViewport, fetchMore, fetching]);
+  }, [hasMore, isInViewport, fetching, fetchMore]);
 
   useEffect(() => {
     if (dataLength > prevDataLength) {
       setPrevDataLength(dataLength);
       setFetching(false);
     }
-    if (dataLength === prevDataLength && !hasMore) {
+    if (!hasMore) {
       setFetching(false);
     }
   }, [dataLength, prevDataLength, hasMore]);
@@ -52,8 +52,8 @@ const styles = {
   },
   loadingContainer: {
     display: 'flex',
-    flex: 1,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    alignItems: 'flex-start'
   }
 };
 

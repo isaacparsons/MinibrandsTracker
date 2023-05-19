@@ -3,7 +3,7 @@ import { Filter } from 'modules/Home/hooks/useFilterMap';
 import useSelectAll from 'modules/Home/hooks/useSelectAll';
 import { Box } from '@mui/material';
 import FilterBar from './components/Filter/FilterBar/FilterBar';
-import MinibrandsList from './MinibrandsList/MinibrandsList';
+import MinibrandsList from './components/MinibrandsList/MinibrandsList';
 import { MiniBrand } from '__generated__/graphql';
 import FilterList from './components/Filter/FilterInput/FilterList';
 
@@ -11,22 +11,13 @@ interface Props {
   filterOpen: boolean;
   filters: Filter[];
   minibrands: MiniBrand[];
-  searchText: string;
-  updateSearchText: (value: string) => void;
   toggleFilter: () => void;
-  clearSearch: () => void;
+  onSearchPress: (value: string) => void;
 }
 
 function LoggedOutMinibrands(props: Props) {
-  const {
-    filterOpen,
-    toggleFilter,
-    filters,
-    minibrands,
-    searchText,
-    updateSearchText,
-    clearSearch
-  } = props;
+  const { filterOpen, toggleFilter, filters, minibrands, onSearchPress } =
+    props;
 
   const { handleSelectAll, handleUnSelectAll, allSelected } =
     useSelectAll(filters);
@@ -34,12 +25,7 @@ function LoggedOutMinibrands(props: Props) {
   return (
     <>
       <Box sx={styles.contentContainer}>
-        <FilterBar
-          searchText={searchText}
-          updateSearchText={updateSearchText}
-          toggleFilter={toggleFilter}
-          clearSearch={clearSearch}
-        />
+        <FilterBar toggleFilter={toggleFilter} onSearchPress={onSearchPress} />
         <FilterInput
           open={filterOpen}
           selectAll={handleSelectAll}

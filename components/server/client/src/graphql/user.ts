@@ -34,6 +34,7 @@ export const GET_ME = gql(/* GraphQL */ `
 export const GET_ACHIEVEMENTS = gql(/* GraphQL */ `
   query getMyAchievements {
     getMyAchievements {
+      totalMinibrands
       totalCollected
       type {
         collectedCount
@@ -102,6 +103,7 @@ export const USER_ACHIEVEMENTS = gql(/* GraphQL */ `
           value
         }
       }
+      totalMinibrands
       totalCollected
       type {
         collectedCount

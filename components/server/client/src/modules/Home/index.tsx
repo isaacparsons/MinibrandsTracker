@@ -1,57 +1,52 @@
 import { Box, CircularProgress, Container } from '@mui/material';
 import useMiniBrands from './hooks/useMiniBrands';
 import useMinibrandsMetadata from '../MinibrandsMetadata/hooks/useMinibrandsMetadata';
-import { useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import useFilterMap from './hooks/useFilterMap';
-import useFilterMinibrandsByType from './hooks/useFilterMinibrandsByType';
-import useFilterByMinibrandsSeries from './hooks/useFilterByMinibrandsSeries';
-import useFilterByMinibrandTags from './hooks/useFilterByMinibrandTags';
-import useFilterBySearch from './hooks/useFilterBySearch';
 
 import { useSessionContext } from 'context/SessionContext';
 import LoggedInMinibrands from './LoggedInMinibrands';
 import LoggedOutMinibrands from './LoggedOutMinibrands';
 import InfinityScroll from 'common/components/InfinityScroll';
+import useMetadataIdMap from './hooks/useMetadataIdMap';
+import useGetIds from './hooks/useGetIds';
 
 function Home() {
-  const { data, cursor, loading, fetchMore } = useMiniBrands();
   const { data: minibrandsMetadata, loading: loadingMinibrandsMetadata } =
     useMinibrandsMetadata();
+
+  const tagsIdMap = useMetadataIdMap(minibrandsMetadata?.tags);
+  const typesIdMap = useMetadataIdMap(minibrandsMetadata?.types);
+  const seriesIdMap = useMetadataIdMap(minibrandsMetadata?.series);
   const session = useSessionContext();
 
   const [filterOpen, setFilterOpen] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [prevCursor, setPrevCursor] = useState<number | null | undefined>();
-  const t0 = performance.now();
 
   const seriesFilter = useFilterMap('series', minibrandsMetadata?.series ?? []);
   const typesFilter = useFilterMap('types', minibrandsMetadata?.types ?? []);
   const tagsFilter = useFilterMap('tags', minibrandsMetadata?.tags ?? []);
 
+  const typeIds = useGetIds(typesFilter.filterMap, typesIdMap);
+  const tagIds = useGetIds(tagsFilter.filterMap, tagsIdMap);
+  const seriesIds = useGetIds(seriesFilter.filterMap, seriesIdMap);
+
+  const filter = useMemo(() => {
+    return searchText !== ''
+      ? { search: searchText, tagIds, typeIds, seriesIds }
+      : { tagIds, typeIds, seriesIds };
+  }, [tagIds, typeIds, seriesIds, searchText]);
+
+  const { data, cursor, loading, fetchMore, refetch } = useMiniBrands({});
+
+  useEffect(() => {
+    refetch({ filter });
+  }, [filter, refetch]);
+
   const filters = useMemo(() => {
     return [seriesFilter, typesFilter, tagsFilter];
   }, [seriesFilter, typesFilter, tagsFilter]);
-
-  const filteredByType = useFilterMinibrandsByType(
-    data,
-    typesFilter.filterMap,
-    typesFilter.allSelected
-  );
-  const filteredBySeries = useFilterByMinibrandsSeries(
-    filteredByType,
-    seriesFilter.filterMap,
-    seriesFilter.allSelected
-  );
-  const filteredByTags = useFilterByMinibrandTags(
-    filteredBySeries,
-    tagsFilter.filterMap,
-    tagsFilter.allSelected
-  );
-
-  const filteredMiniBrands = useFilterBySearch(filteredByTags, searchText);
-
-  const t1 = performance.now();
-  console.log(`Call to filteres took ${t1 - t0} milliseconds.`);
 
   const toggleFilter = () => {
     setFilterOpen((prevFilterOpenVal) => {
@@ -59,22 +54,24 @@ function Home() {
     });
   };
 
-  const updateSearchText = (text: string) => {
-    setSearchText(text);
-  };
-
-  const clearSearch = () => {
-    setSearchText('');
-  };
-
-  const fetchNextPage = () => {
-    fetchMore({ variables: { cursor } });
-    setPrevCursor(cursor);
-  };
-
   const hasMore = useMemo(() => {
+    if (!cursor) return false;
     return prevCursor !== cursor;
   }, [prevCursor, cursor]);
+
+  const fetchNextPage = useCallback(async () => {
+    setPrevCursor(cursor);
+    fetchMore({
+      variables: {
+        cursor,
+        filter
+      }
+    });
+  }, [fetchMore, filter, cursor]);
+
+  const onSearchPress = (value: string) => {
+    setSearchText(value);
+  };
 
   if (loading || loadingMinibrandsMetadata || !data || !minibrandsMetadata) {
     return (
@@ -96,20 +93,16 @@ function Home() {
             filterOpen={filterOpen}
             toggleFilter={toggleFilter}
             filters={filters}
-            minibrands={filteredMiniBrands}
-            searchText={searchText}
-            updateSearchText={updateSearchText}
-            clearSearch={clearSearch}
+            minibrands={data}
+            onSearchPress={onSearchPress}
           />
         ) : (
           <LoggedOutMinibrands
             filterOpen={filterOpen}
             toggleFilter={toggleFilter}
             filters={filters}
-            minibrands={filteredMiniBrands}
-            searchText={searchText}
-            updateSearchText={updateSearchText}
-            clearSearch={clearSearch}
+            minibrands={data}
+            onSearchPress={onSearchPress}
           />
         )}
       </InfinityScroll>

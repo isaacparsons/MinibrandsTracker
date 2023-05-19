@@ -6,12 +6,15 @@ import FriendsRepository from "../db/friends";
 
 const MiniBrandsResolver: Resolvers = {
   Query: {
+    test: async (parent, args, context) => {
+      return 1;
+    },
     getMiniBrands: async (parent, args, context) => {
-      const { cursor } = args;
+      const { filter, cursor } = args;
       const miniBrandsRepository = new MiniBrandsRepository(context.db);
       const friendsRepository = new FriendsRepository(context.db);
       const miniBrandsService = new MiniBrandsService(miniBrandsRepository, friendsRepository);
-      return miniBrandsService.getMiniBrands(cursor);
+      return miniBrandsService.getMiniBrands(filter, cursor);
     },
     getMiniBrand: async (parent, args, context) => {
       const { id } = args;

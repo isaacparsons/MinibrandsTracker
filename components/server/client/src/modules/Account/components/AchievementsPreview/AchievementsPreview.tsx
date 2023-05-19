@@ -1,14 +1,13 @@
 import { Box, Typography } from '@mui/material';
-import { Achievements, MiniBrand } from '__generated__/graphql';
+import { Achievements } from '__generated__/graphql';
 import AchievementCategory from './AchievementCategory';
 
 interface Props {
-  minibrands: MiniBrand[];
   achievements: Achievements;
 }
 
 const AchievementsPreview = (props: Props) => {
-  const { minibrands, achievements } = props;
+  const { achievements } = props;
 
   return (
     <Box sx={styles.container}>
@@ -18,7 +17,7 @@ const AchievementsPreview = (props: Props) => {
       <Box sx={styles.achievementsContainer}>
         <Box sx={styles.collectedContainer}>
           <Typography sx={{ mr: 1 }}>Total collected:</Typography>
-          <Typography>{`${achievements?.totalCollected}/${minibrands.length}`}</Typography>
+          <Typography>{`${achievements?.totalCollected}/${achievements?.totalMinibrands}`}</Typography>
         </Box>
         <AchievementCategory
           name="By Type"

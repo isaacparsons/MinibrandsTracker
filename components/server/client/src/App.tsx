@@ -15,6 +15,9 @@ import ChangePassword from 'modules/Auth/ForgotPassword/ChangePassword';
 import Friends from 'modules/Friends/Friends';
 import Profile from 'modules/Profile/Profile';
 import AddFriend from 'modules/Friends/components/AddFriend/AddFriend';
+import Api from 'api';
+import { useCallback, useEffect } from 'react';
+import { useSessionContext } from 'context/SessionContext';
 
 export const MINIBRANDS_METADATA_PATH = '/minibrandsMetadata';
 export const ACCOUNT_PATH = '/account';
@@ -28,7 +31,26 @@ export const FRIENDS_PATH = '/friends';
 export const ADD_FRIENDS_PATH = '/add_friend';
 export const PROFILE_PATH = '/profile';
 
+const api = new Api();
+
 function App() {
+  const session = useSessionContext();
+
+  const checkSession = useCallback(async () => {
+    try {
+      const response = await api.isSessionAuthentic();
+      if (response.status === 200) {
+        session.login();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, [session]);
+
+  useEffect(() => {
+    checkSession();
+  }, [checkSession]);
+
   return (
     <Box className="App" sx={styles.container}>
       <BrowserRouter>

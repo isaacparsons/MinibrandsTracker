@@ -8,7 +8,7 @@ const useNotCollectedMinibrandsMap = (
   minibrands: MiniBrand[] | undefined | null,
   collectedMap: CollectedMinibrandMap
 ): NotCollectedMinibrandMap => {
-  const notCollectedMap = useMemo(() => {
+  return useMemo(() => {
     const map: NotCollectedMinibrandMap = {};
     if (minibrands) {
       for (let minibrand of minibrands) {
@@ -19,8 +19,6 @@ const useNotCollectedMinibrandsMap = (
     }
     return map;
   }, [minibrands, collectedMap]);
-
-  return notCollectedMap;
 };
 
 export default useNotCollectedMinibrandsMap;

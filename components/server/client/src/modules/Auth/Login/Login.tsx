@@ -11,9 +11,10 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import LoginWithGoogle from './LoginWithGoogle';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSessionContext } from 'context/SessionContext';
 import Api from 'api';
+import { HOME_PATH } from 'App';
 
 const api = new Api();
 
@@ -33,21 +34,11 @@ const Login = () => {
   const session = useSessionContext();
   const navigate = useNavigate();
 
-  const checkSession = useCallback(async () => {
-    try {
-      const response = await api.isSessionAuthentic();
-      if (response.status === 200) {
-        session.login();
-        navigate('/home');
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }, [session, navigate]);
-
   useEffect(() => {
-    checkSession();
-  }, [checkSession]);
+    if (session.authenticated) {
+      navigate(HOME_PATH);
+    }
+  }, [session.authenticated, navigate]);
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     const { password, email } = data;

@@ -2,13 +2,11 @@ import { Box, CircularProgress, Container } from '@mui/material';
 import useMe from 'common/hooks/useMe';
 import AchievementsPreview from './components/AchievementsPreview/AchievementsPreview';
 import AccountDetails from './components/AccountDetails/AccountDetails';
-import useMiniBrands from 'modules/Home/hooks/useMiniBrands';
 import useAchievements from 'common/hooks/useAchievements';
 
 const Account = () => {
   const { data, loading } = useMe();
   const { data: me, loading: loadingMe } = useMe();
-  const { data: minibrands, loading: loadingMinibrands } = useMiniBrands();
   const { data: achievements, loading: loadingAchievements } =
     useAchievements();
   return (
@@ -16,19 +14,14 @@ const Account = () => {
       <Box sx={styles.contentContainer}>
         {loading ||
         loadingMe ||
-        loadingMinibrands ||
         loadingAchievements ||
         !achievements ||
-        !minibrands ||
         !me?.collected ? (
           <CircularProgress />
         ) : (
           <Box sx={styles.contentContainer}>
             <AccountDetails me={me} />
-            <AchievementsPreview
-              minibrands={minibrands}
-              achievements={achievements}
-            />
+            <AchievementsPreview achievements={achievements} />
           </Box>
         )}
       </Box>

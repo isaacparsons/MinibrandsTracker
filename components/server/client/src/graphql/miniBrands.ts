@@ -34,8 +34,8 @@ export const DELETE_MINIBRAND = gql(/* GraphQL */ `
 `);
 
 export const GET_MINIBRANDS = gql(/* GraphQL */ `
-  query GetMiniBrands($cursor: Int) {
-    getMiniBrands(cursor: $cursor) {
+  query GetMiniBrands($filter: MiniBrandsFilter, $cursor: Int) {
+    getMiniBrands(filter: $filter, cursor: $cursor) {
       cursor
       data {
         id
