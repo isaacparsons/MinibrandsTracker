@@ -117,6 +117,7 @@ export default class MiniBrandsRepository {
       data
     });
   };
+
   deleteMiniBrandSeriesById = async (id: number) => {
     return await this.db.miniBrandSeries.delete({
       where: {
@@ -140,6 +141,7 @@ export default class MiniBrandsRepository {
       }
     });
   };
+
   deleteMiniBrandTagById = async (id: number) => {
     return await this.db.miniBrandTag.delete({
       where: {
@@ -192,15 +194,35 @@ export default class MiniBrandsRepository {
   };
 
   updateMiniBrand = async (id: number, input: UpdateMiniBrandInput) => {
-    const inputWithoutNulls = {};
-    for (const param in input) {
-      if (input[param]) inputWithoutNulls[param] = input[param];
+    // const inputWithoutNulls = {};
+    // for (const param in input) {
+    //   if (input[param]) inputWithoutNulls[param] = input[param];
+    // }
+    if (input.tagIds) {
+      await this.db.miniBrand.update({
+        where: {
+          id
+        },
+        data: {
+          tags: {
+            set: []
+          }
+        }
+      });
     }
+    const data = {
+      ...(input.tagIds && { tags: { connect: input.tagIds.map((tagId) => ({ id: tagId })) } }),
+      ...(input.name && { name: input.name }),
+      ...(input.typeId && { typeId: input.typeId }),
+      ...(input.seriesId && { seriesId: input.seriesId }),
+      ...(input.imgUrl && { imgUrl: input.imgUrl })
+    };
+
     return this.db.miniBrand.update({
       where: {
         id
       },
-      data: inputWithoutNulls,
+      data,
       include: {
         tags: true
       }
@@ -264,6 +286,23 @@ export default class MiniBrandsRepository {
         }
       },
       data: input
+    });
+  };
+
+  getAllCollectedMinibrands = async (id: number) => {
+    return this.db.collectedMinibrand.findMany({
+      where: {
+        userId: id
+      },
+      select: {
+        minibrand: {
+          include: {
+            series: true,
+            tags: true,
+            type: true
+          }
+        }
+      }
     });
   };
 

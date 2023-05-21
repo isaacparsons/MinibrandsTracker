@@ -6,6 +6,8 @@ import { CollectedMinibrandMap } from '../../hooks/useCollectedMinibrandsMap';
 import MinibrandsListSkeleton from '../MinibrandsListSkeleton';
 import MinibrandDialog from '../MinibrandDialog/MinibrandDialog';
 import { useState } from 'react';
+import NoResultsCard from 'common/components/NoResultsCard';
+import { useSelectedMinibrandContext } from 'context/SelectedMinibrandContext';
 
 interface Props {
   minibrands: MiniBrand[];
@@ -16,6 +18,8 @@ interface Props {
 const MinibrandsList = (props: Props) => {
   const { minibrands, collectedMinibrandsMap, loading } = props;
 
+  const { handleSelectMinibrand } = useSelectedMinibrandContext();
+
   const [openMinibrand, setOpenMinibrand] = useState<null | MiniBrand>(null);
 
   const handleDialogClose = () => {
@@ -23,12 +27,13 @@ const MinibrandsList = (props: Props) => {
   };
 
   const handleDialogOpen = (minibrand: MiniBrand) => {
-    setOpenMinibrand(minibrand);
+    handleSelectMinibrand(minibrand, collectedMinibrandsMap[minibrand.id]);
+    // setOpenMinibrand(minibrand);
   };
   return (
     <Box sx={{ flexGrow: 1 }}>
       {minibrands.length === 0 ? (
-        <Typography variant="h5">No results</Typography>
+        <NoResultsCard />
       ) : (
         <Grid container spacing={3}>
           {loading ? (
@@ -54,14 +59,6 @@ const MinibrandsList = (props: Props) => {
             })
           )}
         </Grid>
-      )}
-      {openMinibrand && (
-        <MinibrandDialog
-          collectedMinibrand={collectedMinibrandsMap[openMinibrand.id]}
-          minibrand={openMinibrand}
-          open={Boolean(openMinibrand)}
-          handleClose={handleDialogClose}
-        />
       )}
     </Box>
   );

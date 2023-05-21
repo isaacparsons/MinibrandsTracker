@@ -28,7 +28,7 @@ const UserResolver: Resolvers = {
       if (!context.user) {
         throw new Error("User does not exist");
       }
-      return await userService.getAchievementsByUserId(context.user.id);
+      return userService.getAchievementsByUserId(context.user.id);
     },
     getAchievements: async (parent, args, context) => {
       const { userId } = args;
@@ -39,7 +39,7 @@ const UserResolver: Resolvers = {
       if (!context.user) {
         throw new Error("User does not exist");
       }
-      return await userService.getAchievementsForUser(context.user.id, userId);
+      return userService.getAchievementsForUser(context.user.id, userId);
     },
     searchUsers: async (parent, args, context) => {
       const { query, cursor } = args;

@@ -1,6 +1,7 @@
 import { Box, List } from '@mui/material';
 import { FriendRequest } from '__generated__/graphql';
 import FriendRequestCard from '../FriendCard/FriendRequestCard';
+import NoResultsCard from 'common/components/NoResultsCard';
 
 interface Props {
   requests: FriendRequest[];
@@ -10,13 +11,15 @@ const FriendRequests = (props: Props) => {
   const { requests } = props;
   return (
     <Box sx={styles.container}>
-      {requests.length > 0 ? (
+      {requests.length === 0 ? (
+        <NoResultsCard title="no friend requests" />
+      ) : (
         <List sx={styles.list}>
           {requests.map((request) => (
             <FriendRequestCard request={request} />
           ))}
         </List>
-      ) : null}
+      )}
     </Box>
   );
 };

@@ -86,12 +86,12 @@ export default function UploadDialog(props: Props) {
     );
   };
 
-  const handleSeriesChange = (event: SelectChangeEvent<number>) => {
-    setSeriesId(event.target.value as number);
+  const handleSeriesChange = (seriesId: number) => {
+    setSeriesId(seriesId);
   };
 
-  const handleTypesChange = (event: SelectChangeEvent<number>) => {
-    setTypeId(event.target.value as number);
+  const handleTypesChange = (typeId: number) => {
+    setTypeId(typeId);
   };
 
   return (

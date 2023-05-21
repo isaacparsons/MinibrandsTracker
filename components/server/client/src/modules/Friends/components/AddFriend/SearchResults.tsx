@@ -9,6 +9,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { User } from '__generated__/graphql';
 import FriendCardBase from '../FriendCard/FriendCardBase';
 import useCreateFriendRequest from 'modules/Friends/hooks/useCreateFriendRequest';
+import NoResultsCard from 'common/components/NoResultsCard';
 
 interface Props {
   users: User[];
@@ -30,7 +31,9 @@ const SearchResults = (props: Props) => {
 
   return (
     <Box sx={styles.container}>
-      {users.length > 0 ? (
+      {users.length === 0 ? (
+        <NoResultsCard />
+      ) : (
         <List sx={styles.list}>
           {users.map((user) => {
             return (
@@ -52,7 +55,7 @@ const SearchResults = (props: Props) => {
             );
           })}
         </List>
-      ) : null}
+      )}
     </Box>
   );
 };

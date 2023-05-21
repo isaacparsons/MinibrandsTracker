@@ -73,26 +73,6 @@ export default class UserRepository {
     });
   };
 
-  getCollectedById = async (id: number) => {
-    return this.db.user.findUnique({
-      where: {
-        id
-      },
-      select: {
-        collected: {
-          select: {
-            minibrand: {
-              include: {
-                tags: true,
-                type: true
-              }
-            }
-          }
-        }
-      }
-    });
-  };
-
   searchUsers = async (query: string, cursor?: number | null) => {
     const PAGE_SIZE = 25;
     const users = await this.db.user.findMany({

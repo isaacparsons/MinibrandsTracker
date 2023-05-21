@@ -1,14 +1,25 @@
-import { MiniBrand } from '__generated__/graphql';
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import { CollectedMinibrand, MiniBrand } from '__generated__/graphql';
+import useIsAdmin from 'common/hooks/useIsAdmin';
+import MinibrandDialog from 'modules/Home/components/MinibrandDialog/MinibrandDialog';
+import React, { createContext, useContext, useMemo, useState } from 'react';
+import { useAdminModeContext } from './AdminModeContext';
+
+interface MinibrandWithCollected {
+  minibrand: MiniBrand;
+  collected?: CollectedMinibrand;
+}
 
 interface ISelectedMinibrandContext {
-  setSelectedMinibrand: (minibrand: MiniBrand) => void;
-  selectedMinibrand: MiniBrand | null;
+  handleSelectMinibrand: (
+    minibrand: MiniBrand,
+    collected?: CollectedMinibrand
+  ) => void;
+  selectedMinibrand: MinibrandWithCollected | null;
   handleClose: () => void;
 }
 
 const SelectedMinibrandContext = createContext<ISelectedMinibrandContext>({
-  setSelectedMinibrand: () => {},
+  handleSelectMinibrand: () => {},
   selectedMinibrand: null,
   handleClose: () => {}
 });
@@ -24,27 +35,41 @@ export const useSelectedMinibrandContext = () => {
 const SelectedMinibrandProvider: React.FC<Props> = (props) => {
   const { children } = props;
 
-  const [selectedMinibrand, setSelectedMinibrand] = useState<null | MiniBrand>(
-    null
-  );
+  const isAdmin = useIsAdmin();
+  const { adminMode } = useAdminModeContext();
+
+  const [selectedMinibrand, setSelectedMinibrand] =
+    useState<null | MinibrandWithCollected>(null);
+
+  const canEdit = useMemo(() => isAdmin && adminMode, [isAdmin, adminMode]);
+
+  const handleEditClick = () => {};
 
   const handleClose = () => {
     setSelectedMinibrand(null);
   };
 
+  const handleSelectMinibrand = (
+    minibrand: MiniBrand,
+    collected?: CollectedMinibrand
+  ) => {
+    setSelectedMinibrand({ minibrand, collected });
+  };
+
   return (
     <SelectedMinibrandContext.Provider
-      value={{ selectedMinibrand, setSelectedMinibrand, handleClose }}
+      value={{ selectedMinibrand, handleSelectMinibrand, handleClose }}
     >
       {children}
-      {/* {openMinibrand && (
-        <Mini
-          collectedMinibrand={collectedMinibrandsMap[openMinibrand.id]}
-          minibrand={openMinibrand}
-          open={Boolean(openMinibrand)}
-          handleClose={handleDialogClose}
+      {selectedMinibrand && (
+        <MinibrandDialog
+          canEdit={canEdit}
+          collectedMinibrand={selectedMinibrand.collected}
+          minibrand={selectedMinibrand?.minibrand}
+          open={Boolean(selectedMinibrand)}
+          handleClose={handleClose}
         />
-      )} */}
+      )}
     </SelectedMinibrandContext.Provider>
   );
 };

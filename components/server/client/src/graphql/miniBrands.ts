@@ -21,6 +21,22 @@ export const SAVE_MINIBRAND = gql(/* GraphQL */ `
   }
 `);
 
+export const UPDATE_MINIBRAND = gql(/* GraphQL */ `
+  mutation UpdateMiniBrand($id: Int!, $input: UpdateMiniBrandInput!) {
+    updateMiniBrand(id: $id, input: $input) {
+      id
+      imgUrl
+      name
+      seriesId
+      typeId
+      tags {
+        id
+        value
+      }
+    }
+  }
+`);
+
 export const DELETE_MINIBRAND = gql(/* GraphQL */ `
   mutation DeleteMiniBrand($id: Int!) {
     deleteMiniBrand(id: $id) {

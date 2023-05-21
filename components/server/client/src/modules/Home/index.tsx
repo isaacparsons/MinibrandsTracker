@@ -10,6 +10,7 @@ import LoggedOutMinibrands from './LoggedOutMinibrands';
 import InfinityScroll from 'common/components/InfinityScroll';
 import useMetadataIdMap from './hooks/useMetadataIdMap';
 import useGetIds from './hooks/useGetIds';
+import SelectedMinibrandProvider from 'context/SelectedMinibrandContext';
 
 function Home() {
   const { data: minibrandsMetadata, loading: loadingMinibrandsMetadata } =
@@ -82,31 +83,33 @@ function Home() {
   }
 
   return (
-    <Container sx={styles.container}>
-      <InfinityScroll
-        hasMore={hasMore}
-        fetchMore={fetchNextPage}
-        dataLength={data?.length ?? 0}
-      >
-        {session.authenticated ? (
-          <LoggedInMinibrands
-            filterOpen={filterOpen}
-            toggleFilter={toggleFilter}
-            filters={filters}
-            minibrands={data}
-            onSearchPress={onSearchPress}
-          />
-        ) : (
-          <LoggedOutMinibrands
-            filterOpen={filterOpen}
-            toggleFilter={toggleFilter}
-            filters={filters}
-            minibrands={data}
-            onSearchPress={onSearchPress}
-          />
-        )}
-      </InfinityScroll>
-    </Container>
+    <SelectedMinibrandProvider>
+      <Container sx={styles.container}>
+        <InfinityScroll
+          hasMore={hasMore}
+          fetchMore={fetchNextPage}
+          dataLength={data?.length ?? 0}
+        >
+          {session.authenticated ? (
+            <LoggedInMinibrands
+              filterOpen={filterOpen}
+              toggleFilter={toggleFilter}
+              filters={filters}
+              minibrands={data}
+              onSearchPress={onSearchPress}
+            />
+          ) : (
+            <LoggedOutMinibrands
+              filterOpen={filterOpen}
+              toggleFilter={toggleFilter}
+              filters={filters}
+              minibrands={data}
+              onSearchPress={onSearchPress}
+            />
+          )}
+        </InfinityScroll>
+      </Container>
+    </SelectedMinibrandProvider>
   );
 }
 

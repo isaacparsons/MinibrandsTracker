@@ -1,23 +1,12 @@
-import {
-  Box,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  SelectChangeEvent,
-  TextField,
-  Chip,
-  OutlinedInput,
-  Button,
-  MobileStepper
-} from '@mui/material';
+import { Box, Button, MobileStepper } from '@mui/material';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
-import { useTheme } from '@mui/material';
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 
 import { MiniBrandTag } from '../../../__generated__/graphql';
 import { MiniBrand } from '../UploadDialog';
+import MinibrandNameInput from 'common/components/MinibrandNameInput';
+import TagsInput from './TagsInput';
 
 interface Props {
   miniBrands: MiniBrand[];
@@ -27,16 +16,7 @@ interface Props {
 }
 
 const Previews = (props: Props) => {
-  const theme = useTheme();
   const { miniBrands, tags, setMiniBrands, handleSubmit } = props;
-
-  const tagsMap = useMemo(() => {
-    const map = new Map();
-    tags.forEach((tag) => {
-      map.set(tag.id, tag.value);
-    });
-    return map;
-  }, [tags]);
 
   const [activeStep, setActiveStep] = useState(0);
 
@@ -48,25 +28,20 @@ const Previews = (props: Props) => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleNameChange = (event: any) => {
+  const handleNameChange = (name: string) => {
     setMiniBrands((oldMiniBrands: MiniBrand[]) => {
       const newMiniBrands = [...oldMiniBrands];
-      newMiniBrands[activeStep].name = event.target.value;
+      newMiniBrands[activeStep].name = name;
       return newMiniBrands;
     });
   };
 
-  const handleTagChange = (event: SelectChangeEvent<number[]>) => {
-    const {
-      target: { value }
-    } = event;
-    if (typeof value !== 'string') {
-      setMiniBrands((oldMiniBrands: MiniBrand[]) => {
-        const newMiniBrands = [...oldMiniBrands];
-        newMiniBrands[activeStep].tagIds = value;
-        return newMiniBrands;
-      });
-    }
+  const handleTagChange = (tagIds: number[]) => {
+    setMiniBrands((oldMiniBrands: MiniBrand[]) => {
+      const newMiniBrands = [...oldMiniBrands];
+      newMiniBrands[activeStep].tagIds = tagIds;
+      return newMiniBrands;
+    });
   };
 
   return (
@@ -80,11 +55,7 @@ const Previews = (props: Props) => {
             <Button onClick={handleSubmit}>Submit</Button>
           ) : (
             <>
-              <TextField
-                style={nameContainer}
-                id={`name`}
-                label="Name"
-                variant="standard"
+              <MinibrandNameInput
                 value={miniBrands[activeStep].name}
                 onChange={handleNameChange}
               />
@@ -98,46 +69,11 @@ const Previews = (props: Props) => {
                 src={miniBrands[activeStep].preview}
                 alt={miniBrands[activeStep].name}
               />
-              <FormControl sx={{ m: 1 }}>
-                <InputLabel id="tags-chip-label">Tags</InputLabel>
-                <Select
-                  labelId="tags-chip-label"
-                  id="multiple-tags"
-                  multiple
-                  value={miniBrands[activeStep].tagIds}
-                  onChange={handleTagChange}
-                  input={
-                    <OutlinedInput id="select-multiple-tags" label="Tags" />
-                  }
-                  renderValue={(selected) => {
-                    return (
-                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                        {selected.map((value) => {
-                          const tag = tagsMap.get(value);
-                          return <Chip key={tag} label={tag} />;
-                        })}
-                      </Box>
-                    );
-                  }}
-                  // MenuProps={MenuProps}
-                >
-                  {tags.map((tag) => (
-                    <MenuItem
-                      key={tag.value}
-                      value={tag.id}
-                      style={{
-                        fontWeight: tags.find(
-                          (item) => item.value === tag.value
-                        )
-                          ? theme.typography.fontWeightRegular
-                          : theme.typography.fontWeightMedium
-                      }}
-                    >
-                      {tag.value}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+              <TagsInput
+                tags={tags}
+                tagIds={miniBrands[activeStep].tagIds}
+                onTagChange={handleTagChange}
+              />
             </>
           )}
         </Box>
@@ -174,11 +110,6 @@ const Previews = (props: Props) => {
       )}
     </Box>
   );
-};
-
-const nameContainer = {
-  marginTop: 10,
-  marginBottom: 10
 };
 
 export default Previews;

@@ -19,6 +19,7 @@ const documents = {
     "\n  mutation DeleteFriend($friendRequestId: Int!) {\n    deleteFriend(friendRequestId: $friendRequestId) {\n      receiverId\n      senderId\n      status\n    }\n  }\n": types.DeleteFriendDocument,
     "\n  query GetImageUploadLink($name: String!) {\n    getImageUploadLink(name: $name)\n  }\n": types.GetImageUploadLinkDocument,
     "\n  mutation SaveMiniBrand($input: MiniBrandInput!) {\n    saveMiniBrand(input: $input) {\n      id\n      name\n      seriesId\n      typeId\n      tags {\n        id\n        value\n      }\n    }\n  }\n": types.SaveMiniBrandDocument,
+    "\n  mutation UpdateMiniBrand($id: Int!, $input: UpdateMiniBrandInput!) {\n    updateMiniBrand(id: $id, input: $input) {\n      id\n      imgUrl\n      name\n      seriesId\n      typeId\n      tags {\n        id\n        value\n      }\n    }\n  }\n": types.UpdateMiniBrandDocument,
     "\n  mutation DeleteMiniBrand($id: Int!) {\n    deleteMiniBrand(id: $id) {\n      id\n      imgUrl\n      name\n      seriesId\n      typeId\n    }\n  }\n": types.DeleteMiniBrandDocument,
     "\n  query GetMiniBrands($filter: MiniBrandsFilter, $cursor: Int) {\n    getMiniBrands(filter: $filter, cursor: $cursor) {\n      cursor\n      data {\n        id\n        imgUrl\n        name\n        series {\n          id\n          value\n        }\n        seriesId\n        tags {\n          id\n          value\n        }\n        type {\n          id\n          value\n        }\n        typeId\n      }\n    }\n  }\n": types.GetMiniBrandsDocument,
     "\n  query GetMiniBrandsMetaData {\n    getMiniBrandsMetaData {\n      series {\n        id\n        value\n      }\n      tags {\n        id\n        value\n      }\n      types {\n        id\n        value\n      }\n    }\n  }\n": types.GetMiniBrandsMetaDataDocument,
@@ -70,6 +71,10 @@ export function gql(source: "\n  query GetImageUploadLink($name: String!) {\n   
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  mutation SaveMiniBrand($input: MiniBrandInput!) {\n    saveMiniBrand(input: $input) {\n      id\n      name\n      seriesId\n      typeId\n      tags {\n        id\n        value\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation SaveMiniBrand($input: MiniBrandInput!) {\n    saveMiniBrand(input: $input) {\n      id\n      name\n      seriesId\n      typeId\n      tags {\n        id\n        value\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation UpdateMiniBrand($id: Int!, $input: UpdateMiniBrandInput!) {\n    updateMiniBrand(id: $id, input: $input) {\n      id\n      imgUrl\n      name\n      seriesId\n      typeId\n      tags {\n        id\n        value\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateMiniBrand($id: Int!, $input: UpdateMiniBrandInput!) {\n    updateMiniBrand(id: $id, input: $input) {\n      id\n      imgUrl\n      name\n      seriesId\n      typeId\n      tags {\n        id\n        value\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

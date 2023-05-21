@@ -5,6 +5,7 @@ import FriendCardBase from '../../FriendCard/FriendCardBase';
 import { useNavigate } from 'react-router-dom';
 import { PROFILE_PATH } from 'App';
 import extractFriend from 'common/utils/extractFriend';
+import NoResultsCard from 'common/components/NoResultsCard';
 
 interface Props {
   me: User;
@@ -23,7 +24,9 @@ const FriendsList = (props: Props) => {
 
   return (
     <Box sx={styles.container}>
-      {friends.length > 0 ? (
+      {friends.length === 0 ? (
+        <NoResultsCard />
+      ) : (
         <List sx={styles.list}>
           {friends.map((friend) => {
             const user = extractFriend(me, friend);
@@ -39,7 +42,7 @@ const FriendsList = (props: Props) => {
             );
           })}
         </List>
-      ) : null}
+      )}
     </Box>
   );
 };
