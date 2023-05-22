@@ -27,8 +27,16 @@ export default class MiniBrandsRepository {
     });
   };
 
-  getMiniBrands = async (filter?: MiniBrandsFilter | null, cursor?: number | null) => {
-    const PAGE_SIZE = 5;
+  getMiniBrands = async (
+    userId?: number,
+    filter?: MiniBrandsFilter | null,
+    cursor?: number | null
+  ) => {
+    const PAGE_SIZE = 25;
+
+    if (!filter?.collectedStatus?.collected && !filter?.collectedStatus?.notCollected) {
+      return { data: [], cursor: null };
+    }
     const where = filter
       ? {
           ...(Boolean(filter.search) && {
@@ -43,10 +51,28 @@ export default class MiniBrandsRepository {
             some: {
               id: { in: filter.tagIds }
             }
-          }
+          },
+          ...(filter.collectedStatus?.collected &&
+            !filter.collectedStatus?.notCollected &&
+            userId && {
+              collectors: {
+                some: {
+                  userId: userId
+                }
+              }
+            }),
+          ...(filter.collectedStatus?.notCollected &&
+            !filter.collectedStatus?.collected &&
+            userId && {
+              collectors: {
+                none: {
+                  userId: userId
+                }
+              }
+            })
         }
       : {};
-    const users = await this.db.miniBrand.findMany({
+    const miniBrands = await this.db.miniBrand.findMany({
       where,
       ...(cursor && { skip: 1 }),
       ...(cursor && {
@@ -65,8 +91,8 @@ export default class MiniBrandsRepository {
       }
     });
     return {
-      data: users,
-      cursor: users.length > 0 ? users[users.length - 1].id : cursor
+      data: miniBrands,
+      cursor: miniBrands.length > 0 ? miniBrands[miniBrands.length - 1].id : cursor
     };
   };
 

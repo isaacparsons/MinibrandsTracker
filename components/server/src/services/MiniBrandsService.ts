@@ -95,8 +95,12 @@ export default class MiniBrandsService {
     };
   };
 
-  getMiniBrands = async (filter?: MiniBrandsFilter | null, cursor?: number | null) => {
-    return this.miniBrandsRepository.getMiniBrands(filter, cursor);
+  getMiniBrands = async (
+    userId?: number,
+    filter?: MiniBrandsFilter | null,
+    cursor?: number | null
+  ) => {
+    return this.miniBrandsRepository.getMiniBrands(userId, filter, cursor);
   };
 
   getMiniBrand = async (id: number) => {

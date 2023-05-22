@@ -60,9 +60,7 @@ function App() {
           flexDirection={'column'}
           sx={{ backgroundColor: 'neutral.main' }}
         >
-          {/* <Authenticated> */}
           <Topbar />
-          {/* </Authenticated> */}
           <Box sx={styles.contentContainer}>
             <Routes>
               <Route path={'/'} element={<Navigate to={HOME_PATH} />} />

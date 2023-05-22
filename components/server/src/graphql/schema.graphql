@@ -145,6 +145,12 @@ input MiniBrandsFilter {
   typeIds: [Int!]!
   seriesIds: [Int!]!
   tagIds: [Int!]!
+  collectedStatus: CollectedStatus
+}
+
+input CollectedStatus {
+  collected: Boolean!
+  notCollected: Boolean!
 }
 
 input MiniBrandInput {

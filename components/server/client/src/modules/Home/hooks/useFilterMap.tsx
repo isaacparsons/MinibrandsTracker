@@ -1,5 +1,6 @@
+import useLocalStorage from 'common/hooks/useLocalStorage';
 import _ from 'lodash';
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 
 interface FilterTypeValue {
   id?: number;
@@ -40,19 +41,20 @@ const setAllValues = (filterMap: FilterMap, value: boolean) => {
 };
 
 const useFilterMap = (type: string, values: FilterTypeValue[]): Filter => {
-  const [filterMap, setFilterMap] = useState<FilterMap>({});
-  const [allSelected, setAllSelected] = useState(true);
+  const [filterMap, setFilterMap] = useLocalStorage<FilterMap>(type, {});
+  const [allSelected, setAllSelected] = useLocalStorage(
+    `${type}-all-selected`,
+    true
+  );
 
   useEffect(() => {
-    setFilterMap((prevFilterMap) => {
-      const newFilterMap = { ...prevFilterMap };
-      for (let property of values) {
-        if (!Object.hasOwn(newFilterMap, property.value)) {
-          newFilterMap[property.value] = true;
-        }
+    const newFilterMap = { ...filterMap };
+    for (let property of values) {
+      if (!Object.hasOwn(newFilterMap, property.value)) {
+        newFilterMap[property.value] = true;
       }
-      return newFilterMap;
-    });
+    }
+    setFilterMap(newFilterMap);
   }, [values].map(useDeepCompareMemoize));
 
   useEffect(() => {
@@ -67,26 +69,24 @@ const useFilterMap = (type: string, values: FilterTypeValue[]): Filter => {
 
   const updateFilterMap = useCallback(
     (property: string, value: boolean) => {
-      setFilterMap((prevFilterMap) => {
-        const newFilterMap = { ...prevFilterMap };
-        newFilterMap[property] = value;
-        return newFilterMap;
-      });
+      const newFilterMap = { ...filterMap };
+      newFilterMap[property] = value;
+      setFilterMap(newFilterMap);
     },
-    [setFilterMap]
+    [setFilterMap, filterMap]
   );
 
   const selectAll = useCallback(() => {
     const newFilterMap = setAllValues(filterMap, true);
     setFilterMap(newFilterMap);
     setAllSelected(true);
-  }, [filterMap]);
+  }, [filterMap, setFilterMap]);
 
   const unSelectAll = useCallback(() => {
     const newFilterMap = setAllValues(filterMap, false);
     setFilterMap(newFilterMap);
     setAllSelected(false);
-  }, [filterMap]);
+  }, [filterMap, setFilterMap]);
 
   return {
     type,

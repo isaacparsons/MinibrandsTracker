@@ -34,8 +34,8 @@ const MinibrandsListSkeleton = (props: Props) => {
                   <Box display="flex" flexDirection="row" flexWrap="wrap">
                     {Array(Math.ceil(Math.random() * 8))
                       .fill(0)
-                      .map((_) => {
-                        return <TagSkeleton />;
+                      .map((_, ind) => {
+                        return <TagSkeleton key={`${ind}-tag-skeleton`} />;
                       })}
                   </Box>
                 </Paper>

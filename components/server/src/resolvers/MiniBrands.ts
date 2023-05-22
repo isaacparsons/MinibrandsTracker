@@ -14,7 +14,7 @@ const MiniBrandsResolver: Resolvers = {
       const miniBrandsRepository = new MiniBrandsRepository(context.db);
       const friendsRepository = new FriendsRepository(context.db);
       const miniBrandsService = new MiniBrandsService(miniBrandsRepository, friendsRepository);
-      return miniBrandsService.getMiniBrands(filter, cursor);
+      return miniBrandsService.getMiniBrands(context.user?.id, filter, cursor);
     },
     getMiniBrand: async (parent, args, context) => {
       const { id } = args;

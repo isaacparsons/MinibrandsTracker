@@ -91,12 +91,14 @@ export default function Topbar() {
       <AppBar position="static">
         <Toolbar>
           <Box
+            key="topbar-logo"
             onClick={handleLogoClick}
             component="img"
             sx={styles.img}
             src={require('../../../assets/logo.png')}
           />
           <Typography
+            key="topbar-title"
             variant="h6"
             component="div"
             sx={{ flexGrow: 1, color: 'white' }}
@@ -104,6 +106,7 @@ export default function Topbar() {
             Minibrands Tracker
           </Typography>
           <IconButton
+            key="topbar-menu"
             size="large"
             edge="start"
             color="inherit"
@@ -122,16 +125,28 @@ export default function Topbar() {
             }}
           >
             {session.authenticated ? (
-              <>
-                <AccountItem handleClose={handleAccountClick} />
-                <FriendsItem handleClose={handleFriendsClick} />
-                <Admin>
-                  <AdminModeItem />
-                  <SettingsItem handleClose={handleSettingsClick} />
-                  <UploadItem handleClose={handleUploadClick} />
-                </Admin>
-                <LogoutItem handleClick={handleLogout} />
-              </>
+              [
+                <AccountItem
+                  key="account-menu-item"
+                  handleClose={handleAccountClick}
+                />,
+                <FriendsItem
+                  key="friends-menu-item"
+                  handleClose={handleFriendsClick}
+                />,
+                <Admin key="topbar-menu-item-admin">
+                  <AdminModeItem key="admin-mode-menu-item" />
+                  <SettingsItem
+                    key="settings-menu-item"
+                    handleClose={handleSettingsClick}
+                  />
+                  <UploadItem
+                    key="upload-menu-item"
+                    handleClose={handleUploadClick}
+                  />
+                </Admin>,
+                <LogoutItem key="logout-menu-item" handleClick={handleLogout} />
+              ]
             ) : (
               <LoginItem handleClick={handleLoginClick} />
             )}

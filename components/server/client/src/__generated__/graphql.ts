@@ -56,6 +56,11 @@ export type CollectedMinibrand = {
   userId?: Maybe<Scalars['Int']>;
 };
 
+export type CollectedStatus = {
+  collected: Scalars['Boolean'];
+  notCollected: Scalars['Boolean'];
+};
+
 export type FriendRequest = {
   __typename?: 'FriendRequest';
   receiver?: Maybe<User>;
@@ -146,6 +151,7 @@ export type MiniBrandTypeInput = {
 };
 
 export type MiniBrandsFilter = {
+  collectedStatus?: InputMaybe<CollectedStatus>;
   search?: InputMaybe<Scalars['String']>;
   seriesIds: Array<Scalars['Int']>;
   tagIds: Array<Scalars['Int']>;
