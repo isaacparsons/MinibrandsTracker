@@ -53,6 +53,7 @@ export const GET_MINIBRANDS = gql(/* GraphQL */ `
   query GetMiniBrands($filter: MiniBrandsFilter, $cursor: Int) {
     getMiniBrands(filter: $filter, cursor: $cursor) {
       cursor
+      hasNextPage
       data {
         id
         imgUrl

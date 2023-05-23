@@ -20,15 +20,8 @@ const MinibrandsList = (props: Props) => {
 
   const { handleSelectMinibrand } = useSelectedMinibrandContext();
 
-  const [openMinibrand, setOpenMinibrand] = useState<null | MiniBrand>(null);
-
-  const handleDialogClose = () => {
-    setOpenMinibrand(null);
-  };
-
   const handleDialogOpen = (minibrand: MiniBrand) => {
     handleSelectMinibrand(minibrand, collectedMinibrandsMap[minibrand.id]);
-    // setOpenMinibrand(minibrand);
   };
   return (
     <Box sx={{ flexGrow: 1 }}>

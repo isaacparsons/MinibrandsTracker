@@ -8,7 +8,7 @@ interface Props {
   minibrands: MiniBrand[];
 }
 
-function LoggedInMinibrands(props: Props) {
+function LoggedInMinibrandsList(props: Props) {
   const { minibrands } = props;
   const { data: me, loading: loadingMe } = useMe();
   const collectedMinibrandsMap = useCollectedMinibrandsMap(me?.collected);
@@ -21,4 +21,4 @@ function LoggedInMinibrands(props: Props) {
   );
 }
 
-export default LoggedInMinibrands;
+export default LoggedInMinibrandsList;

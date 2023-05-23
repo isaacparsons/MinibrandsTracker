@@ -9,17 +9,12 @@ import FilterList from './FilterInput/FilterList';
 interface Props {
   onSearchPress: (value: string) => void;
   filters: IFilter[];
+  filterOpen: boolean;
+  toggleFilter: () => void;
 }
 
 function Filter(props: Props) {
-  const { onSearchPress, filters } = props;
-  const [filterOpen, setFilterOpen] = useState(false);
-
-  const toggleFilter = () => {
-    setFilterOpen((prevFilterOpenVal) => {
-      return !prevFilterOpenVal;
-    });
-  };
+  const { onSearchPress, filters, filterOpen, toggleFilter } = props;
 
   const { handleSelectAll, handleUnSelectAll, allSelected } =
     useSelectAll(filters);
@@ -60,4 +55,4 @@ const styles = {
   }
 };
 
-export default Filter;
+export default React.memo(Filter);

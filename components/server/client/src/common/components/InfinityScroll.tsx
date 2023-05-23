@@ -7,10 +7,11 @@ interface Props {
   hasMore: boolean;
   fetchMore: () => void;
   dataLength: number;
+  loading?: boolean;
 }
 
 function InfinityScroll(props: Props) {
-  const { children, dataLength, fetchMore, hasMore } = props;
+  const { children, dataLength, fetchMore, hasMore, loading } = props;
   const loadingRef = useRef();
   const isInViewport = useIsInViewport(loadingRef);
 
@@ -38,7 +39,7 @@ function InfinityScroll(props: Props) {
     <Box sx={styles.container}>
       {children}
       <Box sx={styles.loadingContainer} ref={loadingRef}>
-        {fetching ? <CircularProgress /> : null}
+        {fetching || loading ? <CircularProgress /> : null}
       </Box>
     </Box>
   );

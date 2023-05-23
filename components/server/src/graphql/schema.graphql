@@ -125,6 +125,7 @@ type MiniBrandsMetaData {
 type PaginatedMinibrands {
   data: [MiniBrand!]!
   cursor: Int
+  hasNextPage: Boolean!
 }
 
 type MiniBrand {

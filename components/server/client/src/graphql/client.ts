@@ -50,7 +50,7 @@ const client = new ApolloClient({
           getMiniBrands: {
             keyArgs: ['filter'],
             merge(
-              existing: PaginatedMinibrands = { data: [] },
+              existing: PaginatedMinibrands = { data: [], hasNextPage: true },
               incoming: PaginatedMinibrands,
               { readField }
             ) {
@@ -59,9 +59,9 @@ const client = new ApolloClient({
                 const id = readField('id', item) as number;
                 merged[id] = item;
               });
-              // console.log(merged);
               return {
                 data: merged,
+                hasNextPage: incoming.hasNextPage,
                 cursor: incoming.cursor
               };
             },
@@ -69,6 +69,7 @@ const client = new ApolloClient({
               return (
                 existing && {
                   data: Object.values(existing.data),
+                  hasNextPage: existing.hasNextPage,
                   cursor: existing.cursor
                 }
               );

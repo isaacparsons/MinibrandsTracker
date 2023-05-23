@@ -65,7 +65,7 @@ const useFilterMap = (type: string, values: FilterTypeValue[]): Filter => {
     if (!isAllTrue && allSelected) {
       setAllSelected(false);
     }
-  }, [filterMap, allSelected]);
+  }, [filterMap, allSelected, setAllSelected]);
 
   const updateFilterMap = useCallback(
     (property: string, value: boolean) => {
@@ -80,13 +80,13 @@ const useFilterMap = (type: string, values: FilterTypeValue[]): Filter => {
     const newFilterMap = setAllValues(filterMap, true);
     setFilterMap(newFilterMap);
     setAllSelected(true);
-  }, [filterMap, setFilterMap]);
+  }, [filterMap, setFilterMap, setAllSelected]);
 
   const unSelectAll = useCallback(() => {
     const newFilterMap = setAllValues(filterMap, false);
     setFilterMap(newFilterMap);
     setAllSelected(false);
-  }, [filterMap, setFilterMap]);
+  }, [filterMap, setFilterMap, setAllSelected]);
 
   return {
     type,

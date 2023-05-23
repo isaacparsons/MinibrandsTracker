@@ -32,11 +32,8 @@ export default class MiniBrandsRepository {
     filter?: MiniBrandsFilter | null,
     cursor?: number | null
   ) => {
-    const PAGE_SIZE = 25;
+    const PAGE_SIZE = 5;
 
-    if (!filter?.collectedStatus?.collected && !filter?.collectedStatus?.notCollected) {
-      return { data: [], cursor: null };
-    }
     const where = filter
       ? {
           ...(Boolean(filter.search) && {
@@ -90,9 +87,13 @@ export default class MiniBrandsRepository {
         type: true
       }
     });
+    if (filter && !filter?.collectedStatus?.collected && !filter?.collectedStatus?.notCollected) {
+      return { data: [], cursor: null, hasNextPage: false };
+    }
     return {
       data: miniBrands,
-      cursor: miniBrands.length > 0 ? miniBrands[miniBrands.length - 1].id : cursor
+      cursor: miniBrands.length === PAGE_SIZE ? miniBrands[miniBrands.length - 1].id : null,
+      hasNextPage: miniBrands.length === PAGE_SIZE
     };
   };
 

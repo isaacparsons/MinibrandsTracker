@@ -5,7 +5,7 @@ interface Props {
   minibrands: MiniBrand[];
 }
 
-function LoggedOutMinibrands(props: Props) {
+function LoggedOutMinibrandsList(props: Props) {
   const { minibrands } = props;
 
   return (
@@ -17,4 +17,4 @@ function LoggedOutMinibrands(props: Props) {
   );
 }
 
-export default LoggedOutMinibrands;
+export default LoggedOutMinibrandsList;
