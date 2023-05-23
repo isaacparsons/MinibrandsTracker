@@ -32,7 +32,7 @@ export default class MiniBrandsRepository {
     filter?: MiniBrandsFilter | null,
     cursor?: number | null
   ) => {
-    const PAGE_SIZE = 5;
+    const PAGE_SIZE = 50;
 
     const where = filter
       ? {
