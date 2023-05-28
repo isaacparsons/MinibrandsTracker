@@ -1,10 +1,11 @@
-import { Express, Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction } from "express";
+import { UnauthorizedError } from "../util/errors";
+import { ErrorResponse } from "../util/response";
 
 const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
-  if (!req.user)
-    return res.status(401).json({
-      error: "User not authenticated"
-    });
+  if (!req.user) {
+    return ErrorResponse(res, new UnauthorizedError("User not authenticated"));
+  }
   next();
 };
 

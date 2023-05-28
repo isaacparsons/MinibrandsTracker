@@ -18,9 +18,9 @@ import {
 import Tags from '../../../../common/components/Tags';
 import { useState } from 'react';
 import ConfirmDeleteMinibrandDialog from './ConfirmDeleteMinibrandDialog';
-import useDeleteMinibrand from './hooks/useDeleteMinibrand';
-import useCollectMinibrand from './hooks/useCollectMinibrand';
-import useUpdateCollectedMinibrand from './hooks/useUpdateCollectedMinibrand';
+import useDeleteMinibrand from '../../../../graphql/hooks/mutations/useDeleteMinibrand';
+import useCollectMinibrand from '../../../../graphql/hooks/mutations/useCollectMinibrand';
+import useUpdateCollectedMinibrand from '../../../../graphql/hooks/mutations/useUpdateCollectedMinibrand';
 import CollectOrUpdateMinibrand from './CollectOrUpdateMinibrand';
 import useConfetti from './hooks/useConfetti';
 import { useSessionContext } from 'context/SessionContext';

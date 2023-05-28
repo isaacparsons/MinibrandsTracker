@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { GET_ACHIEVEMENTS } from '../../graphql/user';
+import { GET_ACHIEVEMENTS } from '../../user';
 
 const useAchievements = () => {
   const { data, loading, error, refetch } = useQuery(GET_ACHIEVEMENTS);

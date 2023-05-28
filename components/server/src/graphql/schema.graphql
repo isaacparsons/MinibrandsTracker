@@ -210,6 +210,7 @@ enum FriendRequestStatus {
 }
 
 type FriendRequest {
+  id: Int!
   senderId: Int!
   receiverId: Int!
   status: FriendRequestStatus!

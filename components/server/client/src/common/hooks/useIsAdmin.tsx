@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import useMe from './useMe';
+import useMe from '../../graphql/hooks/queries/useMe';
 import { Role } from '__generated__/graphql';
 
 const useIsAdmin = () => {

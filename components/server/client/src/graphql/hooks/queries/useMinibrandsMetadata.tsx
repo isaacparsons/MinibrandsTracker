@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { GET_MINIBRANDS_METADATA } from '../../../graphql/miniBrands';
+import { GET_MINIBRANDS_METADATA } from '../../miniBrands';
 
 const useMinibrandsMetadata = () => {
   const { data, loading, error, refetch } = useQuery(GET_MINIBRANDS_METADATA);

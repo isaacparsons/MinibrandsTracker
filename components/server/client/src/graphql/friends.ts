@@ -4,6 +4,7 @@ export const GET_FRIENDS = gql(/* GraphQL */ `
   query GetFriends {
     getFriends {
       requests {
+        id
         receiverId
         senderId
         status
@@ -19,6 +20,7 @@ export const GET_FRIENDS = gql(/* GraphQL */ `
         }
       }
       friends {
+        id
         receiver {
           username
           id
@@ -62,7 +64,6 @@ export const DELETE_FRIEND = gql(/* GraphQL */ `
     deleteFriend(friendRequestId: $friendRequestId) {
       receiverId
       senderId
-      status
     }
   }
 `);

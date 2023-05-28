@@ -1,8 +1,4 @@
-import {
-  FriendRequest,
-  FriendRequestStatus,
-  User
-} from '__generated__/graphql';
+import { FriendRequest, User } from '__generated__/graphql';
 import { useMemo } from 'react';
 
 const useFilterByNotFriended = (

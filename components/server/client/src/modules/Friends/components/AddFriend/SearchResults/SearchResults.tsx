@@ -1,22 +1,22 @@
-import {
-  Box,
-  CircularProgress,
-  IconButton,
-  List,
-  ListItem
-} from '@mui/material';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { User } from '__generated__/graphql';
-import FriendCardBase from '../FriendCard/FriendCardBase';
-import useCreateFriendRequest from 'modules/Friends/hooks/useCreateFriendRequest';
+import { Box, CircularProgress, List } from '@mui/material';
+import { Friends, User } from '__generated__/graphql';
+import useCreateFriendRequest from 'graphql/hooks/mutations/useCreateFriendRequest';
 import NoResultsCard from 'common/components/NoResultsCard';
+import useMe from 'graphql/hooks/queries/useMe';
+import useFriendsMap from 'common/hooks/useFriendsMap';
+import SearchResultIcon from './SearchResultIcon';
+import FriendCardBase from '../../FriendCard/FriendCardBase';
 
 interface Props {
   users: User[];
+  friends?: Friends;
 }
 
 const SearchResults = (props: Props) => {
-  const { users } = props;
+  const { data } = useMe();
+  const { users, friends } = props;
+
+  const friendsMap = useFriendsMap(data, friends);
 
   const onCreatedFriendRequest = () => {};
   const { createFriendRequest, loading } = useCreateFriendRequest(
@@ -36,6 +36,7 @@ const SearchResults = (props: Props) => {
       ) : (
         <List sx={styles.list}>
           {users.map((user) => {
+            const friendRequest = friendsMap.get(user.id);
             return (
               <FriendCardBase
                 primaryText={user.username ?? ''}
@@ -43,12 +44,12 @@ const SearchResults = (props: Props) => {
                   loading ? (
                     <CircularProgress />
                   ) : (
-                    <IconButton
-                      edge="end"
-                      onClick={() => handleAddUserClick(user)}
-                    >
-                      <AddCircleIcon fontSize="large" />
-                    </IconButton>
+                    <SearchResultIcon
+                      user={user}
+                      me={data}
+                      friendRequest={friendRequest}
+                      handleAddUserClick={handleAddUserClick}
+                    />
                   )
                 }
               />

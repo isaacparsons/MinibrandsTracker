@@ -4,14 +4,14 @@ import { useState } from 'react';
 import { Box, SelectChangeEvent } from '@mui/material';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
-import useMinibrandsMetadata from '../MinibrandsMetadata/hooks/useMinibrandsMetadata';
+import useMinibrandsMetadata from '../../graphql/hooks/queries/useMinibrandsMetadata';
 import FileInput from './FileInput/FileInput';
 import SeriesInput from './SeriesInput';
 import TypesInput from './TypesInput';
 import Previews from './Previews/Previews';
 import client from '../../graphql/client';
 import axios from 'axios';
-import useSaveMinibrand from './hooks/useSaveMinibrand';
+import useSaveMinibrand from '../../graphql/hooks/mutations/useSaveMinibrand';
 import { GET_IMAGE_UPLOAD_LINK } from '../../graphql/miniBrands';
 
 export interface MiniBrand {

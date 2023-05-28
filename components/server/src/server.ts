@@ -3,9 +3,7 @@ import { resolvers } from "./graphql/resolver";
 import passport from "passport";
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
-import { ApolloServerPluginCacheControl } from "@apollo/server/plugin/cacheControl";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
-import responseCachePlugin from "@apollo/server-plugin-response-cache";
 import express from "express";
 import http from "http";
 import cors from "cors";
@@ -13,8 +11,6 @@ import cookieParser from "cookie-parser";
 import RedisStore from "connect-redis";
 import type { RedisClientType } from "redis";
 import { createClient } from "redis";
-import Keyv from "keyv";
-import { KeyvAdapter } from "@apollo/utils.keyvadapter";
 
 import { dbMiddleware } from "./middleware/dbMiddleware";
 import googleAuthMiddleware from "./middleware/googleAuthMiddleware";
@@ -24,6 +20,7 @@ import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin
 import authRoutes from "./middleware/authRoutes";
 import { sessionMiddleware } from "./session";
 import { loggingMiddleware } from "./middleware/loggingMiddleware";
+import errorMiddleware from "./middleware/errorMiddleware";
 
 const typeDefs = readFileSync("src/graphql/schema.graphql", {
   encoding: "utf-8"
@@ -66,26 +63,16 @@ export const startServer = async () => {
 
   app.use(dbMiddleware);
   app.use(loggingMiddleware);
-  app.use(googleAuthMiddleware(app));
-  app.use(localAuthMiddleware(app));
+  googleAuthMiddleware(app);
+  localAuthMiddleware(app);
   authRoutes(app);
+  app.use(errorMiddleware);
 
   const httpServer = http.createServer(app);
   const server = new ApolloServer({
     typeDefs,
     resolvers,
-    // cache: new KeyvAdapter(new Keyv(process.env.REDIS_URL)),
     plugins: [
-      // ApolloServerPluginCacheControl({
-      //   defaultMaxAge: 1,
-      //   calculateHttpHeaders: false
-      // }),
-      // responseCachePlugin({
-      //   sessionId: (requestContext) => {
-      //     const context = requestContext.contextValue as any;
-      //     return context.sessionId;
-      //   }
-      // }),
       ApolloServerPluginDrainHttpServer({ httpServer }),
       ApolloServerPluginLandingPageLocalDefault({
         embed: true,

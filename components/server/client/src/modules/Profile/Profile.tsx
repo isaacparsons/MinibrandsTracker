@@ -11,7 +11,7 @@ import { FRIENDS_PATH } from 'App';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { FriendRequest } from '__generated__/graphql';
 import extractFriend from 'common/utils/extractFriend';
-import useMe from 'common/hooks/useMe';
+import useMe from 'graphql/hooks/queries/useMe';
 import { useMemo, useState } from 'react';
 import Collected from './components/Collected/Collected';
 import Achievements from './components/Achievements/Achievements';

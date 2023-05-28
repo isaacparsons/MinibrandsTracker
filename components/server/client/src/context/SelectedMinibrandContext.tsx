@@ -43,8 +43,6 @@ const SelectedMinibrandProvider: React.FC<Props> = (props) => {
 
   const canEdit = useMemo(() => isAdmin && adminMode, [isAdmin, adminMode]);
 
-  const handleEditClick = () => {};
-
   const handleClose = () => {
     setSelectedMinibrand(null);
   };

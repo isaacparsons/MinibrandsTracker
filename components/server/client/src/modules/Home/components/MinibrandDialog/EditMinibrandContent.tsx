@@ -5,9 +5,9 @@ import MinibrandNameInput from 'common/components/MinibrandNameInput';
 import { useEffect, useState } from 'react';
 import SeriesInput from 'modules/Upload/SeriesInput';
 import TypesInput from 'modules/Upload/TypesInput';
-import useMinibrandsMetadata from 'modules/MinibrandsMetadata/hooks/useMinibrandsMetadata';
+import useMinibrandsMetadata from 'graphql/hooks/queries/useMinibrandsMetadata';
 import TagsInput from 'modules/Upload/Previews/TagsInput';
-import useUpdateMinibrand from './hooks/useUpdateMinibrand';
+import useUpdateMinibrand from '../../../../graphql/hooks/mutations/useUpdateMinibrand';
 
 interface Props {
   minibrand: MiniBrand;

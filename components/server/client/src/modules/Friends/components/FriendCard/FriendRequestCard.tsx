@@ -2,7 +2,7 @@ import { Box, IconButton, CircularProgress } from '@mui/material';
 import FriendCardBase from './FriendCardBase';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
-import useUpdateFriendRequest from 'modules/Friends/hooks/useUpdateFriendRequest';
+import useUpdateFriendRequest from 'graphql/hooks/mutations/useUpdateFriendRequest';
 import { FriendRequest, FriendRequestStatus } from '__generated__/graphql';
 
 interface Props {

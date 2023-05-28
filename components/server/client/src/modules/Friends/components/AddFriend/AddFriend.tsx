@@ -3,11 +3,9 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FRIENDS_PATH } from 'App';
-import SearchResults from './SearchResults';
-import useSearchUsers from 'modules/Friends/hooks/useSearchUsers';
-import useFilterByNotFriended from 'modules/Friends/hooks/useFilterByNotFriended';
-import useMe from 'common/hooks/useMe';
-import useFriends from 'modules/Friends/hooks/useFriends';
+import SearchResults from './SearchResults/SearchResults';
+import useSearchUsers from 'graphql/hooks/queries/useSearchUsers';
+import useFriends from 'graphql/hooks/queries/useFriends';
 import InfinityScroll from 'common/components/InfinityScroll';
 import SearchBar from './SearchBar';
 
@@ -15,7 +13,7 @@ const AddFriend = () => {
   const navigate = useNavigate();
   const { searchUsers, cursor, data, loading, fetchMore } = useSearchUsers();
   const { data: friends, loading: loadingFriends } = useFriends();
-  const { data: me, loading: loadingMe } = useMe();
+  // const { data: me, loading: loadingMe } = useMe();
   const [searchQuery, setSearchQuery] = useState('');
 
   const [prevCursor, setPrevCursor] = useState<number | null | undefined>();
@@ -30,7 +28,7 @@ const AddFriend = () => {
     searchUsers({ query: value, cursor: null });
   };
 
-  const filteredUsers = useFilterByNotFriended(me, friends?.friends, data);
+  // const filteredUsers = useFilterByNotFriended(me, friends?.friends, data);
 
   const fetchNextPage = () => {
     fetchMore({ variables: { query: searchQuery, cursor: cursor } });
@@ -49,7 +47,7 @@ const AddFriend = () => {
         </IconButton>
         <SearchBar handleSearchPress={handleSearchPress} />
       </Box>
-      {loading || loadingFriends || loadingMe ? (
+      {loading || loadingFriends ? (
         <CircularProgress />
       ) : (
         <InfinityScroll
@@ -57,7 +55,7 @@ const AddFriend = () => {
           fetchMore={fetchNextPage}
           dataLength={data?.length ?? 0}
         >
-          <SearchResults users={filteredUsers ?? []} />
+          <SearchResults users={data ?? []} friends={friends} />
         </InfinityScroll>
       )}
     </Container>

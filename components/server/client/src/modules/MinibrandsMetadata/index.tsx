@@ -1,9 +1,9 @@
 import { Button, Container } from '@mui/material';
-import useMinibrandsMetadata from './hooks/useMinibrandsMetadata';
+import useMinibrandsMetadata from '../../graphql/hooks/queries/useMinibrandsMetadata';
 import { useState, useMemo } from 'react';
 import EditableList from './EditableList';
 import useEditableList from './hooks/useEditableList';
-import useSaveMinibrandsMetadata from './hooks/useSaveMinibrandsMetadata';
+import useSaveMinibrandsMetadata from '../../graphql/hooks/mutations/useSaveMinibrandsMetadata';
 import WithLoading from '../../common/components/WithLoading';
 
 function MinibrandsMetadataScreen() {

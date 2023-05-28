@@ -2,7 +2,7 @@ import InfinityScroll from 'common/components/InfinityScroll';
 import React, { useCallback } from 'react';
 import LoggedInMinibrandsList from './LoggedInMinibrandsList';
 import LoggedOutMinibrandsList from './LoggedOutMinibrandsList';
-import useMiniBrands from './hooks/useMiniBrands';
+import useMiniBrands from '../../graphql/hooks/mutations/useMiniBrands';
 import { MiniBrandsFilter } from '__generated__/graphql';
 import { useSessionContext } from 'context/SessionContext';
 import { Box, CircularProgress } from '@mui/material';

@@ -1,5 +1,5 @@
 import { Box, CircularProgress, Container } from '@mui/material';
-import useMinibrandsMetadata from '../MinibrandsMetadata/hooks/useMinibrandsMetadata';
+import useMinibrandsMetadata from '../../graphql/hooks/queries/useMinibrandsMetadata';
 import { useState } from 'react';
 import SelectedMinibrandProvider from 'context/SelectedMinibrandContext';
 import useFilterMinibrands from './hooks/useFilterMinibrands';

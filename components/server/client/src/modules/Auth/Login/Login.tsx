@@ -15,6 +15,8 @@ import { useEffect, useState } from 'react';
 import { useSessionContext } from 'context/SessionContext';
 import Api from 'api';
 import { HOME_PATH } from 'App';
+import { useSnackBarContext } from 'context/SnackBarContext';
+import { AxiosError } from 'axios';
 
 const api = new Api();
 
@@ -32,6 +34,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const theme = useTheme();
   const session = useSessionContext();
+  const snackbar = useSnackBarContext();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -47,8 +50,14 @@ const Login = () => {
       await api.authLocal(email, password);
       session.login();
       navigate('/home');
-    } catch (error) {
-      console.log(error);
+    } catch (e) {
+      console.log(e);
+      const error = e as AxiosError;
+      const response = error?.response?.data as Error;
+      snackbar.show({
+        message: response.message,
+        type: 'error'
+      });
     } finally {
       setLoading(false);
     }
@@ -103,15 +112,6 @@ const Login = () => {
             <Divider sx={styles.divider} />
           </Box>
           <LoginWithGoogle loading={loading} onClick={handleLoginWithGoogle} />
-          {/* {loading ? (
-            <CircularProgress />
-          ) : (
-            <Button variant="contained" onClick={handleSubmit(onSubmit)}>
-              Signup
-            </Button>
-          )} */}
-
-          {/* {error ? <Typography color="red">{error.message} </Typography> : null} */}
         </Box>
       </Paper>
     </Box>

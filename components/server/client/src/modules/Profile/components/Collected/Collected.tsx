@@ -3,7 +3,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import InfinityScroll from 'common/components/InfinityScroll';
 import MinibrandCard from 'modules/Home/components/MinibrandCard/MinibrandCard';
 import MinibrandsListSkeleton from 'modules/Home/components/MinibrandsListSkeleton';
-import useCollectedMinibrands from 'modules/Profile/hooks/useCollectedMinibrands';
+import useCollectedMinibrands from 'graphql/hooks/queries/useCollectedMinibrands';
 import { useMemo, useState } from 'react';
 
 interface Props {

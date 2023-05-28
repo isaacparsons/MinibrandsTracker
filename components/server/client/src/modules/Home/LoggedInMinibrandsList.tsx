@@ -1,4 +1,4 @@
-import useMe from 'common/hooks/useMe';
+import useMe from 'graphql/hooks/queries/useMe';
 import useCollectedMinibrandsMap from 'modules/Home/hooks/useCollectedMinibrandsMap';
 
 import MinibrandsList from './components/MinibrandsList/MinibrandsList';

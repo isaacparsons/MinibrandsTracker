@@ -1,6 +1,6 @@
 import { Box, CircularProgress } from '@mui/material';
 import AchievementsPreview from 'modules/Account/components/AchievementsPreview/AchievementsPreview';
-import useUserAchievements from 'modules/Profile/hooks/useUserAchievements';
+import useUserAchievements from 'graphql/hooks/queries/useUserAchievements';
 
 interface Props {
   userId: number;

@@ -9,8 +9,8 @@ import {
 import { useState } from 'react';
 import AddedFriends from './components/AddedFriends/AddedFriends';
 import FriendRequests from './components/FriendRequests/FriendRequests';
-import useFriends from './hooks/useFriends';
-import useMe from 'common/hooks/useMe';
+import useFriends from '../../graphql/hooks/queries/useFriends';
+import useMe from 'graphql/hooks/queries/useMe';
 
 const Friends = () => {
   const { data, loading } = useFriends();

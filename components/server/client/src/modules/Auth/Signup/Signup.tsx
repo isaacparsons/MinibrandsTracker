@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import { LOGIN_PATH } from 'App';
 import { useSessionContext } from 'context/SessionContext';
 import { useState } from 'react';
-import { AxiosError, isAxiosError } from 'axios';
+import { AxiosError } from 'axios';
 import { useSnackBarContext } from 'context/SnackBarContext';
 
 const api = new Api();
@@ -48,14 +48,11 @@ const Signup = () => {
         navigate('/home');
       } catch (e) {
         const error = e as AxiosError;
-        console.log(error);
-        const response = error?.response?.data as any;
-        if (response?.error) {
-          snackbar.show({
-            message: response.error,
-            type: 'error'
-          });
-        }
+        const response = error?.response?.data as Error;
+        snackbar.show({
+          message: response.message,
+          type: 'error'
+        });
       }
     }
     setLoading(false);

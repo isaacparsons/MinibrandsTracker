@@ -35,6 +35,7 @@ const FriendsList = (props: Props) => {
             }
             return (
               <FriendCardBase
+                key={`friend-${friend.id}`}
                 primaryText={user.username ?? ''}
                 RightComponent={<ChevronRightIcon />}
                 onCardClick={() => handleCardClick(friend)}

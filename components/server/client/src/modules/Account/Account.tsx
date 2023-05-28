@@ -1,8 +1,8 @@
 import { Box, CircularProgress, Container } from '@mui/material';
-import useMe from 'common/hooks/useMe';
+import useMe from 'graphql/hooks/queries/useMe';
 import AchievementsPreview from './components/AchievementsPreview/AchievementsPreview';
 import AccountDetails from './components/AccountDetails/AccountDetails';
-import useAchievements from 'common/hooks/useAchievements';
+import useAchievements from 'graphql/hooks/queries/useAchievements';
 
 const Account = () => {
   const { data, loading } = useMe();

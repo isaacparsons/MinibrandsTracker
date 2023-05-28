@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { GET_MINIBRANDS } from '../../../graphql/miniBrands';
+import { GET_MINIBRANDS } from '../../miniBrands';
 import { QueryGetMiniBrandsArgs } from '__generated__/graphql';
 import { useMemo } from 'react';
 
