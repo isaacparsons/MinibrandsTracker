@@ -18,6 +18,7 @@ import AddFriend from 'modules/Friends/components/AddFriend/AddFriend';
 import Api from 'api';
 import { useCallback, useEffect } from 'react';
 import { useSessionContext } from 'context/SessionContext';
+import Support from 'modules/Support/Support';
 
 export const MINIBRANDS_METADATA_PATH = '/minibrandsMetadata';
 export const ACCOUNT_PATH = '/account';
@@ -30,6 +31,7 @@ export const LOGIN_SUCCESS_PATH = '/login_success';
 export const FRIENDS_PATH = '/friends';
 export const ADD_FRIENDS_PATH = '/add_friend';
 export const PROFILE_PATH = '/profile';
+export const SUPPORT_PATH = '/support';
 
 const api = new Api();
 
@@ -110,6 +112,7 @@ function App() {
                   </ProtectedRoute>
                 }
               />
+              <Route path={SUPPORT_PATH} element={<Support />} />
             </Routes>
           </Box>
         </Box>

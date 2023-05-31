@@ -22,12 +22,14 @@ import {
   FRIENDS_PATH,
   HOME_PATH,
   LOGIN_PATH,
-  MINIBRANDS_METADATA_PATH
+  MINIBRANDS_METADATA_PATH,
+  SUPPORT_PATH
 } from 'App';
 import { useNavigate } from 'react-router-dom';
 import client from '../../../graphql/client';
 import FriendsItem from './FriendsIcon';
 import LoginItem from './LoginItem';
+import SupportItem from './SupportItem';
 
 const api = new Api();
 
@@ -86,6 +88,10 @@ export default function Topbar() {
     navigate(LOGIN_PATH);
   };
 
+  const handleSupportClick = async () => {
+    handleClose();
+    navigate(SUPPORT_PATH);
+  };
   return (
     <Box>
       <AppBar position="static">
@@ -124,32 +130,37 @@ export default function Topbar() {
               'aria-labelledby': 'basic-button'
             }}
           >
-            {session.authenticated ? (
-              [
-                <AccountItem
-                  key="account-menu-item"
-                  handleClose={handleAccountClick}
-                />,
-                <FriendsItem
-                  key="friends-menu-item"
-                  handleClose={handleFriendsClick}
-                />,
-                <Admin key="topbar-menu-item-admin">
-                  <AdminModeItem key="admin-mode-menu-item" />
-                  <SettingsItem
-                    key="settings-menu-item"
-                    handleClose={handleSettingsClick}
+            {session.authenticated
+              ? [
+                  <AccountItem
+                    key="account-menu-item"
+                    handleClose={handleAccountClick}
+                  />,
+                  <FriendsItem
+                    key="friends-menu-item"
+                    handleClose={handleFriendsClick}
+                  />,
+                  <Admin key="topbar-menu-item-admin">
+                    <AdminModeItem key="admin-mode-menu-item" />
+                    <SettingsItem
+                      key="settings-menu-item"
+                      handleClose={handleSettingsClick}
+                    />
+                    <UploadItem
+                      key="upload-menu-item"
+                      handleClose={handleUploadClick}
+                    />
+                  </Admin>,
+                  <SupportItem handleClick={handleSupportClick} />,
+                  <LogoutItem
+                    key="logout-menu-item"
+                    handleClick={handleLogout}
                   />
-                  <UploadItem
-                    key="upload-menu-item"
-                    handleClose={handleUploadClick}
-                  />
-                </Admin>,
-                <LogoutItem key="logout-menu-item" handleClick={handleLogout} />
-              ]
-            ) : (
-              <LoginItem handleClick={handleLoginClick} />
-            )}
+                ]
+              : [
+                  <LoginItem handleClick={handleLoginClick} />,
+                  <SupportItem handleClick={handleSupportClick} />
+                ]}
           </Menu>
         </Toolbar>
       </AppBar>
