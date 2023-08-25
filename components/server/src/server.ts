@@ -28,16 +28,16 @@ const typeDefs = readFileSync("src/graphql/schema.graphql", {
 
 const app = express();
 
-export const cacheClient: RedisClientType = createClient({
-  url: process.env.REDIS_URL
-});
+// export const cacheClient: RedisClientType = createClient({
+//   url: process.env.REDIS_URL
+// });
 
 export const startServer = async () => {
-  await cacheClient.connect();
-  const redisStore = new RedisStore({
-    client: cacheClient,
-    prefix: "minibrands-tracker"
-  });
+  // await cacheClient.connect();
+  // const redisStore = new RedisStore({
+  //   client: cacheClient,
+  //   prefix: "minibrands-tracker"
+  // });
   app.use(
     cors<cors.CorsRequest>({
       origin: [
@@ -57,7 +57,7 @@ export const startServer = async () => {
   });
   app.use(express.json());
   app.use(cookieParser());
-  app.use(sessionMiddleware(redisStore));
+  app.use(sessionMiddleware());
   app.use(passport.initialize());
   app.use(passport.session());
 
